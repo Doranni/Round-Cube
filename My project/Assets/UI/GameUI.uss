@@ -1,0 +1,16 @@
+.dice {
+    padding-left: 10px;
+    padding-right: 10px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
+
+.dice_button {
+    width: 110px;
+    height: 110px;
+    font-size: 22px;
+    color: rgba(0, 0, 0, 255);
+    -unity-text-align: middle-center;
+    background-color: rgba(183, 183, 183, 255);
+    -unity-font-style: bold;
+}
