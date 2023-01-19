@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
 
 public class Map : Singleton<Map>
 {
@@ -17,9 +18,19 @@ public class Map : Singleton<Map>
     {
         MapNodes = new();
         GetComponentsInChildren(MapNodes);
+        
         for (int i = 0; i < MapNodes.Count; i++)
         {
             MapNodes[i].SetIndex(i);
+            for (int j = 0; j < MapNodes[i].Links.Count; j++)
+            {
+                NavMeshPath path = new NavMeshPath();
+                if (NavMesh.CalculatePath(MapNodes[i].transform.position,
+                    MapNodes[i].Links[j].DestinationNode.transform.position, NavMesh.AllAreas, path))
+                {
+                    MapNodes[i].Links[j].SetPath(path);
+                }
+            }
         }
         Index_start = GetStartIndex();
     }
@@ -36,14 +47,14 @@ public class Map : Singleton<Map>
         return 0;
     }
 
-    public List<MapNode> AvailableLinks(int index)
+    public List<NodeLink> AvailableLinks(int index)
     {
-        List<MapNode> links = new();
+        List<NodeLink> links = new();
         for ( int i = 0; i < MapNodes[index].Links.Count; i++)
         {
             if (MapNodes[index].Links[i].IsOpen)
             {
-                links.Add(MapNodes[index].Links[i].Node);
+                links.Add(MapNodes[index].Links[i]);
             }
         }
         return links;

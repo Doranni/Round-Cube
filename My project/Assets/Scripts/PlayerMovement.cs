@@ -2,15 +2,26 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
 
+[RequireComponent(typeof(NavMeshAgent))]
 public class PlayerMovement : MonoBehaviour
 {
-    [SerializeField] private float speed;
+   public enum Status
+    {
+        onDestinationNode,
+        moving,
+        onBetweenNode,
+        waitingNodeChosen
+    }
 
-    private float yPositionOffset;
+    [SerializeField] private float timeDelay_diceRolled = 0.3f;
+
+    private NavMeshAgent navMeshAgent;
+
     private int index_currentNodePos;
-    private Vector3 targetPos;
-    private Coroutine movingCoroutine;
+    private Coroutine diceRolledRoutine;
+    private Status status;
 
     public event Action OnMoveFinished;
 
@@ -18,10 +29,38 @@ public class PlayerMovement : MonoBehaviour
     {
         //InputManager.Instance.OnMouseClick_canceled += MouseClicked;
 
+        DiceRoller.Instance.OnDiceRolled += DiceRolled;
         DiceRoller.Instance.OnDiceResChanged += DiceResChanged;
 
-        yPositionOffset = GetComponent<Collider>().bounds.extents.y;
+        navMeshAgent = GetComponent<NavMeshAgent>();
         MoveToStart();
+    }
+
+    private void Update()
+    {
+        switch (status)
+        {
+            case Status.moving:
+                {
+                    if (navMeshAgent.remainingDistance == 0)
+                    {
+                        status = Status.onBetweenNode;
+                        OnMoveFinished?.Invoke();
+                    }
+                    break;
+                }
+        }
+    }
+
+    private void DiceRolled(int value)
+    {
+        diceRolledRoutine = StartCoroutine(DiceRolledRoutine(value));
+    }
+
+    private IEnumerator DiceRolledRoutine(int value)
+    {
+        yield return new WaitForSeconds(timeDelay_diceRolled);
+        DiceResChanged(value);
     }
 
     private void DiceResChanged(int value)
@@ -29,6 +68,11 @@ public class PlayerMovement : MonoBehaviour
         if (value > 0)
         {
             Move();
+        }
+        else
+        {
+            status = Status.onDestinationNode;
+            // TODO: Unlock way back
         }
     }
 
@@ -40,8 +84,8 @@ public class PlayerMovement : MonoBehaviour
     private void MoveToStart()
     {
         index_currentNodePos = Map.Instance.Index_start;
-        transform.position = Map.Instance.MapNodes[index_currentNodePos].transform.position 
-            + Vector3.up * yPositionOffset;
+        navMeshAgent.Warp(Map.Instance.MapNodes[index_currentNodePos].transform.position);
+        status = Status.onDestinationNode;
     }
 
     private void Move()
@@ -49,24 +93,22 @@ public class PlayerMovement : MonoBehaviour
         var links = Map.Instance.AvailableLinks(index_currentNodePos);
         if (links.Count == 1)
         {
-            index_currentNodePos = links[0].Index;
-            targetPos = links[0].transform.position + Vector3.up * yPositionOffset;
-            movingCoroutine = StartCoroutine(Moving());
+            index_currentNodePos = links[0].DestinationNode.Index;
+            // TODO: Lock way back 
+            navMeshAgent.SetPath(links[0].Path);
+            status = Status.moving;
         }
-    }
-
-    private IEnumerator Moving()
-    {
-        while (transform.position != targetPos)
+        else
         {
-            transform.position = Vector3.MoveTowards(transform.position, targetPos, speed * Time.deltaTime);
-            yield return 0;
+            status = Status.waitingNodeChosen;
         }
-        OnMoveFinished?.Invoke();
     }
 
     private void OnDestroy()
     {
         //InputManager.Instance.OnMouseClick_performed -= MouseClicked;
+
+        DiceRoller.Instance.OnDiceRolled -= DiceRolled;
+        DiceRoller.Instance.OnDiceResChanged -= DiceResChanged;
     }
 }

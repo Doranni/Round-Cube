@@ -12,7 +12,7 @@ public class MainSceneUI : MonoBehaviour
     const string k_diceScreen = "Dice";
     const string k_diceButton = "Button_RollTheDice";
 
-    const string str_rollTheDice = "Roll \nthe Dice";
+    const string str_rollTheDice = "Roll the\nDice";
 
     private void Awake()
     {
@@ -24,6 +24,7 @@ public class MainSceneUI : MonoBehaviour
 
     void Start()
     {
+        DiceRoller.Instance.OnDiceRolled += DisplayDiceRes;
         DiceRoller.Instance.OnDiceResChanged += DisplayDiceRes;
 
         rollDiceButton.RegisterCallback<ClickEvent>((_) => DiceRoller.Instance.RollTheDice());
@@ -47,6 +48,7 @@ public class MainSceneUI : MonoBehaviour
 
     private void OnDestroy()
     {
+        DiceRoller.Instance.OnDiceRolled -= DisplayDiceRes;
         DiceRoller.Instance.OnDiceResChanged -= DisplayDiceRes;
     }
 }

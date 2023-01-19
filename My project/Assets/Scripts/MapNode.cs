@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
 
 public class MapNode : MonoBehaviour
 {
@@ -16,15 +17,21 @@ public class MapNode : MonoBehaviour
     {
         this.index = index;
     }
-
 }
 
 [System.Serializable]
 public class NodeLink
 {
     [SerializeField] private bool isOpen;
-    [SerializeField] private MapNode node;
+    [SerializeField] private MapNode destinationNode;
+    private NavMeshPath path;
 
     public bool IsOpen => isOpen;
-    public MapNode Node => node;
+    public MapNode DestinationNode => destinationNode;
+    public NavMeshPath Path => path;
+
+    public void SetPath(NavMeshPath path)
+    {
+        this.path = path;
+    }
 }
