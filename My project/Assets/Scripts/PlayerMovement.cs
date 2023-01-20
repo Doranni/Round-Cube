@@ -2,12 +2,11 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.AI;
 
-[RequireComponent(typeof(NavMeshAgent))]
+[RequireComponent(typeof(CharacterController))]
 public class PlayerMovement : MonoBehaviour
 {
-   public enum Status
+   public enum MoveStatus
     {
         onDestinationNode,
         moving,
@@ -15,37 +14,61 @@ public class PlayerMovement : MonoBehaviour
         waitingNodeChosen
     }
 
-    [SerializeField] private float timeDelay_diceRolled = 0.3f;
+    [SerializeField] private float speed = 8, posOffset = 0.1f, timeDelay_diceRolled = 0.3f;
 
-    private NavMeshAgent navMeshAgent;
+    private CharacterController characterController;
 
-    private int index_currentNodePos;
+    private MoveStatus moveStatus;
+    private int destNodeIndex;
+    private List<Vector3> destPoints = new();
+    private int passedDestPoints;
+    private float yOffset;
+    private float yGravity;
+    private List<NodeLink> movedLinks = new();
+
     private Coroutine diceRolledRoutine;
-    private Status status;
 
     public event Action OnMoveFinished;
 
+    private void Awake()
+    {
+        characterController = GetComponent<CharacterController>();
+    }
+
     void Start()
     {
-        //InputManager.Instance.OnMouseClick_canceled += MouseClicked;
-
         DiceRoller.Instance.OnDiceRolled += DiceRolled;
         DiceRoller.Instance.OnDiceResChanged += DiceResChanged;
 
-        navMeshAgent = GetComponent<NavMeshAgent>();
+        yOffset = GetComponent<Collider>().bounds.extents.y;
+        yGravity = Physics.gravity.y;
+        
         MoveToStart();
     }
 
-    private void Update()
+    private void FixedUpdate()
     {
-        switch (status)
+        switch (moveStatus)
         {
-            case Status.moving:
+            case MoveStatus.moving:
                 {
-                    if (navMeshAgent.remainingDistance == 0)
+                    if (passedDestPoints == destPoints.Count)
                     {
-                        status = Status.onBetweenNode;
+                        destPoints.Clear();
+                        moveStatus = MoveStatus.onBetweenNode;
                         OnMoveFinished?.Invoke();
+                    }
+                    else
+                    {
+                        var vector = (destPoints[passedDestPoints] - transform.position).normalized;
+                        vector.y = yGravity;
+                        characterController.Move(vector * speed * Time.deltaTime);
+
+                        if (Mathf.Abs(transform.position.x - destPoints[passedDestPoints].x) < posOffset 
+                            && Mathf.Abs(transform.position.z - destPoints[passedDestPoints].z) < posOffset)
+                        {
+                            passedDestPoints++;
+                        }
                     }
                     break;
                 }
@@ -71,43 +94,71 @@ public class PlayerMovement : MonoBehaviour
         }
         else
         {
-            status = Status.onDestinationNode;
-            // TODO: Unlock way back
+            moveStatus = MoveStatus.onDestinationNode;
+            for (int i = 0; i < movedLinks.Count; i++)
+            {
+                movedLinks[i].SetIsAvailable(true);
+            }
+            movedLinks.Clear();
         }
-    }
-
-    private void MouseClicked(UnityEngine.InputSystem.InputAction.CallbackContext obj)
-    {
-        Debug.Log("Mouse Clicked");
     }
 
     private void MoveToStart()
     {
-        index_currentNodePos = Map.Instance.Index_start;
-        navMeshAgent.Warp(Map.Instance.MapNodes[index_currentNodePos].transform.position);
-        status = Status.onDestinationNode;
+        destNodeIndex = Map.Instance.Index_start;
+        characterController.enabled = false;
+        transform.position = Map.Instance.MapNodes[destNodeIndex].transform.position
+            + Vector3.up * yOffset;
+        characterController.enabled = true;
+        characterController.Move(Vector3.up * yGravity);
+        moveStatus = MoveStatus.onDestinationNode;
     }
 
     private void Move()
     {
-        var links = Map.Instance.AvailableLinks(index_currentNodePos);
+        var links = Map.Instance.AvailableLinks(destNodeIndex);
         if (links.Count == 1)
         {
-            index_currentNodePos = links[0].DestinationNode.Index;
-            // TODO: Lock way back 
-            navMeshAgent.SetPath(links[0].Path);
-            status = Status.moving;
+            if (links[0].direction == NodeLink.Direction.forward)
+            {
+                destNodeIndex = links[0].link.DestNodeForward.node.Index;
+            }
+            else
+            {
+                destNodeIndex = links[0].link.DestNodeBackward.node.Index;
+            }
+            links[0].link.SetIsAvailable(false);
+            movedLinks.Add(links[0].link);
+            SetDestPoints(links[0]);
+            moveStatus = MoveStatus.moving;
         }
         else
         {
-            status = Status.waitingNodeChosen;
+            moveStatus = MoveStatus.waitingNodeChosen;
         }
+    }
+
+    private void SetDestPoints((NodeLink link, NodeLink.Direction direction) link)
+    {
+        if (link.direction == NodeLink.Direction.forward)
+        {
+            for (int i = 1; i < link.link.PathPoints.Count; i++)
+            {
+                destPoints.Add(link.link.PathPoints[i]);
+            }
+        }
+        else
+        {
+            for (int i = link.link.PathPoints.Count - 2; i >= 0; i--)
+            {
+                destPoints.Add(link.link.PathPoints[i]);
+            }
+        }
+        passedDestPoints = 0;
     }
 
     private void OnDestroy()
     {
-        //InputManager.Instance.OnMouseClick_performed -= MouseClicked;
-
         DiceRoller.Instance.OnDiceRolled -= DiceRolled;
         DiceRoller.Instance.OnDiceResChanged -= DiceResChanged;
     }
