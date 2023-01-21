@@ -18,7 +18,7 @@ public class PlayerMovement : MonoBehaviour
 
     private CharacterController characterController;
 
-    private MoveStatus moveStatus;
+    public MoveStatus MStatus { get; private set; }
     private int destNodeIndex;
     private List<Vector3> destPoints = new();
     private int passedDestPoints;
@@ -48,14 +48,14 @@ public class PlayerMovement : MonoBehaviour
 
     private void FixedUpdate()
     {
-        switch (moveStatus)
+        switch (MStatus)
         {
             case MoveStatus.moving:
                 {
                     if (passedDestPoints == destPoints.Count)
                     {
                         destPoints.Clear();
-                        moveStatus = MoveStatus.onBetweenNode;
+                        MStatus = MoveStatus.onBetweenNode;
                         OnMoveFinished?.Invoke();
                     }
                     else
@@ -94,7 +94,7 @@ public class PlayerMovement : MonoBehaviour
         }
         else
         {
-            moveStatus = MoveStatus.onDestinationNode;
+            MStatus = MoveStatus.onDestinationNode;
             for (int i = 0; i < movedLinks.Count; i++)
             {
                 movedLinks[i].SetIsAvailable(true);
@@ -111,7 +111,7 @@ public class PlayerMovement : MonoBehaviour
             + Vector3.up * yOffset;
         characterController.enabled = true;
         characterController.Move(Vector3.up * yGravity);
-        moveStatus = MoveStatus.onDestinationNode;
+        MStatus = MoveStatus.onDestinationNode;
     }
 
     private void Move()
@@ -121,20 +121,20 @@ public class PlayerMovement : MonoBehaviour
         {
             if (links[0].direction == NodeLink.Direction.forward)
             {
-                destNodeIndex = links[0].link.DestNodeForward.node.Index;
+                destNodeIndex = links[0].link.NodeTo.node.Index;
             }
             else
             {
-                destNodeIndex = links[0].link.DestNodeBackward.node.Index;
+                destNodeIndex = links[0].link.NodeFrom.node.Index;
             }
             links[0].link.SetIsAvailable(false);
             movedLinks.Add(links[0].link);
             SetDestPoints(links[0]);
-            moveStatus = MoveStatus.moving;
+            MStatus = MoveStatus.moving;
         }
         else
         {
-            moveStatus = MoveStatus.waitingNodeChosen;
+            MStatus = MoveStatus.waitingNodeChosen;
         }
     }
 
@@ -155,6 +155,30 @@ public class PlayerMovement : MonoBehaviour
             }
         }
         passedDestPoints = 0;
+    }
+
+    public void ChooseMoveNode(MapNode node)
+    {
+        if (Map.Instance.IsNodeReachable(destNodeIndex, node.Index))
+        {
+            Debug.Log("Move to node " + node.name);
+            var link = Map.Instance.GetNodeLink(destNodeIndex, node.Index);
+            destNodeIndex = node.Index;
+            link.link.SetIsAvailable(false);
+            movedLinks.Add(link.link);
+            SetDestPoints(link);
+            MStatus = MoveStatus.moving;
+        }
+    }
+
+    public void ConsiderMoveNode(MapNode node)
+    {
+        if (Map.Instance.IsNodeReachable(destNodeIndex, node.Index))
+        {
+            // TODO: to outline this way
+            Debug.Log("We can go there!");
+        }
+
     }
 
     private void OnDestroy()

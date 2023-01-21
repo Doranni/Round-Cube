@@ -63,8 +63,8 @@ public class Map : Singleton<Map>
     {
         for (int i = 0; i < Links.Count; i++)
         {
-            MapNodes[Links[i].DestNodeForward.node.Index].AddLink(Links[i]);
-            MapNodes[Links[i].DestNodeBackward.node.Index].AddLink(Links[i]);
+            MapNodes[Links[i].NodeTo.node.Index].AddLink(Links[i]);
+            MapNodes[Links[i].NodeFrom.node.Index].AddLink(Links[i]);
         }
     }
 
@@ -73,19 +73,61 @@ public class Map : Singleton<Map>
         List<(NodeLink link, NodeLink.Direction type)> links = new();
         for ( int i = 0; i < MapNodes[index].Links.Count; i++)
         {
-            if (MapNodes[index].Equals(MapNodes[index].Links[i].DestNodeBackward.node)
-                && MapNodes[index].Links[i].DestNodeForward.isOpen
+            if (MapNodes[index].Equals(MapNodes[index].Links[i].NodeFrom.node)
+                && MapNodes[index].Links[i].NodeTo.isOpen
                 && MapNodes[index].Links[i].IsAvailable)
             {
                 links.Add((MapNodes[index].Links[i], NodeLink.Direction.forward));
             }
-            else if (MapNodes[index].Equals(MapNodes[index].Links[i].DestNodeForward.node)
-                && MapNodes[index].Links[i].DestNodeBackward.isOpen
+            else if (MapNodes[index].Equals(MapNodes[index].Links[i].NodeTo.node)
+                && MapNodes[index].Links[i].NodeFrom.isOpen
                 && MapNodes[index].Links[i].IsAvailable)
             {
                 links.Add((MapNodes[index].Links[i], NodeLink.Direction.backward));
             }
         }
         return links;
+    }
+
+    public bool IsNodeReachable(int currentIndex, int nextNodeIndex, int stepsAmount = 1)
+    {
+        if (stepsAmount == 1)
+        {
+            var links = AvailableLinks(currentIndex);
+            for (int i = 0; i < links.Count; i++)
+            {
+                if (links[i].direction == NodeLink.Direction.forward
+                    && links[i].link.NodeTo.node.Index == nextNodeIndex)
+                {
+                    return true;
+                }
+                if (links[i].direction == NodeLink.Direction.backward
+                    && links[i].link.NodeFrom.node.Index == nextNodeIndex)
+                {
+                    return true;
+                }
+            }
+        }
+        // TODO: to fix for more steps
+        return false;
+    }
+
+    public (NodeLink link, NodeLink.Direction direction) GetNodeLink(int node1Index, int node2Index)
+    {
+        var links = AvailableLinks(node1Index);
+        for (int i = 0; i < links.Count; i++)
+        {
+            if (links[i].direction == NodeLink.Direction.forward
+                && links[i].link.NodeTo.node.Index == node2Index)
+            {
+                return links[i];
+            }
+            if (links[i].direction == NodeLink.Direction.backward
+                && links[i].link.NodeFrom.node.Index == node2Index)
+            {
+                return links[i];
+            }
+        }
+        return (null, NodeLink.Direction.forward);
     }
 }
