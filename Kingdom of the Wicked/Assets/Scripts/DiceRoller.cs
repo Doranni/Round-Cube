@@ -17,7 +17,7 @@ public class DiceRoller : Singleton<DiceRoller>
 
     private void Start()
     {
-        plMovement.OnMoveFinished += DecreaseDiceRes;
+        plMovement.OnStepFinished += DecreaseDiceRes;
     }
 
     private void DecreaseDiceRes()

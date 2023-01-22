@@ -14,21 +14,24 @@ public class PlayerMovement : MonoBehaviour
         waitingNodeChosen
     }
 
-    [SerializeField] private float speed = 8, posOffset = 0.1f, timeDelay_diceRolled = 0.3f;
+    [SerializeField] private float speed = 10, posOffset = 0.4f, timeDelay_diceRolled = 0.2f;
 
     private CharacterController characterController;
 
     public MoveStatus MStatus { get; private set; }
+
+    private float yOffset;
+    private float yGravity;
+
     private int destNodeIndex;
     private List<Vector3> destPoints = new();
     private int passedDestPoints;
-    private float yOffset;
-    private float yGravity;
-    private List<NodeLink> movedLinks = new();
+    private NodeLink movedLink;
+    private Vector3 moveVector;
 
     private Coroutine diceRolledRoutine;
 
-    public event Action OnMoveFinished;
+    public event Action OnStepFinished;
 
     private void Awake()
     {
@@ -52,24 +55,21 @@ public class PlayerMovement : MonoBehaviour
         {
             case MoveStatus.moving:
                 {
+                    if (Mathf.Abs(transform.position.x - destPoints[passedDestPoints].x) < posOffset
+                        && Mathf.Abs(transform.position.z - destPoints[passedDestPoints].z) < posOffset)
+                    {
+                        passedDestPoints++;
+                    }
                     if (passedDestPoints == destPoints.Count)
                     {
                         destPoints.Clear();
                         MStatus = MoveStatus.onBetweenNode;
-                        OnMoveFinished?.Invoke();
+                        OnStepFinished?.Invoke();
+                        return;
                     }
-                    else
-                    {
-                        var vector = (destPoints[passedDestPoints] - transform.position).normalized;
-                        vector.y = yGravity;
-                        characterController.Move(vector * speed * Time.deltaTime);
-
-                        if (Mathf.Abs(transform.position.x - destPoints[passedDestPoints].x) < posOffset 
-                            && Mathf.Abs(transform.position.z - destPoints[passedDestPoints].z) < posOffset)
-                        {
-                            passedDestPoints++;
-                        }
-                    }
+                    moveVector = (destPoints[passedDestPoints] - transform.position).normalized;
+                    moveVector.y = yGravity;
+                    characterController.Move(moveVector * speed * Time.deltaTime);
                     break;
                 }
         }
@@ -95,11 +95,11 @@ public class PlayerMovement : MonoBehaviour
         else
         {
             MStatus = MoveStatus.onDestinationNode;
-            for (int i = 0; i < movedLinks.Count; i++)
+            if (movedLink != null)
             {
-                movedLinks[i].SetIsAvailable(true);
+                movedLink.SetIsAvailable(true);
             }
-            movedLinks.Clear();
+            movedLink = null;
         }
     }
 
@@ -119,18 +119,7 @@ public class PlayerMovement : MonoBehaviour
         var links = Map.Instance.AvailableLinks(destNodeIndex);
         if (links.Count == 1)
         {
-            if (links[0].direction == NodeLink.Direction.forward)
-            {
-                destNodeIndex = links[0].link.NodeTo.node.Index;
-            }
-            else
-            {
-                destNodeIndex = links[0].link.NodeFrom.node.Index;
-            }
-            links[0].link.SetIsAvailable(false);
-            movedLinks.Add(links[0].link);
-            SetDestPoints(links[0]);
-            MStatus = MoveStatus.moving;
+            SetDestination(links[0]);
         }
         else
         {
@@ -138,10 +127,17 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
-    private void SetDestPoints((NodeLink link, NodeLink.Direction direction) link)
+    private void SetDestination((NodeLink link, NodeLink.Direction direction) link)
     {
+        if (movedLink != null)
+        {
+            movedLink.SetIsAvailable(true);
+        }
+        link.link.SetIsAvailable(false);
+        movedLink = link.link;
         if (link.direction == NodeLink.Direction.forward)
         {
+            destNodeIndex = link.link.NodeTo.node.Index;
             for (int i = 1; i < link.link.PathPoints.Count; i++)
             {
                 destPoints.Add(link.link.PathPoints[i]);
@@ -149,25 +145,22 @@ public class PlayerMovement : MonoBehaviour
         }
         else
         {
+            destNodeIndex = link.link.NodeFrom.node.Index;
             for (int i = link.link.PathPoints.Count - 2; i >= 0; i--)
             {
                 destPoints.Add(link.link.PathPoints[i]);
             }
         }
         passedDestPoints = 0;
+        MStatus = MoveStatus.moving;
     }
 
     public void ChooseMoveNode(MapNode node)
     {
         if (Map.Instance.IsNodeReachable(destNodeIndex, node.Index))
         {
-            Debug.Log("Move to node " + node.name);
             var link = Map.Instance.GetNodeLink(destNodeIndex, node.Index);
-            destNodeIndex = node.Index;
-            link.link.SetIsAvailable(false);
-            movedLinks.Add(link.link);
-            SetDestPoints(link);
-            MStatus = MoveStatus.moving;
+            SetDestination(link);
         }
     }
 
