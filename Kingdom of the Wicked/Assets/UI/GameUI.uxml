@@ -1,0 +1,6 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="False">
+    <Style src="project://database/Assets/UI/GameUI.uss?fileID=7433441132597879392&amp;guid=eef1d654d6413574fa2156a1d1b237bc&amp;type=3#GameUI" />
+    <ui:VisualElement name="Dice" class="dice" style="position: absolute; bottom: 0; right: 0;">
+        <ui:Button text="Roll the&#10;Dice" display-tooltip-when-elided="true" name="Button_RollTheDice" class="dice_button" style="border-top-left-radius: 25px; border-bottom-left-radius: 25px; border-top-right-radius: 25px; border-bottom-right-radius: 25px;" />
+    </ui:VisualElement>
+</ui:UXML>
