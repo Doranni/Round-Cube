@@ -1,16 +1,70 @@
 .dice {
+    margin-left: 50px;
+    margin-right: 50px;
+    margin-top: 50px;
+    margin-bottom: 50px;
+}
+
+.dice_button {
+    width: 130px;
+    height: 130px;
+    font-size: 22px;
+    color: rgb(0, 0, 0);
+    -unity-text-align: middle-center;
+    background-color: rgb(183, 183, 183);
+    -unity-font-style: bold;
+}
+
+.player {
     padding-left: 10px;
     padding-right: 10px;
     padding-top: 10px;
     padding-bottom: 10px;
 }
 
-.dice_button {
-    width: 110px;
-    height: 110px;
-    font-size: 22px;
+.card {
+    width: 90px;
+    height: 130px;
+    border-top-left-radius: 14px;
+    border-bottom-left-radius: 14px;
+    border-top-right-radius: 14px;
+    border-bottom-right-radius: 14px;
+    background-color: rgb(120, 207, 145);
+    margin-left: 5px;
+    margin-right: 5px;
+    margin-top: 5px;
+    margin-bottom: 5px;
     color: rgba(0, 0, 0, 255);
+    font-size: 17px;
     -unity-text-align: middle-center;
-    background-color: rgba(183, 183, 183, 255);
     -unity-font-style: bold;
+    justify-content: center;
+    align-items: center;
+}
+
+.icon {
+    width: 180px;
+    height: 180px;
+    background-color: rgb(197, 165, 27);
+    border-top-left-radius: 100px;
+    border-bottom-left-radius: 100px;
+    border-top-right-radius: 100px;
+    border-bottom-right-radius: 100px;
+    color: rgba(0, 0, 0, 255);
+    font-size: 22px;
+    -unity-font-style: bold;
+}
+
+.health_bar {
+    width: 250px;
+    height: 40px;
+    background-color: rgb(178, 68, 68);
+    justify-content: center;
+}
+
+.player {
+    margin-left: 10px;
+    margin-right: 10px;
+    margin-top: 10px;
+    margin-bottom: 10px;
 }

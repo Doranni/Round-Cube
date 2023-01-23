@@ -2,7 +2,6 @@ using UnityEngine;
 
 public class CameraTarget : MonoBehaviour
 {
-    [SerializeField] private PlayerMovement pMovement;
     [SerializeField] private float speed = 30, radius = 10;
 
     private Vector2 cameraInput;

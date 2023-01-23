@@ -225,7 +225,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 159367721}
   m_LocalRotation: {x: 0.5, y: 0, z: 0, w: 0.8660254}
-  m_LocalPosition: {x: 1.27, y: 35.56699, z: -43.30256}
+  m_LocalPosition: {x: 1.27, y: 33.663048, z: -42.20332}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -646,7 +646,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 330585543}
   m_LocalRotation: {x: 0.5, y: -0, z: -0, w: 0.8660254}
-  m_LocalPosition: {x: 1.27, y: 35.56699, z: -43.30256}
+  m_LocalPosition: {x: 1.27, y: 33.663048, z: -42.20332}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -2836,6 +2836,18 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 5951481344367250247}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1307952728 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1307952728, guid: 1711fa5ec2f03ca4eb484fd54cd1451f,
+    type: 3}
+  m_PrefabInstance: {fileID: 5951481344367250247}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d34e331a08ea61744b8e761640d1a685, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &1308921334
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -4714,7 +4726,7 @@ MonoBehaviour:
   m_TargetMovementOnly: 1
   m_ScreenX: 0.5
   m_ScreenY: 0.5
-  m_CameraDistance: 37.60512
+  m_CameraDistance: 35.40664
   m_DeadZoneWidth: 0
   m_DeadZoneHeight: 0
   m_DeadZoneDepth: 0
@@ -5154,6 +5166,7 @@ GameObject:
   - component: {fileID: 2140604886}
   - component: {fileID: 2140604885}
   - component: {fileID: 2140604887}
+  - component: {fileID: 2140604888}
   m_Layer: 5
   m_Name: UIDocument
   m_TagString: Untagged
@@ -5261,6 +5274,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6dbb130f1cce63f4f820986005687d53, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &2140604888
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2140604882}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8a1b97a182001ab41a64a63fc42cdfd3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  plStats: {fileID: 1307952728}
 --- !u!1001 &294601608747851552
 PrefabInstance:
   m_ObjectHideFlags: 0
