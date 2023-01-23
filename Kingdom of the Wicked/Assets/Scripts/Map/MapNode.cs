@@ -3,7 +3,10 @@ using UnityEngine;
 
 public class MapNode : MonoBehaviour
 {
+    [SerializeField] private Transform stayPoint;
     [SerializeField] private bool isStart = false;
+
+    public Vector3 StayPoint => stayPoint.transform.position;
     public bool IsStart => isStart;
     public int Index { get; private set; }
     public List<NodeLink> Links { get; private set; }

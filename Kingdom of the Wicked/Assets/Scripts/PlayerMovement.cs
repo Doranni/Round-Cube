@@ -107,7 +107,7 @@ public class PlayerMovement : MonoBehaviour
     {
         destNodeIndex = Map.Instance.Index_start;
         characterController.enabled = false;
-        transform.position = Map.Instance.MapNodes[destNodeIndex].transform.position
+        transform.position = Map.Instance.MapNodes[destNodeIndex].StayPoint
             + Vector3.up * yOffset;
         characterController.enabled = true;
         characterController.Move(Vector3.up * yGravity);
