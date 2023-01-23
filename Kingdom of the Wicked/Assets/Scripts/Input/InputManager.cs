@@ -1,10 +1,9 @@
 using System;
-using UnityEngine;
 using UnityEngine.InputSystem;
 
 public class InputManager : Singleton<InputManager>
 {
-    public event Action<InputAction.CallbackContext> OnMouseClick_started, OnMouseClick_performed, OnMouseClick_canceled;
+    public event Action<InputAction.CallbackContext> OnCameraMove_performed, OnCameraZoom_performed;
 
     private GameInput gameInput;
 
@@ -16,24 +15,18 @@ public class InputManager : Singleton<InputManager>
 
     private void Start()
     {
-        gameInput.Player.MouseClick.started += MouseClick_started; ;
-        gameInput.Player.MouseClick.performed += MouseClick_performed;
-        gameInput.Player.MouseClick.canceled += MouseClick_canceled; ;
+        gameInput.Camera.Move.performed += CameraMove_performed;
+        gameInput.Camera.Zoom.performed += CameraZoom_performed;
     }
 
-    private void MouseClick_started(InputAction.CallbackContext obj)
+    private void CameraZoom_performed(InputAction.CallbackContext obj)
     {
-        OnMouseClick_started?.Invoke(obj);
+        OnCameraZoom_performed?.Invoke(obj);
     }
 
-    private void MouseClick_performed(InputAction.CallbackContext obj)
+    private void CameraMove_performed(InputAction.CallbackContext obj)
     {
-        OnMouseClick_performed?.Invoke(obj);
-    }
-
-    private void MouseClick_canceled(InputAction.CallbackContext obj)
-    {
-        OnMouseClick_canceled?.Invoke(obj);
+        OnCameraMove_performed?.Invoke(obj);
     }
 
     private void OnEnable()
@@ -48,6 +41,7 @@ public class InputManager : Singleton<InputManager>
 
     private void OnDestroy()
     {
-        gameInput.Player.MouseClick.performed -= MouseClick_performed;
+        gameInput.Camera.Move.performed -= CameraMove_performed;
+        gameInput.Camera.Zoom.performed -= CameraZoom_performed;
     }
 }
