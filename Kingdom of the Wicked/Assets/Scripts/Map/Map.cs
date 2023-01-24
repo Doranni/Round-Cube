@@ -1,7 +1,5 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.AI;
 
 public class Map : Singleton<Map>
 {
@@ -89,26 +87,22 @@ public class Map : Singleton<Map>
         return links;
     }
 
-    public bool IsNodeReachable(int currentIndex, int nextNodeIndex, int stepsAmount = 1)
+    public bool IsNodeReachable(int currentIndex, int nextNodeIndex)
     {
-        if (stepsAmount == 1)
+        var links = AvailableLinks(currentIndex);
+        for (int i = 0; i < links.Count; i++)
         {
-            var links = AvailableLinks(currentIndex);
-            for (int i = 0; i < links.Count; i++)
+            if (links[i].direction == NodeLink.Direction.forward
+                && links[i].link.NodeTo.node.Index == nextNodeIndex)
             {
-                if (links[i].direction == NodeLink.Direction.forward
-                    && links[i].link.NodeTo.node.Index == nextNodeIndex)
-                {
-                    return true;
-                }
-                if (links[i].direction == NodeLink.Direction.backward
-                    && links[i].link.NodeFrom.node.Index == nextNodeIndex)
-                {
-                    return true;
-                }
+                return true;
+            }
+            if (links[i].direction == NodeLink.Direction.backward
+                && links[i].link.NodeFrom.node.Index == nextNodeIndex)
+            {
+                return true;
             }
         }
-        // TODO: to fix for more steps
         return false;
     }
 

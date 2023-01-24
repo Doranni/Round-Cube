@@ -35,10 +35,12 @@ public class NodeLink : MonoBehaviour
     private void InitPathPoints()
     {
         PathPoints = new();
+        PathPoints.Add(nodeFrom.StayPoint);
         for (int i = 0; i < pathPoints.Count; i++)
         {
             PathPoints.Add(pathPoints[i].position);
         }
+        PathPoints.Add(nodeTo.StayPoint);
     }
 
     public void SetNodeIsOpen(Direction direction, bool isOpen)

@@ -31,7 +31,7 @@ public class PlayerMovement : MonoBehaviour
 
     private Coroutine diceRolledRoutine;
 
-    public event Action OnStepFinished;
+    public event Action OnStepStarted, OnStepFinished;
 
     private void Awake()
     {
@@ -49,7 +49,7 @@ public class PlayerMovement : MonoBehaviour
         MoveToStart();
     }
 
-    private void FixedUpdate()
+    private void Update()
     {
         switch (MStatus)
         {
@@ -107,7 +107,7 @@ public class PlayerMovement : MonoBehaviour
     {
         destNodeIndex = Map.Instance.Index_start;
         characterController.enabled = false;
-        transform.position = Map.Instance.MapNodes[destNodeIndex].transform.position
+        transform.position = Map.Instance.MapNodes[destNodeIndex].StayPoint
             + Vector3.up * yOffset;
         characterController.enabled = true;
         characterController.Move(Vector3.up * yGravity);
@@ -125,6 +125,25 @@ public class PlayerMovement : MonoBehaviour
         {
             MStatus = MoveStatus.waitingNodeChosen;
         }
+    }
+
+    public void ChooseMoveNode(MapNode node)
+    {
+        if (Map.Instance.IsNodeReachable(destNodeIndex, node.Index))
+        {
+            var link = Map.Instance.GetNodeLink(destNodeIndex, node.Index);
+            SetDestination(link);
+        }
+    }
+
+    public void ConsiderMoveNode(MapNode node)
+    {
+        if (Map.Instance.IsNodeReachable(destNodeIndex, node.Index))
+        {
+            // TODO: to outline this way
+            Debug.Log("We can go there!");
+        }
+
     }
 
     private void SetDestination((NodeLink link, NodeLink.Direction direction) link)
@@ -152,26 +171,8 @@ public class PlayerMovement : MonoBehaviour
             }
         }
         passedDestPoints = 0;
+        OnStepStarted?.Invoke();
         MStatus = MoveStatus.moving;
-    }
-
-    public void ChooseMoveNode(MapNode node)
-    {
-        if (Map.Instance.IsNodeReachable(destNodeIndex, node.Index))
-        {
-            var link = Map.Instance.GetNodeLink(destNodeIndex, node.Index);
-            SetDestination(link);
-        }
-    }
-
-    public void ConsiderMoveNode(MapNode node)
-    {
-        if (Map.Instance.IsNodeReachable(destNodeIndex, node.Index))
-        {
-            // TODO: to outline this way
-            Debug.Log("We can go there!");
-        }
-
     }
 
     private void OnDestroy()
