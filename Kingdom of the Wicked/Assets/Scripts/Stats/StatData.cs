@@ -1,10 +1,8 @@
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "stat", menuName = "Stats")]
+[CreateAssetMenu(fileName = "stat", menuName = "Stats/Stat")]
 public class StatData : ScriptableObject
 {
-    public StatType type;
     public string statName;
     public string description;
-    public int baseValue;
 }

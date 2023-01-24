@@ -230,6 +230,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d34e331a08ea61744b8e761640d1a685, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  healthStat: {fileID: 11400000, guid: 4a8bfea092f5a164f94e4c08f426a306, type: 2}
-  armorStat: {fileID: 11400000, guid: bfb5ac68cf6f0794fa47e3a80cc4fc88, type: 2}
-  damageStat: {fileID: 11400000, guid: b5cc0c7fde4c16249bfbd7f8a687d70f, type: 2}
+  stats:
+  - stat: {fileID: 11400000, guid: 7c3ac1081717d964fbd3716ddd4acb0e, type: 2}
+    baseValue: 7
+  - stat: {fileID: 11400000, guid: da4ece70c29588b4a9939d4717b1a463, type: 2}
+    baseValue: 5

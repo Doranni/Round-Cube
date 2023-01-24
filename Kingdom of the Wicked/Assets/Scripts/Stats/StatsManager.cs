@@ -4,18 +4,40 @@ using UnityEngine;
 
 public class StatsManager : MonoBehaviour
 {
-    [SerializeField] private StatData healthStat, armorStat, damageStat;
+    [SerializeField] private StatValueData[] stats;
 
-    public Dictionary<StatType, Stat> Stats { get; private set; }
+    public Dictionary<string, Stat> Stats { get; private set; }
 
     private void Awake()
     {
         Stats = new();
-        Stats.Add(StatType.health, new Stat(StatType.health, healthStat.statName, healthStat.description, 
-            healthStat.baseValue));
-        Stats.Add(StatType.armor, new Stat(StatType.armor, armorStat.statName, armorStat.description,
-            armorStat.baseValue));
-        Stats.Add(StatType.damage, new Stat(StatType.damage, damageStat.statName, damageStat.description,
-            damageStat.baseValue));
+        for (int i = 0; i < stats.Length; i++)
+        {
+            Stats.Add(stats[i].stat.statName, new Stat(stats[i].stat.statName, stats[i].stat.description, 
+                stats[i].baseValue));
+        }
     }
+
+    public void AddBonus(int id, StatBonus bonus)
+    {
+        if (Stats.ContainsKey(bonus.StatName))
+        {
+            Stats[bonus.StatName].AddBonus(id, bonus);
+        }
+    }
+
+    public void RemoveBonus(int id, StatBonus bonus)
+    {
+        if (Stats.ContainsKey(bonus.StatName))
+        {
+            Stats[bonus.StatName].RemoveBonus(id);
+        }
+    }
+}
+
+[System.Serializable]
+public class StatValueData
+{
+    public StatData stat;
+    public int baseValue;
 }

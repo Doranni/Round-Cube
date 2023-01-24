@@ -10,9 +10,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: fae50b42d671b2141b5580e3209c9406, type: 3}
-  m_Name: damage stat
+  m_Name: stat Armor
   m_EditorClassIdentifier: 
-  type: 2
-  statName: Damage
-  description: Your damage
-  baseValue: 4
+  type: 1
+  statName: Armor
+  description: Your armor value

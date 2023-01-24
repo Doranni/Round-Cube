@@ -3,14 +3,14 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [Serializable]
-public class StatEffect
+public class StatBonus
 {
-    public StatType Type { get; private set; }
+    public string StatName { get; private set; }
     public int Value { get; private set; }
 
-    public StatEffect(StatType type, int value)
+    public StatBonus(string statName, int value)
     {
-        Type = type;
+        StatName = statName;
         Value = value;
     }
 }
