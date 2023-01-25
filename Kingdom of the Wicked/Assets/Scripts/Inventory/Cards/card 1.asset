@@ -10,14 +10,14 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 8fcadc0bdfbb910498943e17dc332e4f, type: 3}
-  m_Name: card
+  m_Name: card 1
   m_EditorClassIdentifier: 
   cardName: 
   description: 
   StatBonuses:
-  - statTypeId: 1
+  - statTypeId: 0
     value: 3
-  - statTypeId: 2
-    value: 4
+  - statTypeId: 1
+    value: 6
   duration: 0
   image: {fileID: 0}
