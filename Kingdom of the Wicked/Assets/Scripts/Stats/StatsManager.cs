@@ -6,31 +6,31 @@ public class StatsManager : MonoBehaviour
 {
     [SerializeField] private StatValueData[] stats;
 
-    public Dictionary<string, Stat> Stats { get; private set; }
+    public Dictionary<Stat.StatId, Stat> Stats { get; private set; }
 
     private void Awake()
     {
         Stats = new();
         for (int i = 0; i < stats.Length; i++)
         {
-            Stats.Add(stats[i].stat.statName, new Stat(stats[i].stat.statName, stats[i].stat.description, 
+            Stats.Add(stats[i].stat.Id, new Stat(stats[i].stat.statName, stats[i].stat.description, 
                 stats[i].baseValue));
         }
     }
 
-    public void AddBonus(int id, StatBonus bonus)
+    public void AddBonus(StatBonus bonus)
     {
-        if (Stats.ContainsKey(bonus.StatName))
+        if (Stats.ContainsKey(bonus.StatTypeId))
         {
-            Stats[bonus.StatName].AddBonus(id, bonus);
+            Stats[bonus.StatTypeId].AddBonus(bonus);
         }
     }
 
-    public void RemoveBonus(int id, StatBonus bonus)
+    public void RemoveBonus(StatBonus bonus)
     {
-        if (Stats.ContainsKey(bonus.StatName))
+        if (Stats.ContainsKey(bonus.StatTypeId))
         {
-            Stats[bonus.StatName].RemoveBonus(id);
+            Stats[bonus.StatTypeId].RemoveBonus(bonus);
         }
     }
 }

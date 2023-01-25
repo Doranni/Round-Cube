@@ -5,12 +5,16 @@ using UnityEngine;
 [Serializable]
 public class StatBonus
 {
-    public string StatName { get; private set; }
-    public int Value { get; private set; }
+    [SerializeField] private Stat.StatId statTypeId;
+    [SerializeField] private int value;
+    private int bonusId;
 
-    public StatBonus(string statName, int value)
+    public Stat.StatId StatTypeId => statTypeId;
+    public int Value => value;  
+    public int BonusId => bonusId;
+
+    public void SetId(int id)
     {
-        StatName = statName;
-        Value = value;
+        bonusId = id;
     }
 }

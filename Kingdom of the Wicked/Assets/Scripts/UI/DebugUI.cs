@@ -27,9 +27,9 @@ public class DebugUI : MonoBehaviour
     void Update()
     {
         var res = str_stats;
-        foreach (KeyValuePair<string, Stat> stat in plStats.Stats)
+        foreach (KeyValuePair<Stat.StatId, Stat> stat in plStats.Stats)
         {
-            res += "\n" + stat.Key + ": " + stat.Value.TotalValue;
+            res += "\n" + stat.Value.StatName + ": " + stat.Value.TotalValue;
         }
         plStatsLbl.text = res;
     }

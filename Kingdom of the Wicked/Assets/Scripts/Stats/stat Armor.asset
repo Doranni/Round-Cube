@@ -12,6 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fae50b42d671b2141b5580e3209c9406, type: 3}
   m_Name: stat Armor
   m_EditorClassIdentifier: 
-  type: 1
+  Id: 1
   statName: Armor
   description: Your armor value

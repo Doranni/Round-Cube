@@ -6,6 +6,7 @@ using UnityEngine.UIElements;
 [RequireComponent(typeof(UIDocument))]
 public class MainSceneUI : MonoBehaviour
 {
+    //Dise
     private VisualElement diceScreen;
     private Button rollDiceButton;
 
@@ -14,22 +15,48 @@ public class MainSceneUI : MonoBehaviour
 
     const string str_rollTheDice = "Roll the\nDice";
 
+    //Player
+    [SerializeField] private Health plHealth;
+
+    private VisualElement playerScreen;
+    private Label plHealthLbl;
+
+    const string k_playerScreen = "Player";
+    const string k_plHealthLbl = "Lbl_PlHealth";
+
     private void Awake()
     {
         VisualElement rootElement = GetComponent<UIDocument>().rootVisualElement;
 
+        //Dise
         diceScreen = rootElement.Q(k_diceScreen);
         rollDiceButton = rootElement.Q<Button>(k_diceButton);
+
+        //Player
+        playerScreen = rootElement.Q(k_playerScreen);
+        plHealthLbl = rootElement.Q<Label>(k_plHealthLbl);
     }
 
     void Start()
     {
+        //Dise
         DiceRoller.Instance.OnDiceRolled += DisplayDiceRes;
         DiceRoller.Instance.OnDiceResChanged += DisplayDiceRes;
 
         rollDiceButton.RegisterCallback<ClickEvent>((_) => DiceRoller.Instance.RollTheDice());
 
         DisplayDiceRes(DiceRoller.Instance.DiceResult);
+
+        //Player
+        plHealth.OnChangeHealth += DisplayPlHealth;
+        plHealth.OnChangeMaxHealth += DisplayPlHealth;
+
+        DisplayPlHealth((plHealth.CurrentHealth, plHealth.MaxHealth));
+    }
+
+    private void DisplayPlHealth((float currentHealth, float maxHealth) obj)
+    {
+        plHealthLbl.text = "HP: " + obj.currentHealth + "/" + obj.maxHealth;
     }
 
     private void DisplayDiceRes(int value)
