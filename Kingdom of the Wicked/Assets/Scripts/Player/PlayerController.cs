@@ -5,9 +5,6 @@ using UnityEngine;
 [RequireComponent(typeof(Equipment))]
 public class PlayerController : MonoBehaviour
 {
-    [SerializeField] private CardWeapon cardWeapon;
-    [SerializeField] private CardArmor cardArmor;
-    [SerializeField] private CardOther cardOther;
     private Equipment equipment;
 
     private void Awake()
@@ -18,8 +15,8 @@ public class PlayerController : MonoBehaviour
     void Start()
     {
         //test
-        equipment.EquipWeaponCard(cardWeapon);
-        equipment.EquipArmorCard(cardArmor);
-        equipment.EquipOtherCard(cardOther);
+        //equipment.EquipWeaponCard(cardWeapon);
+        //equipment.EquipArmorCard(cardArmor);
+        //equipment.EquipOtherCard(cardOther);
     }
 }

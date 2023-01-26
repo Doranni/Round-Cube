@@ -5,9 +5,9 @@ using UnityEngine;
 [RequireComponent(typeof(StatsManager))]
 public class Equipment : MonoBehaviour
 {
-    public CardWeapon WeaponCard { get; private set; }
-    public CardArmor ArmorCard { get; private set; }
-    public Dictionary<int, CardOther> OtherCards { get; private set; }
+    public Card WeaponCard { get; private set; }
+    public Card ArmorCard { get; private set; }
+    public Dictionary<int, Card> OtherCards { get; private set; }
 
     private int activeOtherSlot = 0;
     public int ActiveOtherSlot => activeOtherSlot;
@@ -20,14 +20,14 @@ public class Equipment : MonoBehaviour
     private void Awake()
     {
         statsManager = GetComponent<StatsManager>();
-        OtherCards = new Dictionary<int, CardOther>(GameManager.Instance.Equipment_OtherSlotsAmount);
+        OtherCards = new Dictionary<int, Card>(GameManager.Instance.Equipment_OtherSlotsAmount);
         for (int i = 0; i < GameManager.Instance.Equipment_OtherSlotsAmount; i++)
         {
             OtherCards.Add(i, null);
         }
     }
 
-    public void EquipWeaponCard(CardWeapon card)
+    public void EquipWeaponCard(Card card)
     {
         if (WeaponCard != null)
         {
@@ -44,7 +44,7 @@ public class Equipment : MonoBehaviour
         OnEquippedWeaponCardChanged?.Invoke();
     }
 
-    public void EquipArmorCard(CardArmor card)
+    public void EquipArmorCard(Card card)
     {
         if (ArmorCard != null)
         {
@@ -61,7 +61,7 @@ public class Equipment : MonoBehaviour
         OnEquippedArmorCardChanged?.Invoke();
     }
 
-    public void EquipOtherCard(CardOther card)
+    public void EquipOtherCard(Card card)
     {
         if (OtherCards[activeOtherSlot] != null)
         {
