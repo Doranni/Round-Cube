@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.UIElements;
+using System.Linq;
+using UnityEngine.InputSystem;
 
 [RequireComponent(typeof(UIDocument))]
 public class EquipmentUI : MonoBehaviour
@@ -47,7 +49,14 @@ public class EquipmentUI : MonoBehaviour
     private void DragCard(MouseDownEvent evt, VisualElement slot)
     {
         Debug.Log($"{slot.name} MouseDownEvent");
-
+        //if (slot.childCount > 0)
+        //{
+        //    var card = slot.Children().ToList();
+        //    Debug.Log($"card count - {card.Count}");
+        //    Vector2 pos = Mouse.current.position.ReadValue();
+        //    card[0].style.top = pos.x;
+        //    card[0].style.left = pos.y;
+        //}
     }
 
     private void DisplayCard(VisualElement slot, Card card)
