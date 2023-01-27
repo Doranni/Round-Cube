@@ -1,18 +1,33 @@
-using System.Collections;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class Inventory : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+    public List<Card> Cards { get; private set; }
+
+    public event Action OnInventoryChanged;
+
+    private void Awake()
     {
-        
+        Cards = new();
     }
 
-    // Update is called once per frame
-    void Update()
+    public void AddCard(Card card)
     {
-        
+        Cards.Add(card);
+        OnInventoryChanged?.Invoke();
+    }
+
+    public bool RemoveCard(Card card)
+    {
+        var cardToRemove = Cards.Find(x => x.Id == card.Id);
+        if (cardToRemove == null)
+        {
+            return false;
+        }
+        Cards.Remove(cardToRemove);
+        OnInventoryChanged?.Invoke();
+        return true;
     }
 }

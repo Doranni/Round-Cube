@@ -11,6 +11,7 @@ public class Card
         Other
     }
 
+    public int Id { get; private set; }
     public CardsType CardType { get; private set; }
     public string CardName { get; private set; }
     public string Description { get; private set; }
@@ -20,6 +21,7 @@ public class Card
 
     public Card(CardData data)
     {
+        Id = data.id;
         CardType = data.cardType;
         CardName = data.cardName;
         Description = data.description;

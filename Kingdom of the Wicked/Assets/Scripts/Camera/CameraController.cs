@@ -23,9 +23,12 @@ public class CameraController : MonoBehaviour
 
     private void CameraZoom_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj)
     {
-        cameraZoomInput = Mathf.Clamp(obj.ReadValue<float>(), -1, 1);
-        destDistFollowCam = Mathf.Clamp(destDistFollowCam + cameraZoomInput * zoomStrength * Time.deltaTime, 
-            followCamDistMin, followCamDistMax);
+        if (GameManager.Instance.State == GameManager.GameState.active)
+        {
+            cameraZoomInput = Mathf.Clamp(obj.ReadValue<float>(), -1, 1);
+            destDistFollowCam = Mathf.Clamp(destDistFollowCam + cameraZoomInput * zoomStrength * Time.deltaTime,
+                followCamDistMin, followCamDistMax);
+        }
     }
 
     private void LateUpdate()

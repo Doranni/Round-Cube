@@ -11,6 +11,7 @@ public class CardsDatabaseData : ScriptableObject
 [Serializable]
 public class CardData
 {
+    public int id;
     public Card.CardsType cardType;
     public string cardName;
     public string description;

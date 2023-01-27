@@ -10,7 +10,7 @@ public class Singleton<T> : MonoBehaviour where T : Component
     {
         if (Instance != null)
         {
-            Destroy(gameObject);
+            Destroy(this);
         }
         else
         {

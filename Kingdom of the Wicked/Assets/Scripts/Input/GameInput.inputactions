@@ -2,6 +2,54 @@
     "name": "GameInput",
     "maps": [
         {
+            "name": "GameUI",
+            "id": "1f12648b-d9b6-4f2e-90a1-ed3ce7f5ddf9",
+            "actions": [
+                {
+                    "name": "Escape",
+                    "type": "Button",
+                    "id": "914f3e95-4403-47b8-995d-a5788dc4cec6",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "MousePosition",
+                    "type": "PassThrough",
+                    "id": "3a034328-95a7-45b2-a9c7-c21f1dfa7385",
+                    "expectedControlType": "Vector2",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "74f9ee11-8bec-436b-8856-4cfd857343cb",
+                    "path": "<Keyboard>/escape",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard&Mouse",
+                    "action": "Escape",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "5564f39e-6175-45eb-a08d-e9817e7641c4",
+                    "path": "<Mouse>/position",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard&Mouse",
+                    "action": "MousePosition",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
+        },
+        {
             "name": "Camera",
             "id": "4fe6f13c-c186-4988-b535-60a33fe6f4a8",
             "actions": [
