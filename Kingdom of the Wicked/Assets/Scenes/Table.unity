@@ -5711,6 +5711,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cdbf7d77a22928748b5b393c873fb7c1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  dragRangeMin: {x: 0, y: 0}
+  dragRangeMax: {x: 1920, y: 1080}
 --- !u!1001 &294601608747851552
 PrefabInstance:
   m_ObjectHideFlags: 0

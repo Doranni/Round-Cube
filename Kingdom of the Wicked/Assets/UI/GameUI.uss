@@ -150,3 +150,28 @@
     margin-top: 5px;
     margin-bottom: 5px;
 }
+
+.Slots {
+    flex-direction: row;
+    flex-wrap: wrap;
+}
+
+.Slot {
+    width: 50px;
+    height: 50px;
+    background-color: rgba(245, 223, 223, 255);
+    border-left-width: 1px;
+    border-right-width: 1px;
+    border-top-width: 1px;
+    border-bottom-width: 1px;
+    margin-left: 2px;
+    margin-right: 2px;
+    margin-top: 2px;
+    margin-bottom: 2px;
+    border-left-color: rgba(0, 0, 0, 255);
+    border-right-color: rgba(0, 0, 0, 255);
+    border-top-color: rgba(0, 0, 0, 255);
+    border-bottom-color: rgba(0, 0, 0, 255);
+    align-items: center;
+    justify-content: center;
+}

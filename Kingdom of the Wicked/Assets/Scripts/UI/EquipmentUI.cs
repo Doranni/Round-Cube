@@ -7,6 +7,14 @@ using UnityEngine.UIElements;
 [RequireComponent(typeof(UIDocument))]
 public class EquipmentUI : MonoBehaviour
 {
+    [Flags]
+    public enum SlotType
+    {
+        weapon = 1,
+        armor = 2,
+        other = 4
+    }
+
     [SerializeField] private Vector2 cardSize_small, cardSize_big;
     [SerializeField] private float inventoryCardMargin;
 
@@ -16,8 +24,7 @@ public class EquipmentUI : MonoBehaviour
     private VisualElement equipmentScreen;
     private VisualElement slotWeapon, slotArmor, slotOther;
     private VisualElement inventoryButton, inventoryScreen, inventoryContent;
-
-
+    private VisualElement topPanel;
 
     const string k_equipmentScreen = "Equipment";
     const string k_slotWeapon = "SlopWeapon";
@@ -28,6 +35,7 @@ public class EquipmentUI : MonoBehaviour
     const string k_inventoryContent = "InventoryContent";
     const string k_cardBackground = "CardBackground";
     const string k_cardName = "CardName";
+    const string k_topPanel = "topPanel";
 
     VisualTreeAsset CardAsset;
 
@@ -46,6 +54,7 @@ public class EquipmentUI : MonoBehaviour
         inventoryButton = rootElement.Q(k_inventoryButton);
         inventoryScreen = rootElement.Q(k_inventoryScreen);
         inventoryContent = rootElement.Q(k_inventoryContent);
+        topPanel = rootElement.Q(k_topPanel);
 
         CardAsset = EditorGUIUtility.Load("Assets/UI/CardUI.uxml") as VisualTreeAsset;
     }
@@ -56,6 +65,16 @@ public class EquipmentUI : MonoBehaviour
         SetSize(slotArmor, cardSize_small);
         SetSize(slotOther, cardSize_small);
         SetSize(inventoryButton, cardSize_small);
+
+        DragCardManager.Instance.AddSlot(slotWeapon, DragCardManager.SlotType.weapon,
+            DragCardManager.SlotNames.weaponSlot, true);
+        DragCardManager.Instance.AddSlot(slotArmor, DragCardManager.SlotType.armor,
+            DragCardManager.SlotNames.armorSlot, true);
+        DragCardManager.Instance.AddSlot(slotOther, DragCardManager.SlotType.other,
+            DragCardManager.SlotNames.otherSlot, true);
+        DragCardManager.Instance.AddSlot(inventoryContent, DragCardManager.SlotType.weapon 
+            | DragCardManager.SlotType.armor | DragCardManager.SlotType.other,
+            DragCardManager.SlotNames.inventory, false);
 
         plEquipment.OnEquippedWeaponCardChanged += delegate { DisplayCardOnSlot(slotWeapon, plEquipment.WeaponCard); };
         plEquipment.OnEquippedArmorCardChanged += delegate { DisplayCardOnSlot(slotArmor, plEquipment.ArmorCard); };
@@ -110,18 +129,7 @@ public class EquipmentUI : MonoBehaviour
             VisualElement cardVE = CardAsset.CloneTree();
             slot.Add(cardVE);
             StyleCard(cardVE, card, cardSize_small, 0);
-            cardVE.RegisterCallback<MouseDownEvent>(_ =>
-            { 
-                DragCard.Instance.StartDragging(cardVE.Q(k_cardBackground)); 
-            });
-            cardVE.RegisterCallback<MouseUpEvent>(_ => 
-            { 
-                DragCard.Instance.StopDragging(cardVE.Q(k_cardBackground)); 
-            });
-            //cardVE.RegisterCallback<MouseOutEvent>(_ =>
-            //{
-            //    DragCard.Instance.StopDragging(cardVE.Q(k_cardBackground));
-            //});
+            DragCardManager.Instance.AddTarget(cardVE, cardSize_small, card);
         }
     }
 
@@ -146,10 +154,12 @@ public class EquipmentUI : MonoBehaviour
         if (isInventoryOpen)
         {
             inventoryScreen.style.display = DisplayStyle.Flex;
+            DragCardManager.Instance.SetSlotIsActive(DragCardManager.SlotNames.inventory, true);
         }
         else
         {
             inventoryScreen.style.display = DisplayStyle.None;
+            DragCardManager.Instance.SetSlotIsActive(DragCardManager.SlotNames.inventory, false);
         }
     }
 
