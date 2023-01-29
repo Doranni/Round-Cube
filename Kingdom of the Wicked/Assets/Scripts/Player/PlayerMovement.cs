@@ -26,7 +26,7 @@ public class PlayerMovement : MonoBehaviour
     private int destNodeIndex;
     private List<Vector3> destPoints = new();
     private int passedDestPoints;
-    private NodeLink movedLink;
+    private (bool wasLocked, NodeLink link) lockedLink = (false, null);
     private Vector3 moveVector;
 
     private Coroutine diceRolledRoutine;
@@ -95,11 +95,12 @@ public class PlayerMovement : MonoBehaviour
         else
         {
             MStatus = MoveStatus.onDestinationNode;
-            if (movedLink != null)
+            if (lockedLink.wasLocked)
             {
-                movedLink.SetIsAvailable(true);
+                lockedLink.link.SetIsAvailable(true);
+                lockedLink.wasLocked = false;
+                lockedLink.link = null;
             }
-            movedLink = null;
         }
     }
 
@@ -116,7 +117,7 @@ public class PlayerMovement : MonoBehaviour
 
     private void Move()
     {
-        var links = Map.Instance.AvailableLinks(destNodeIndex);
+        var links = Map.Instance.GetAvailableLinks(destNodeIndex);
         if (links.Count == 1)
         {
             SetDestination(links[0]);
@@ -131,7 +132,7 @@ public class PlayerMovement : MonoBehaviour
     {
         if (Map.Instance.IsNodeReachable(destNodeIndex, node.Index))
         {
-            var link = Map.Instance.GetNodeLink(destNodeIndex, node.Index);
+            var link = Map.Instance.MapNodes[destNodeIndex].Links[node.Index];
             SetDestination(link);
         }
     }
@@ -146,29 +147,24 @@ public class PlayerMovement : MonoBehaviour
 
     }
 
-    private void SetDestination((NodeLink link, NodeLink.Direction direction) link)
+    private void SetDestination(NodeLink link)
     {
-        if (movedLink != null)
+        if (lockedLink.wasLocked)
         {
-            movedLink.SetIsAvailable(true);
+            lockedLink.link.SetIsAvailable(true);
+            lockedLink.wasLocked = false;
+            lockedLink.link = null;
         }
-        link.link.SetIsAvailable(false);
-        movedLink = link.link;
-        if (link.direction == NodeLink.Direction.forward)
+        if (Map.Instance.MapNodes[link.NodeTo.Index].Links.ContainsKey(destNodeIndex))
         {
-            destNodeIndex = link.link.NodeTo.node.Index;
-            for (int i = 1; i < link.link.PathPoints.Count; i++)
-            {
-                destPoints.Add(link.link.PathPoints[i]);
-            }
+            var linkBack = Map.Instance.MapNodes[link.NodeTo.Index].Links[destNodeIndex];
+            linkBack.SetIsAvailable(false);
+            lockedLink = (true, linkBack);
         }
-        else
+        destNodeIndex = link.NodeTo.Index;
+        for (int i = 1; i < link.PathPoints.Count; i++)
         {
-            destNodeIndex = link.link.NodeFrom.node.Index;
-            for (int i = link.link.PathPoints.Count - 2; i >= 0; i--)
-            {
-                destPoints.Add(link.link.PathPoints[i]);
-            }
+            destPoints.Add(link.PathPoints[i]);
         }
         passedDestPoints = 0;
         OnStepStarted?.Invoke();

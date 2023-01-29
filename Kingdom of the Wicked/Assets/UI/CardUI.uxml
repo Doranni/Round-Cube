@@ -1,0 +1,6 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="False">
+    <Style src="project://database/Assets/UI/Card.uss?fileID=7433441132597879392&amp;guid=b958656baed37244c9522b7c0af22a0a&amp;type=3#Card" />
+    <ui:VisualElement name="CardBackground" class="card">
+        <ui:Label text="Card" display-tooltip-when-elided="true" name="CardName" />
+    </ui:VisualElement>
+</ui:UXML>

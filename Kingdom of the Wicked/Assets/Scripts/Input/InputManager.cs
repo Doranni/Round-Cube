@@ -3,7 +3,8 @@ using UnityEngine.InputSystem;
 
 public class InputManager : Singleton<InputManager>
 {
-    public event Action<InputAction.CallbackContext> OnCameraMove_performed, OnCameraZoom_performed;
+    public event Action<InputAction.CallbackContext> OnUIEscape_performed, OnUIMousePosition_performed,
+        OnCameraMove_performed, OnCameraZoom_performed;
 
     private GameInput gameInput;
 
@@ -15,8 +16,20 @@ public class InputManager : Singleton<InputManager>
 
     private void Start()
     {
+        gameInput.GameUI.Escape.performed += UIEscape_performed;
+        gameInput.GameUI.MousePosition.performed += UIMousePosition_performed;
         gameInput.Camera.Move.performed += CameraMove_performed;
         gameInput.Camera.Zoom.performed += CameraZoom_performed;
+    }
+
+    private void UIMousePosition_performed(InputAction.CallbackContext obj)
+    {
+        OnUIMousePosition_performed?.Invoke(obj);
+    }
+
+    private void UIEscape_performed(InputAction.CallbackContext obj)
+    {
+        OnUIEscape_performed?.Invoke(obj);
     }
 
     private void CameraZoom_performed(InputAction.CallbackContext obj)
@@ -41,6 +54,7 @@ public class InputManager : Singleton<InputManager>
 
     private void OnDestroy()
     {
+        gameInput.GameUI.Escape.performed -= UIEscape_performed;
         gameInput.Camera.Move.performed -= CameraMove_performed;
         gameInput.Camera.Zoom.performed -= CameraZoom_performed;
     }

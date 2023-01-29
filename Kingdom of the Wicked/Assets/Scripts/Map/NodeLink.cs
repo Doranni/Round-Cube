@@ -6,35 +6,26 @@ public class NodeLink : MonoBehaviour
 {
     [SerializeField] private MapNode nodeFrom;
     [SerializeField] private MapNode nodeTo;
-    [SerializeField] private bool isWayForwardOpen;
-    [SerializeField] private bool isWayBackOpen;
+    [SerializeField] private bool isWayOpen;
     [SerializeField] private List<Transform> pathPoints;
 
-    public enum Direction
-    {
-        forward,
-        backward
-    }
+    public event Action OnWayOpen, OnWayClosed;
 
-    public event Action OnNodeToOpen, OnNodeFromOpen,
-        OnNodeToClosed, OnNodeFromClosed;
-
-    public (MapNode node, bool isOpen) NodeTo { get; private set; }
-    public (MapNode node, bool isOpen) NodeFrom { get; private set; }
+    public MapNode NodeTo => nodeTo;
+    public MapNode NodeFrom => nodeFrom;
+    public bool IsWayOpen => isWayOpen;
     public List<Vector3> PathPoints { get; private set; }
     public bool IsAvailable { get; private set; }
 
     private void Awake()
     {
-        NodeTo = (nodeTo, isWayForwardOpen);
-        NodeFrom = (nodeFrom, isWayBackOpen);
         IsAvailable = true;
         InitPathPoints();
     }
 
     private void InitPathPoints()
     {
-        PathPoints = new();
+        PathPoints = new(pathPoints.Count + 2);
         PathPoints.Add(nodeFrom.StayPoint);
         for (int i = 0; i < pathPoints.Count; i++)
         {
@@ -43,36 +34,17 @@ public class NodeLink : MonoBehaviour
         PathPoints.Add(nodeTo.StayPoint);
     }
 
-    public void SetNodeIsOpen(Direction direction, bool isOpen)
+    public void SetWayIsOpen(bool isOpen)
     {
-        switch (direction)
+        var prevVal = isWayOpen;
+        isWayOpen = isOpen;
+        if (!prevVal && isWayOpen)
         {
-            case Direction.forward:
-                {
-                    NodeTo = (NodeTo.node, isOpen);
-                    if (isOpen)
-                    {
-                        OnNodeToOpen?.Invoke();
-                    }
-                    else
-                    {
-                        OnNodeToClosed?.Invoke();
-                    }
-                    break;
-                }
-            case Direction.backward:
-                {
-                    NodeFrom = (NodeFrom.node, isOpen);
-                    if (isOpen)
-                    {
-                        OnNodeFromOpen?.Invoke();
-                    }
-                    else
-                    {
-                        OnNodeFromClosed?.Invoke();
-                    }
-                    break;
-                }
+            OnWayOpen?.Invoke();
+        }
+        else if (prevVal && !isWayOpen)
+        {
+            OnWayClosed?.Invoke();
         }
     }
 
