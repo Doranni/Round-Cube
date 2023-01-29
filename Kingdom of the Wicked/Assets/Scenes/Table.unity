@@ -1582,6 +1582,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   otherSlotCapacity: 3
   inventoryCapacity: 50
+  dragRangeMin: {x: 0, y: 0}
+  dragRangeMax: {x: 1920, y: 1080}
 --- !u!4 &569206833
 Transform:
   m_ObjectHideFlags: 0
@@ -3119,18 +3121,6 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: b6020942841be3c4399b3158f7bd9934, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &1307952738 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 9124569182049458245, guid: 1711fa5ec2f03ca4eb484fd54cd1451f,
-    type: 3}
-  m_PrefabInstance: {fileID: 5951481344367250247}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 70dadfeffeea2b84b8edf6c25e824df9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1001 &1308921334
@@ -5581,11 +5571,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   cardSize_small: {x: 80, y: 120}
   cardSize_big: {x: 120, y: 160}
+  slotCardMargin: 0
   inventoryCardMargin: 5
-  dragRangeMin: {x: 0, y: 0}
-  dragRangeMax: {x: 1920, y: 1080}
   plEquipment: {fileID: 1307952733}
-  plInventory: {fileID: 1307952738}
 --- !u!1001 &294601608747851552
 PrefabInstance:
   m_ObjectHideFlags: 0

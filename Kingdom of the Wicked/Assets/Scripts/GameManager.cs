@@ -12,6 +12,11 @@ public class GameManager : Singleton<GameManager>
 
     [SerializeField] [Range(1, 5)] private int otherSlotCapacity = 3;
     [SerializeField][Range(1, 100)] private int inventoryCapacity = 50;
+    [SerializeField]
+    private Vector2 dragRangeMin = Vector2.zero,
+        dragRangeMax = new Vector2(1920, 1080);
+    public Vector2 DragRangeMin => dragRangeMin;
+    public Vector2 DragRangeMax => dragRangeMax;
 
     public int Equipment_OtherSlotCapacity => otherSlotCapacity;
     public int Equipment_InventoryCapacity => inventoryCapacity;

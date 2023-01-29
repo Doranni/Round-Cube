@@ -10,14 +10,16 @@ public class DragAndDropManipulator : PointerManipulator
     private Vector2 dragRangeMin, dragRangeMax;
     private Vector2 cardSize;
     private Card.CardsType type;
+    private Card card;
     private Storage.StorageNames prevSlotName;
 
-    public DragAndDropManipulator(VisualElement card, Vector2 cardSize, Card.CardsType type,
+    public DragAndDropManipulator(VisualElement cardUI, Vector2 cardSize, Card card,
         Storage.StorageNames prevSlotName)
     {
-        target = card;
+        target = cardUI;
         this.cardSize = cardSize;
-        this.type = type;
+        this.card = card;
+        this.type = card.CardType;
         this.prevSlotName = prevSlotName;
     }
 
@@ -38,10 +40,10 @@ public class DragAndDropManipulator : PointerManipulator
     private void PointerDownHandler(PointerDownEvent evt)
     {
         target.BringToFront();
-        dragRangeMin = target.WorldToLocal(EquipmentUI.Instance.DragRangeMin);
+        dragRangeMin = target.WorldToLocal(GameManager.Instance.DragRangeMin);
         dragRangeMax = target.WorldToLocal(new Vector2(
-            EquipmentUI.Instance.DragRangeMax.x - cardSize.x,
-            EquipmentUI.Instance.DragRangeMax.y - cardSize.y));
+            GameManager.Instance.DragRangeMax.x - cardSize.x,
+            GameManager.Instance.DragRangeMax.y - cardSize.y));
         pointerStartPos = evt.position;
         cardStartPos = target.transform.position;
         target.CapturePointer(evt.pointerId);
@@ -49,13 +51,13 @@ public class DragAndDropManipulator : PointerManipulator
 
     private void PointerUpHandler(PointerUpEvent evt)
     {
-        var slots = EquipmentUI.Instance.GetAvailableSlots(type);
-        for (int i = 0; i < slots.Count; i++)
+        var storages = EquipmentUI.Instance.GetAvailableStorages(type);
+        for (int i = 0; i < storages.Count; i++)
         {
-            if (OverlapsTarget(slots[i].slot))
+            if (OverlapsTarget(storages[i].storageUI))
             {
                 target.ReleasePointer(evt.pointerId);
-                EquipmentUI.Instance.CardWasMoved(prevSlotName, slots[i].slotName);
+                EquipmentUI.Instance.CardWasMoved(prevSlotName, storages[i].storageName);
                 return;
             }
         }
