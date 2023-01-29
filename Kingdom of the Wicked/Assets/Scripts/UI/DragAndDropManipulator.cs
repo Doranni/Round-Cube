@@ -5,10 +5,20 @@ using UnityEngine.UIElements;
 
 public class DragAndDropManipulator : PointerManipulator
 {
-    public DragAndDropManipulator(VisualElement target)
+    private Vector2 cardStartPos;
+    private Vector3 pointerStartPos;
+    private Vector2 dragRangeMin, dragRangeMax;
+    private Vector2 cardSize;
+    private Card.CardsType type;
+    private EquipmentUI.SlotNames prevSlotName;
+
+    public DragAndDropManipulator(VisualElement card, Vector2 cardSize, Card.CardsType type,
+        EquipmentUI.SlotNames prevSlotName)
     {
-        this.target = target;
-        root = target.parent;
+        target = card;
+        this.cardSize = cardSize;
+        this.type = type;
+        this.prevSlotName = prevSlotName;
     }
 
     protected override void RegisterCallbacksOnTarget()
@@ -16,7 +26,6 @@ public class DragAndDropManipulator : PointerManipulator
         target.RegisterCallback<PointerDownEvent>(PointerDownHandler);
         target.RegisterCallback<PointerMoveEvent>(PointerMoveHandler);
         target.RegisterCallback<PointerUpEvent>(PointerUpHandler);
-        target.RegisterCallback<PointerCaptureOutEvent>(PointerCaptureOutHandler);
     }
 
     protected override void UnregisterCallbacksFromTarget()
@@ -24,98 +33,54 @@ public class DragAndDropManipulator : PointerManipulator
         target.UnregisterCallback<PointerDownEvent>(PointerDownHandler);
         target.UnregisterCallback<PointerMoveEvent>(PointerMoveHandler);
         target.UnregisterCallback<PointerUpEvent>(PointerUpHandler);
-        target.UnregisterCallback<PointerCaptureOutEvent>(PointerCaptureOutHandler);
     }
-
-    private Vector2 targetStartPosition { get; set; }
-
-    private Vector3 pointerStartPosition { get; set; }
-
-    private bool enabled { get; set; }
-
-    private VisualElement root { get; }
 
     private void PointerDownHandler(PointerDownEvent evt)
     {
-        targetStartPosition = target.transform.position;
-        pointerStartPosition = evt.position;
+        Debug.Log("PointerDownHandler target - " + target);
+        target.BringToFront();
+        Debug.Log("PointerDownHandler EquipmentUI.Instance == null - "
+            + (EquipmentUI.Instance== null));
+        dragRangeMin = target.WorldToLocal(EquipmentUI.Instance.DragRangeMin);
+        
+        dragRangeMax = target.WorldToLocal(new Vector2(
+            EquipmentUI.Instance.DragRangeMax.x - cardSize.x,
+            EquipmentUI.Instance.DragRangeMax.y - cardSize.y));
+        Debug.Log("PointerDownHandler dragRangeMax - " + dragRangeMax);
+        pointerStartPos = evt.position;
+        cardStartPos = target.transform.position;
         target.CapturePointer(evt.pointerId);
-        enabled = true;
-    }
-
-    private void PointerMoveHandler(PointerMoveEvent evt)
-    {
-        if (enabled && target.HasPointerCapture(evt.pointerId))
-        {
-            Vector3 pointerDelta = evt.position - pointerStartPosition;
-
-            target.transform.position = new Vector2(
-                Mathf.Clamp(targetStartPosition.x + pointerDelta.x, 0, target.panel.visualTree.worldBound.width),
-                Mathf.Clamp(targetStartPosition.y + pointerDelta.y, 0, target.panel.visualTree.worldBound.height));
-        }
     }
 
     private void PointerUpHandler(PointerUpEvent evt)
     {
-        if (enabled && target.HasPointerCapture(evt.pointerId))
+        var slots = EquipmentUI.Instance.GetAvailableSlots(type);
+        for (int i = 0; i < slots.Count; i++)
         {
-            target.ReleasePointer(evt.pointerId);
+            if (OverlapsTarget(slots[i]))
+            {
+                target.ReleasePointer(evt.pointerId);
+                return;
+            }
         }
+        target.ReleasePointer(evt.pointerId);
+        target.transform.position = cardStartPos;
     }
 
-    private void PointerCaptureOutHandler(PointerCaptureOutEvent evt)
+    private void PointerMoveHandler(PointerMoveEvent evt)
     {
-        if (enabled)
+        if (target.HasPointerCapture(evt.pointerId))
         {
-            VisualElement slotsContainer = root.Q<VisualElement>("Slots");
-            UQueryBuilder<VisualElement> allSlots =
-                slotsContainer.Query<VisualElement>(className: "Slot");
-            UQueryBuilder<VisualElement> overlappingSlots =
-                allSlots.Where(OverlapsTarget);
-            VisualElement closestOverlappingSlot =
-                FindClosestSlot(overlappingSlots);
-            Vector3 closestPos = Vector3.zero;
-            if (closestOverlappingSlot != null)
-            {
-                closestPos = RootSpaceOfSlot(closestOverlappingSlot);
-                closestPos = new Vector2(closestPos.x - 5, closestPos.y - 5);
-            }
-            target.transform.position =
-                closestOverlappingSlot != null ?
-                closestPos :
-                targetStartPosition;
+            Vector3 pointerDelta = evt.position - pointerStartPos;
 
-            enabled = false;
+            target.transform.position = new Vector2(
+            Mathf.Clamp(cardStartPos.x + pointerDelta.x, dragRangeMin.x, dragRangeMax.x),
+            Mathf.Clamp(cardStartPos.y + pointerDelta.y, dragRangeMin.y, dragRangeMax.y));
         }
     }
 
     private bool OverlapsTarget(VisualElement slot)
     {
         return target.worldBound.Overlaps(slot.worldBound);
-    }
-
-    private VisualElement FindClosestSlot(UQueryBuilder<VisualElement> slots)
-    {
-        List<VisualElement> slotsList = slots.ToList();
-        float bestDistanceSq = float.MaxValue;
-        VisualElement closest = null;
-        foreach (VisualElement slot in slotsList)
-        {
-            Vector3 displacement =
-                RootSpaceOfSlot(slot) - target.transform.position;
-            float distanceSq = displacement.sqrMagnitude;
-            if (distanceSq < bestDistanceSq)
-            {
-                bestDistanceSq = distanceSq;
-                closest = slot;
-            }
-        }
-        return closest;
-    }
-
-    private Vector3 RootSpaceOfSlot(VisualElement slot)
-    {
-        Vector2 slotWorldSpace = slot.parent.LocalToWorld(slot.layout.position);
-        return root.WorldToLocal(slotWorldSpace);
     }
 }

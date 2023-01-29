@@ -15,11 +15,56 @@
     -unity-font-style: bold;
 }
 
-.player {
-    padding-left: 10px;
-    padding-right: 10px;
-    padding-top: 10px;
-    padding-bottom: 10px;
+.pl_panel {
+    position: absolute;
+    left: 0;
+    bottom: 0;
+}
+
+.pl_icon {
+    width: 180px;
+    height: 180px;
+    background-color: rgb(229, 231, 110);
+    border-top-left-radius: 100px;
+    border-bottom-left-radius: 100px;
+    border-top-right-radius: 100px;
+    border-bottom-right-radius: 100px;
+    color: rgb(0, 0, 0);
+    font-size: 22px;
+    -unity-font-style: bold;
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    margin-left: 20px;
+    margin-right: 20px;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    justify-content: center;
+    align-items: center;
+    -unity-text-align: upper-center;
+}
+
+.pl_health_bar {
+    width: 250px;
+    height: 40px;
+    background-color: rgb(178, 68, 68);
+    justify-content: center;
+    position: absolute;
+    left: 220px;
+    bottom: 150px;
+}
+
+.pl_equipment {
+    position: absolute;
+    left: 205px;
+    bottom: 0;
+    flex-direction: row;
+    width: 270px;
+    height: 130px;
+    margin-left: 10px;
+    margin-right: 10px;
+    margin-top: 10px;
+    margin-bottom: 10px;
 }
 
 .cardSlot {
@@ -50,33 +95,6 @@
     margin-bottom: 5px;
 }
 
-.icon {
-    width: 180px;
-    height: 180px;
-    background-color: rgb(229, 231, 110);
-    border-top-left-radius: 100px;
-    border-bottom-left-radius: 100px;
-    border-top-right-radius: 100px;
-    border-bottom-right-radius: 100px;
-    color: rgb(0, 0, 0);
-    font-size: 22px;
-    -unity-font-style: bold;
-}
-
-.health_bar {
-    width: 250px;
-    height: 40px;
-    background-color: rgb(178, 68, 68);
-    justify-content: center;
-}
-
-.player {
-    margin-left: 10px;
-    margin-right: 10px;
-    margin-top: 10px;
-    margin-bottom: 10px;
-}
-
 .inventory_button {
     width: 80px;
     height: 120px;
@@ -99,10 +117,13 @@
     border-right-width: 3px;
     border-top-width: 3px;
     border-bottom-width: 3px;
-    margin-left: 5px;
-    margin-right: 5px;
-    margin-top: 5px;
-    margin-bottom: 5px;
+    margin-left: 15px;
+    margin-right: 15px;
+    margin-top: 15px;
+    margin-bottom: 15px;
+    position: absolute;
+    left: 480px;
+    bottom: 0;
 }
 
 .inventory {
@@ -149,29 +170,4 @@
     margin-right: 5px;
     margin-top: 5px;
     margin-bottom: 5px;
-}
-
-.Slots {
-    flex-direction: row;
-    flex-wrap: wrap;
-}
-
-.Slot {
-    width: 50px;
-    height: 50px;
-    background-color: rgba(245, 223, 223, 255);
-    border-left-width: 1px;
-    border-right-width: 1px;
-    border-top-width: 1px;
-    border-bottom-width: 1px;
-    margin-left: 2px;
-    margin-right: 2px;
-    margin-top: 2px;
-    margin-bottom: 2px;
-    border-left-color: rgba(0, 0, 0, 255);
-    border-right-color: rgba(0, 0, 0, 255);
-    border-top-color: rgba(0, 0, 0, 255);
-    border-bottom-color: rgba(0, 0, 0, 255);
-    align-items: center;
-    justify-content: center;
 }

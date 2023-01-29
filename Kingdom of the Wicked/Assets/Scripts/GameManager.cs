@@ -11,7 +11,6 @@ public class GameManager : Singleton<GameManager>
     }
 
     [SerializeField] [Range(1, 5)] private int otherCardsEquipSlotsAmount;
-    [SerializeField] private EquipmentUI equipmentUI;
 
     public int Equipment_OtherSlotsAmount => otherCardsEquipSlotsAmount;
 
@@ -21,7 +20,7 @@ public class GameManager : Singleton<GameManager>
 
     private void Start()
     {
-        equipmentUI.OnToggleOpenInvemtory += ToggleOpenInvemtory;
+        EquipmentUI.Instance.OnToggleOpenInvemtory += ToggleOpenInvemtory;
         State = GameState.active;
     }
 

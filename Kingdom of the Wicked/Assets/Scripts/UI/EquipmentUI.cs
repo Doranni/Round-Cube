@@ -5,7 +5,7 @@ using UnityEngine;
 using UnityEngine.UIElements;
 
 [RequireComponent(typeof(UIDocument))]
-public class EquipmentUI : MonoBehaviour
+public class EquipmentUI : Singleton<EquipmentUI>
 {
     [Flags]
     public enum SlotType
@@ -14,19 +14,33 @@ public class EquipmentUI : MonoBehaviour
         armor = 2,
         other = 4
     }
+    public enum SlotNames
+    {
+        weaponSlot,
+        armorSlot,
+        otherSlot,
+        inventory,
+        storage
+    }
 
-    [SerializeField] private Vector2 cardSize_small, cardSize_big;
+    [SerializeField] private Vector2 cardSize_small = new Vector2(80, 120), 
+        cardSize_big = new Vector2(120, 160);
     [SerializeField] private float inventoryCardMargin;
+    [SerializeField] private Vector2 dragRangeMin = Vector2.zero,
+        dragRangeMax = new Vector2(1920, 1080);
+    public Vector2 DragRangeMin => dragRangeMin;
+    public Vector2 DragRangeMax => dragRangeMax;
 
     [SerializeField] private Equipment plEquipment;
     [SerializeField] private Inventory plInventory;
 
-    private VisualElement equipmentScreen;
-    private VisualElement slotWeapon, slotArmor, slotOther;
-    private VisualElement inventoryButton, inventoryScreen, inventoryContent;
-    private VisualElement topPanel;
+    private VisualElement plEquipmentScreen;
+    public Dictionary<SlotNames, (SlotType type, bool isActive, VisualElement slot,
+        VisualElement card)> slots = new();
+    private VisualElement inventoryButton, inventoryScreen;
+    private VisualElement plCardsPanel;
 
-    const string k_equipmentScreen = "Equipment";
+    const string k_equipmentScreen = "PlayerEquipment";
     const string k_slotWeapon = "SlopWeapon";
     const string k_slotArmor = "SlotArmor";
     const string k_slotOther = "SlotOther";
@@ -35,7 +49,7 @@ public class EquipmentUI : MonoBehaviour
     const string k_inventoryContent = "InventoryContent";
     const string k_cardBackground = "CardBackground";
     const string k_cardName = "CardName";
-    const string k_topPanel = "topPanel";
+    const string k_cardsPanel = "PlayerEquipCards";
 
     VisualTreeAsset CardAsset;
 
@@ -43,52 +57,49 @@ public class EquipmentUI : MonoBehaviour
 
     public event Action<bool> OnToggleOpenInvemtory;
 
-    private void Awake()
+    public override void Awake()
     {
+        base.Awake();
+
         VisualElement rootElement = GetComponent<UIDocument>().rootVisualElement;
 
-        equipmentScreen = rootElement.Q(k_equipmentScreen);
-        slotWeapon = rootElement.Q(k_slotWeapon);
-        slotArmor = rootElement.Q(k_slotArmor);
-        slotOther = rootElement.Q(k_slotOther);
+        slots.Add(SlotNames.weaponSlot, (SlotType.weapon, true, rootElement.Q(k_slotWeapon), null));
+        slots.Add(SlotNames.armorSlot, (SlotType.armor, true, rootElement.Q(k_slotArmor), null));
+        slots.Add(SlotNames.otherSlot, (SlotType.other, true, rootElement.Q(k_slotOther), null));
+        slots.Add(SlotNames.inventory, (SlotType.weapon | SlotType.armor | SlotType.other, 
+            false, rootElement.Q(k_inventoryContent), null));
+
+        plEquipmentScreen = rootElement.Q(k_equipmentScreen);
         inventoryButton = rootElement.Q(k_inventoryButton);
         inventoryScreen = rootElement.Q(k_inventoryScreen);
-        inventoryContent = rootElement.Q(k_inventoryContent);
-        topPanel = rootElement.Q(k_topPanel);
+        plCardsPanel = rootElement.Q(k_cardsPanel);
 
         CardAsset = EditorGUIUtility.Load("Assets/UI/CardUI.uxml") as VisualTreeAsset;
+
+        SetSize(slots[SlotNames.weaponSlot].slot, cardSize_small);
+        SetSize(slots[SlotNames.armorSlot].slot, cardSize_small);
+        SetSize(slots[SlotNames.otherSlot].slot, cardSize_small);
+        SetSize(inventoryButton, cardSize_small);
     }
 
     private void Start()
     {
-        SetSize(slotWeapon, cardSize_small);
-        SetSize(slotArmor, cardSize_small);
-        SetSize(slotOther, cardSize_small);
-        SetSize(inventoryButton, cardSize_small);
-
-        DragCardManager.Instance.AddSlot(slotWeapon, DragCardManager.SlotType.weapon,
-            DragCardManager.SlotNames.weaponSlot, true);
-        DragCardManager.Instance.AddSlot(slotArmor, DragCardManager.SlotType.armor,
-            DragCardManager.SlotNames.armorSlot, true);
-        DragCardManager.Instance.AddSlot(slotOther, DragCardManager.SlotType.other,
-            DragCardManager.SlotNames.otherSlot, true);
-        DragCardManager.Instance.AddSlot(inventoryContent, DragCardManager.SlotType.weapon 
-            | DragCardManager.SlotType.armor | DragCardManager.SlotType.other,
-            DragCardManager.SlotNames.inventory, false);
-
-        plEquipment.OnEquippedWeaponCardChanged += delegate { DisplayCardOnSlot(slotWeapon, plEquipment.WeaponCard); };
-        plEquipment.OnEquippedArmorCardChanged += delegate { DisplayCardOnSlot(slotArmor, plEquipment.ArmorCard); };
-        plEquipment.OnEquippedOtherCardChanged += delegate { DisplayCardOnSlot(slotOther, 
-            plEquipment.OtherCards[plEquipment.ActiveOtherSlot]); };
+        plEquipment.OnEquippedWeaponCardChanged += delegate 
+        { DisplayCardOnSlot(SlotNames.weaponSlot, plEquipment.WeaponCard, 0); };
+        plEquipment.OnEquippedArmorCardChanged += delegate 
+        { DisplayCardOnSlot(SlotNames.armorSlot, plEquipment.ArmorCard, 90); };
+        plEquipment.OnEquippedOtherCardChanged += delegate 
+        { DisplayCardOnSlot(SlotNames.otherSlot, 
+            plEquipment.OtherCards[plEquipment.ActiveOtherSlot], 180); };
 
         plInventory.OnInventoryChanged += DisplayInventoryButton;
         plInventory.OnInventoryChanged += UpdateInventory;
         inventoryButton.RegisterCallback<ClickEvent>(_ => ToggleOpenInvemtory()) ;
         InputManager.Instance.OnUIEscape_performed += _ => GameUIEscape_performed();
 
-        DisplayCardOnSlot(slotWeapon, plEquipment.WeaponCard);
-        DisplayCardOnSlot(slotArmor, plEquipment.ArmorCard);
-        DisplayCardOnSlot(slotOther, plEquipment.OtherCards[plEquipment.ActiveOtherSlot]);
+        DisplayCardOnSlot(SlotNames.weaponSlot, plEquipment.WeaponCard, 0);
+        DisplayCardOnSlot(SlotNames.armorSlot, plEquipment.ArmorCard, 90);
+        DisplayCardOnSlot(SlotNames.otherSlot, plEquipment.OtherCards[plEquipment.ActiveOtherSlot], 180);
         DisplayInventoryButton();
         UpdateInventory();
         DisplayInventory();
@@ -121,15 +132,23 @@ public class EquipmentUI : MonoBehaviour
         cardBackgroung.style.marginRight = margin;
     }
 
-    private void DisplayCardOnSlot(VisualElement slot, Card card)
+    private void DisplayCardOnSlot(SlotNames slotName, Card newCard, float posLeft)
     {
-        slot.Clear();
-        if (card != null)
+        if (slots[slotName].card != null)
+        {
+            plCardsPanel.Remove(slots[slotName].card);
+        }
+        if (newCard != null)
         {
             VisualElement cardVE = CardAsset.CloneTree();
-            slot.Add(cardVE);
-            StyleCard(cardVE, card, cardSize_small, 0);
-            DragCardManager.Instance.AddTarget(cardVE, cardSize_small, card);
+            plCardsPanel.Add(cardVE);
+            cardVE.style.position = Position.Absolute;
+            cardVE.style.left = posLeft;
+            StyleCard(cardVE, newCard, cardSize_small, 5);
+            slots[slotName]= (slots[slotName].type, slots[slotName].isActive, 
+                slots[slotName].slot, cardVE);
+            cardVE.AddManipulator(new DragAndDropManipulator(cardVE, cardSize_small, 
+                newCard.CardType, slotName));
         }
     }
 
@@ -154,12 +173,12 @@ public class EquipmentUI : MonoBehaviour
         if (isInventoryOpen)
         {
             inventoryScreen.style.display = DisplayStyle.Flex;
-            DragCardManager.Instance.SetSlotIsActive(DragCardManager.SlotNames.inventory, true);
+            SetSlotIsActive(SlotNames.inventory, true);
         }
         else
         {
             inventoryScreen.style.display = DisplayStyle.None;
-            DragCardManager.Instance.SetSlotIsActive(DragCardManager.SlotNames.inventory, false);
+            SetSlotIsActive(SlotNames.inventory, false);
         }
     }
 
@@ -172,12 +191,65 @@ public class EquipmentUI : MonoBehaviour
 
     private void UpdateInventory()
     {
-        inventoryContent.Clear();
+        slots[SlotNames.inventory].slot.Clear();
         foreach (Card card in plInventory.Cards)
         {
             var cartToDisplay = CardAsset.CloneTree();
             StyleCard(cartToDisplay, card, cardSize_big, inventoryCardMargin);
-            inventoryContent.Add(cartToDisplay);
+            slots[SlotNames.inventory].slot.Add(cartToDisplay);
         }
+    }
+
+    public void SetSlotIsActive(SlotNames name, bool isActive)
+    {
+        if (slots.ContainsKey(name))
+        {
+            slots[name] = (slots[name].type, isActive, slots[name].slot, slots[name].card);
+        }
+    }
+
+    public List<VisualElement> GetAvailableSlots(Card.CardsType type)
+    {
+        List<VisualElement> res = new();
+        switch (type)
+        {
+            case Card.CardsType.Weapon:
+                {
+                    foreach ((SlotType type, bool isActive, VisualElement slot, VisualElement card) 
+                        slot in slots.Values)
+                    {
+                        if (slot.isActive && slot.type.HasFlag(SlotType.weapon))
+                        {
+                            res.Add(slot.slot);
+                        }
+                    }
+                    break;
+                }
+            case Card.CardsType.Armor:
+                {
+                    foreach ((SlotType type, bool isActive, VisualElement slot, VisualElement card) 
+                        slot in slots.Values)
+                    {
+                        if (slot.isActive && slot.type.HasFlag(SlotType.armor))
+                        {
+                            res.Add(slot.slot);
+                        }
+                    }
+                    break;
+                }
+            case Card.CardsType.Other:
+                {
+                    foreach ((SlotType type, bool isActive, VisualElement slot, VisualElement card) 
+                        slot in slots.Values)
+                    {
+                        if (slot.isActive && slot.type.HasFlag(SlotType.other))
+                        {
+                            res.Add(slot.slot);
+                        }
+                    }
+                    break;
+                }
+        }
+        return res;
     }
 }
