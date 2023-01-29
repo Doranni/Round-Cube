@@ -1580,7 +1580,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3b4c9179848628e418629382077f144f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  otherCardsEquipSlotsAmount: 3
+  otherSlotCapacity: 3
+  inventoryCapacity: 50
 --- !u!4 &569206833
 Transform:
   m_ObjectHideFlags: 0

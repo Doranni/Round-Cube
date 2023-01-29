@@ -10,10 +10,10 @@ public class DragAndDropManipulator : PointerManipulator
     private Vector2 dragRangeMin, dragRangeMax;
     private Vector2 cardSize;
     private Card.CardsType type;
-    private EquipmentUI.SlotNames prevSlotName;
+    private Storage.StorageNames prevSlotName;
 
     public DragAndDropManipulator(VisualElement card, Vector2 cardSize, Card.CardsType type,
-        EquipmentUI.SlotNames prevSlotName)
+        Storage.StorageNames prevSlotName)
     {
         target = card;
         this.cardSize = cardSize;
@@ -37,16 +37,11 @@ public class DragAndDropManipulator : PointerManipulator
 
     private void PointerDownHandler(PointerDownEvent evt)
     {
-        Debug.Log("PointerDownHandler target - " + target);
         target.BringToFront();
-        Debug.Log("PointerDownHandler EquipmentUI.Instance == null - "
-            + (EquipmentUI.Instance== null));
         dragRangeMin = target.WorldToLocal(EquipmentUI.Instance.DragRangeMin);
-        
         dragRangeMax = target.WorldToLocal(new Vector2(
             EquipmentUI.Instance.DragRangeMax.x - cardSize.x,
             EquipmentUI.Instance.DragRangeMax.y - cardSize.y));
-        Debug.Log("PointerDownHandler dragRangeMax - " + dragRangeMax);
         pointerStartPos = evt.position;
         cardStartPos = target.transform.position;
         target.CapturePointer(evt.pointerId);
@@ -57,9 +52,10 @@ public class DragAndDropManipulator : PointerManipulator
         var slots = EquipmentUI.Instance.GetAvailableSlots(type);
         for (int i = 0; i < slots.Count; i++)
         {
-            if (OverlapsTarget(slots[i]))
+            if (OverlapsTarget(slots[i].slot))
             {
                 target.ReleasePointer(evt.pointerId);
+                EquipmentUI.Instance.CardWasMoved(prevSlotName, slots[i].slotName);
                 return;
             }
         }

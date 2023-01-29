@@ -10,9 +10,11 @@ public class GameManager : Singleton<GameManager>
         active
     }
 
-    [SerializeField] [Range(1, 5)] private int otherCardsEquipSlotsAmount;
+    [SerializeField] [Range(1, 5)] private int otherSlotCapacity = 3;
+    [SerializeField][Range(1, 100)] private int inventoryCapacity = 50;
 
-    public int Equipment_OtherSlotsAmount => otherCardsEquipSlotsAmount;
+    public int Equipment_OtherSlotCapacity => otherSlotCapacity;
+    public int Equipment_InventoryCapacity => inventoryCapacity;
 
     public GameState State { get; private set; }
 

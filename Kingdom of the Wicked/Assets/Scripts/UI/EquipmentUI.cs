@@ -7,22 +7,6 @@ using UnityEngine.UIElements;
 [RequireComponent(typeof(UIDocument))]
 public class EquipmentUI : Singleton<EquipmentUI>
 {
-    [Flags]
-    public enum SlotType
-    {
-        weapon = 1,
-        armor = 2,
-        other = 4
-    }
-    public enum SlotNames
-    {
-        weaponSlot,
-        armorSlot,
-        otherSlot,
-        inventory,
-        storage
-    }
-
     [SerializeField] private Vector2 cardSize_small = new Vector2(80, 120), 
         cardSize_big = new Vector2(120, 160);
     [SerializeField] private float inventoryCardMargin;
@@ -35,7 +19,7 @@ public class EquipmentUI : Singleton<EquipmentUI>
     [SerializeField] private Inventory plInventory;
 
     private VisualElement plEquipmentScreen;
-    public Dictionary<SlotNames, (SlotType type, bool isActive, VisualElement slot,
+    public Dictionary<Storage.StorageNames, (Storage.AvailableCardsTypes type, bool isActive, VisualElement slot,
         VisualElement card)> slots = new();
     private VisualElement inventoryButton, inventoryScreen;
     private VisualElement plCardsPanel;
@@ -63,10 +47,11 @@ public class EquipmentUI : Singleton<EquipmentUI>
 
         VisualElement rootElement = GetComponent<UIDocument>().rootVisualElement;
 
-        slots.Add(SlotNames.weaponSlot, (SlotType.weapon, true, rootElement.Q(k_slotWeapon), null));
-        slots.Add(SlotNames.armorSlot, (SlotType.armor, true, rootElement.Q(k_slotArmor), null));
-        slots.Add(SlotNames.otherSlot, (SlotType.other, true, rootElement.Q(k_slotOther), null));
-        slots.Add(SlotNames.inventory, (SlotType.weapon | SlotType.armor | SlotType.other, 
+        slots.Add(Storage.StorageNames.weaponSlot, (Storage.AvailableCardsTypes.weapon, true, rootElement.Q(k_slotWeapon), null));
+        slots.Add(Storage.StorageNames.armorSlot, (Storage.AvailableCardsTypes.armor, true, rootElement.Q(k_slotArmor), null));
+        slots.Add(Storage.StorageNames.otherSlot, (Storage.AvailableCardsTypes.other, true, rootElement.Q(k_slotOther), null));
+        slots.Add(Storage.StorageNames.inventory, (Storage.AvailableCardsTypes.weapon | Storage.AvailableCardsTypes.armor 
+            | Storage.AvailableCardsTypes.other, 
             false, rootElement.Q(k_inventoryContent), null));
 
         plEquipmentScreen = rootElement.Q(k_equipmentScreen);
@@ -76,30 +61,29 @@ public class EquipmentUI : Singleton<EquipmentUI>
 
         CardAsset = EditorGUIUtility.Load("Assets/UI/CardUI.uxml") as VisualTreeAsset;
 
-        SetSize(slots[SlotNames.weaponSlot].slot, cardSize_small);
-        SetSize(slots[SlotNames.armorSlot].slot, cardSize_small);
-        SetSize(slots[SlotNames.otherSlot].slot, cardSize_small);
+        SetSize(slots[Storage.StorageNames.weaponSlot].slot, cardSize_small);
+        SetSize(slots[Storage.StorageNames.armorSlot].slot, cardSize_small);
+        SetSize(slots[Storage.StorageNames.otherSlot].slot, cardSize_small);
         SetSize(inventoryButton, cardSize_small);
     }
 
     private void Start()
     {
         plEquipment.OnEquippedWeaponCardChanged += delegate 
-        { DisplayCardOnSlot(SlotNames.weaponSlot, plEquipment.WeaponCard, 0); };
+        { DisplayCardOnSlot(Storage.StorageNames.weaponSlot); };
         plEquipment.OnEquippedArmorCardChanged += delegate 
-        { DisplayCardOnSlot(SlotNames.armorSlot, plEquipment.ArmorCard, 90); };
+        { DisplayCardOnSlot(Storage.StorageNames.armorSlot); };
         plEquipment.OnEquippedOtherCardChanged += delegate 
-        { DisplayCardOnSlot(SlotNames.otherSlot, 
-            plEquipment.OtherCards[plEquipment.ActiveOtherSlot], 180); };
+        { DisplayCardOnSlot(Storage.StorageNames.otherSlot); };
 
         plInventory.OnInventoryChanged += DisplayInventoryButton;
         plInventory.OnInventoryChanged += UpdateInventory;
         inventoryButton.RegisterCallback<ClickEvent>(_ => ToggleOpenInvemtory()) ;
         InputManager.Instance.OnUIEscape_performed += _ => GameUIEscape_performed();
 
-        DisplayCardOnSlot(SlotNames.weaponSlot, plEquipment.WeaponCard, 0);
-        DisplayCardOnSlot(SlotNames.armorSlot, plEquipment.ArmorCard, 90);
-        DisplayCardOnSlot(SlotNames.otherSlot, plEquipment.OtherCards[plEquipment.ActiveOtherSlot], 180);
+        DisplayCardOnSlot(Storage.StorageNames.weaponSlot);
+        DisplayCardOnSlot(Storage.StorageNames.armorSlot);
+        DisplayCardOnSlot(Storage.StorageNames.otherSlot);
         DisplayInventoryButton();
         UpdateInventory();
         DisplayInventory();
@@ -132,7 +116,35 @@ public class EquipmentUI : Singleton<EquipmentUI>
         cardBackgroung.style.marginRight = margin;
     }
 
-    private void DisplayCardOnSlot(SlotNames slotName, Card newCard, float posLeft)
+    private void DisplayCardOnSlot(Storage.StorageNames slotName)
+    {
+        switch (slotName)
+        {
+            case Storage.StorageNames.weaponSlot:
+                {
+                    DisplayCardOnSlot(Storage.StorageNames.weaponSlot, plEquipment.WeaponCard, 0);
+                    break;
+                }
+            case Storage.StorageNames.armorSlot:
+                {
+                    DisplayCardOnSlot(Storage.StorageNames.armorSlot, plEquipment.ArmorCard, 90);
+                    break;
+                }
+            case Storage.StorageNames.otherSlot:
+                {
+                    DisplayCardOnSlot(Storage.StorageNames.otherSlot, 
+                        plEquipment.OtherCards[plEquipment.ActiveOtherSlot], 180);
+                    break;
+                }
+            case Storage.StorageNames.inventory:
+                {
+                    UpdateInventory();
+                    break;
+                }
+        }
+    }
+
+    private void DisplayCardOnSlot(Storage.StorageNames slotName, Card newCard, float posLeft)
     {
         if (slots[slotName].card != null)
         {
@@ -173,12 +185,12 @@ public class EquipmentUI : Singleton<EquipmentUI>
         if (isInventoryOpen)
         {
             inventoryScreen.style.display = DisplayStyle.Flex;
-            SetSlotIsActive(SlotNames.inventory, true);
+            SetSlotIsActive(Storage.StorageNames.inventory, true);
         }
         else
         {
             inventoryScreen.style.display = DisplayStyle.None;
-            SetSlotIsActive(SlotNames.inventory, false);
+            SetSlotIsActive(Storage.StorageNames.inventory, false);
         }
     }
 
@@ -191,16 +203,16 @@ public class EquipmentUI : Singleton<EquipmentUI>
 
     private void UpdateInventory()
     {
-        slots[SlotNames.inventory].slot.Clear();
+        slots[Storage.StorageNames.inventory].slot.Clear();
         foreach (Card card in plInventory.Cards)
         {
             var cartToDisplay = CardAsset.CloneTree();
             StyleCard(cartToDisplay, card, cardSize_big, inventoryCardMargin);
-            slots[SlotNames.inventory].slot.Add(cartToDisplay);
+            slots[Storage.StorageNames.inventory].slot.Add(cartToDisplay);
         }
     }
 
-    public void SetSlotIsActive(SlotNames name, bool isActive)
+    public void SetSlotIsActive(Storage.StorageNames name, bool isActive)
     {
         if (slots.ContainsKey(name))
         {
@@ -208,48 +220,50 @@ public class EquipmentUI : Singleton<EquipmentUI>
         }
     }
 
-    public List<VisualElement> GetAvailableSlots(Card.CardsType type)
+    public List<(Storage.StorageNames slotName, VisualElement slot)> GetAvailableSlots(Card.CardsType type)
     {
-        List<VisualElement> res = new();
+        List<(Storage.StorageNames, VisualElement)> res = new();
+        Storage.AvailableCardsTypes flags = new();
         switch (type)
         {
             case Card.CardsType.Weapon:
                 {
-                    foreach ((SlotType type, bool isActive, VisualElement slot, VisualElement card) 
-                        slot in slots.Values)
-                    {
-                        if (slot.isActive && slot.type.HasFlag(SlotType.weapon))
-                        {
-                            res.Add(slot.slot);
-                        }
-                    }
+                    flags = Storage.AvailableCardsTypes.weapon;
                     break;
                 }
             case Card.CardsType.Armor:
                 {
-                    foreach ((SlotType type, bool isActive, VisualElement slot, VisualElement card) 
-                        slot in slots.Values)
-                    {
-                        if (slot.isActive && slot.type.HasFlag(SlotType.armor))
-                        {
-                            res.Add(slot.slot);
-                        }
-                    }
+                    flags = Storage.AvailableCardsTypes.armor;
                     break;
                 }
             case Card.CardsType.Other:
                 {
-                    foreach ((SlotType type, bool isActive, VisualElement slot, VisualElement card) 
-                        slot in slots.Values)
-                    {
-                        if (slot.isActive && slot.type.HasFlag(SlotType.other))
-                        {
-                            res.Add(slot.slot);
-                        }
-                    }
+                    flags = Storage.AvailableCardsTypes.other;
                     break;
                 }
         }
+        foreach (KeyValuePair<Storage.StorageNames,
+                        (Storage.AvailableCardsTypes type, bool isActive, VisualElement slot, VisualElement card)>
+                        slot in slots)
+        {
+            if (slot.Value.isActive && slot.Value.type.HasFlag(flags))
+            {
+                res.Add((slot.Key, slot.Value.slot));
+            }
+        }
         return res;
+    }
+
+    public void CardWasMoved(Storage.StorageNames prevSlot, Storage.StorageNames newSlot)
+    {
+        if (prevSlot == newSlot)
+        {
+            DisplayCardOnSlot(newSlot);
+        }
+        else
+        {
+
+        }
+        Debug.Log($"Card was moved from {prevSlot} to {newSlot}");
     }
 }
