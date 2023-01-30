@@ -18,7 +18,7 @@ public class UIManager : Singleton<UIManager>
     const string k_cardBackground = "CardBackground";
     const string k_cardName = "CardName";
 
-    public void StyleCard(Storage.StorageNames storageName, VisualElement cardVE, Card card)
+    public void StyleCard(IStorage.StorageNames storageName, VisualElement cardVE, Card card)
     {
         var cardBackgroung = cardVE.Q(k_cardBackground);
         var cardName = cardVE.Q<Label>(k_cardName);
@@ -26,9 +26,9 @@ public class UIManager : Singleton<UIManager>
         SetSize(cardBackgroung, storageName);
         switch (storageName)
         {
-            case Storage.StorageNames.weaponSlot:
-            case Storage.StorageNames.armorSlot:
-            case Storage.StorageNames.otherSlot:
+            case IStorage.StorageNames.weaponSlot:
+            case IStorage.StorageNames.armorSlot:
+            case IStorage.StorageNames.otherSlot:
                 {
                     cardBackgroung.style.marginBottom = slotCardMargin;
                     cardBackgroung.style.marginTop = slotCardMargin;
@@ -36,7 +36,7 @@ public class UIManager : Singleton<UIManager>
                     cardBackgroung.style.marginRight = slotCardMargin;
                     break;
                 }
-            case Storage.StorageNames.inventory:
+            case IStorage.StorageNames.inventory:
                 {
                     cardBackgroung.style.marginBottom = inventoryCardMargin;
                     cardBackgroung.style.marginTop = inventoryCardMargin;
@@ -47,20 +47,20 @@ public class UIManager : Singleton<UIManager>
         }
     }
 
-    public void SetSize(VisualElement cardVE, Storage.StorageNames storageName)
+    public void SetSize(VisualElement cardVE, IStorage.StorageNames storageName)
     {
         var size = RequiredCardSize(storageName);
         cardVE.style.width = size.x;
         cardVE.style.height = size.y;
     }
 
-    private Vector2 RequiredCardSize(Storage.StorageNames storageName)
+    private Vector2 RequiredCardSize(IStorage.StorageNames storageName)
     {
         switch (storageName)
         {
-            case Storage.StorageNames.weaponSlot:
-            case Storage.StorageNames.armorSlot:
-            case Storage.StorageNames.otherSlot:
+            case IStorage.StorageNames.weaponSlot:
+            case IStorage.StorageNames.armorSlot:
+            case IStorage.StorageNames.otherSlot:
                 {
                     return cardSize_small;
                 }
@@ -71,20 +71,20 @@ public class UIManager : Singleton<UIManager>
         }
     }
 
-    public Vector2 GetCardSizeOffset(Storage.StorageNames storageName)
+    public Vector2 GetCardSizeOffset(IStorage.StorageNames storageName)
     {
         var offset = RequiredCardSize(storageName);
         switch (storageName)
         {
-            case Storage.StorageNames.weaponSlot:
-            case Storage.StorageNames.armorSlot:
-            case Storage.StorageNames.otherSlot:
+            case IStorage.StorageNames.weaponSlot:
+            case IStorage.StorageNames.armorSlot:
+            case IStorage.StorageNames.otherSlot:
                 {
                     offset.x += slotCardMargin;
                     offset.y += slotCardMargin;
                     break;
                 }
-            case Storage.StorageNames.inventory:
+            case IStorage.StorageNames.inventory:
                 {
                     offset.x += inventoryCardMargin;
                     offset.y += inventoryCardMargin;

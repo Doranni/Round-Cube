@@ -2,21 +2,26 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Inventory : MonoBehaviour
+public class Inventory : MonoBehaviour, IStorage
 {
+    public IStorage.StorageNames StorageName { get; private set; }
+    public IStorage.AvailableCardsTypes CardsTypes { get; private set; }
+    public bool AffectsStats => false;
+    public int Capacity => -1;
     public List<Card> Cards { get; private set; }
 
-    public event Action OnInventoryChanged;
-
-    private void Awake()
+    public Inventory()
     {
+        StorageName = IStorage.StorageNames.inventory;
+        CardsTypes = IStorage.AvailableCardsTypes.weapon | IStorage.AvailableCardsTypes.armor
+            | IStorage.AvailableCardsTypes.other;
         Cards = new();
     }
 
-    public void AddCard(Card card)
+    public Card AddCard(Card card)
     {
         Cards.Add(card);
-        OnInventoryChanged?.Invoke();
+        return null;
     }
 
     public bool RemoveCard(Card card)
@@ -27,7 +32,6 @@ public class Inventory : MonoBehaviour
             return false;
         }
         Cards.Remove(cardToRemove);
-        OnInventoryChanged?.Invoke();
         return true;
     }
 }

@@ -8,7 +8,7 @@ public class DragAndDropController : Singleton<DragAndDropController>
     private VisualElement targetVE;
     private Card targetCard;
     private Vector2 targetStartPos, targetSizeOffset;
-    private Storage.StorageNames targetPrevStorage;
+    private IStorage.StorageNames targetPrevStorage;
 
     private Vector3 pointerStartPos;
 
@@ -21,8 +21,8 @@ public class DragAndDropController : Singleton<DragAndDropController>
         cardToDrag.style.display = DisplayStyle.None;
     }
 
-    public void AddTarget(PointerDownEvent evt, (VisualElement targetVE, Card card, 
-        Storage.StorageNames prevStorageName) target)
+    public void AddTarget(PointerDownEvent evt, (VisualElement targetVE, Card card,
+        IStorage.StorageNames prevStorageName) target)
     {
         UIManager.Instance.StyleCard(target.prevStorageName, cardToDrag, target.card);
 

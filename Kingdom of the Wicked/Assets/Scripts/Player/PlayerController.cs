@@ -15,14 +15,10 @@ public class PlayerController : MonoBehaviour
     void Start()
     {
         //test
-        equipment.AddCard(ItemsDatabase.Instance.GetCard(101), Storage.StorageNames.weaponSlot);
-        equipment.AddCard(ItemsDatabase.Instance.GetCard(201), Storage.StorageNames.armorSlot);
-        //equipment.EquipOtherCard(cardOther);
+        equipment.AddCard(ItemsDatabase.Instance.GetCard(101), IStorage.StorageNames.weaponSlot);
+        equipment.AddCard(ItemsDatabase.Instance.GetCard(201), IStorage.StorageNames.armorSlot);
 
-        for(int i = 0; i< 2; i++)
-        {
-            equipment.AddCard(ItemsDatabase.Instance.GetCard(101), Storage.StorageNames.inventory);
-            equipment.AddCard(ItemsDatabase.Instance.GetCard(201), Storage.StorageNames.inventory);
-        }
+        equipment.AddCard(ItemsDatabase.Instance.GetCard(102), IStorage.StorageNames.inventory);
+        equipment.AddCard(ItemsDatabase.Instance.GetCard(202), IStorage.StorageNames.inventory);
     }
 }
