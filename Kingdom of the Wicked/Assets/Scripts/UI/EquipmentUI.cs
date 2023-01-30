@@ -7,16 +7,13 @@ using UnityEngine.UIElements;
 [RequireComponent(typeof(UIDocument))]
 public class EquipmentUI : Singleton<EquipmentUI>
 {
-    [SerializeField] private Vector2 cardSize_small = new Vector2(80, 120), 
-        cardSize_big = new Vector2(120, 160);
-    [SerializeField] private float slotCardMargin = 5, inventoryCardMargin;
-    private float slotWeaponPosLeft, slotArmorPosLeft, slotOtherPosLeft;
+    [SerializeField] private int inventoryRowCardsCapacity = 10;
 
     [SerializeField] private Equipment plEquipment;
 
     private VisualElement plEquipmentScreen;
     private VisualElement inventoryButton, inventoryScreen;
-    private VisualElement plSlotsCardsPanel, plInventoryCardsPanel;
+    private VisualElement plInventoryCardsPanel, dragCardPanel;
 
     public Dictionary<Storage.StorageNames, StorageUI> storages = new();
 
@@ -27,13 +24,9 @@ public class EquipmentUI : Singleton<EquipmentUI>
     const string k_inventoryButton = "InventoryButton";
     const string k_inventoryScreen = "Inventory";
     const string k_inventoryContent = "InventoryContent";
-    const string k_cardBackground = "CardBackground";
-    const string k_cardName = "CardName";
-    const string k_cardsPanel = "PlayerEquipCards";
+    const string k_dragCardPanel = "DragCardPanel";
 
     private VisualTreeAsset cardAsset;
-
-    private bool isInventoryOpen = false;
 
     public event Action<bool> OnToggleOpenInvemtory;
 
@@ -45,32 +38,33 @@ public class EquipmentUI : Singleton<EquipmentUI>
         plEquipmentScreen = rootElement.Q(k_equipmentScreen);
         inventoryButton = rootElement.Q(k_inventoryButton);
         inventoryScreen = rootElement.Q(k_inventoryScreen);
-        plSlotsCardsPanel = rootElement.Q(k_cardsPanel);
         plInventoryCardsPanel = rootElement.Q(k_inventoryContent);
+        dragCardPanel = rootElement.Q(k_dragCardPanel);
 
         storages.Add(Storage.StorageNames.weaponSlot, new(plEquipment.Storages[Storage.StorageNames.weaponSlot],
-            true, rootElement.Q(k_slotWeapon), plSlotsCardsPanel));
+            true, rootElement.Q(k_slotWeapon), rootElement.Q(k_slotWeapon)));
         storages.Add(Storage.StorageNames.armorSlot, new(plEquipment.Storages[Storage.StorageNames.armorSlot], 
-            true, rootElement.Q(k_slotArmor), plSlotsCardsPanel));
+            true, rootElement.Q(k_slotArmor), rootElement.Q(k_slotArmor)));
         storages.Add(Storage.StorageNames.otherSlot, new(plEquipment.Storages[Storage.StorageNames.otherSlot], 
-            true, rootElement.Q(k_slotOther), plSlotsCardsPanel));
+            true, rootElement.Q(k_slotOther), rootElement.Q(k_slotOther)));
         storages.Add(Storage.StorageNames.inventory, new(plEquipment.Storages[Storage.StorageNames.inventory], 
             false, plInventoryCardsPanel, plInventoryCardsPanel));
 
-        slotWeaponPosLeft = storages[Storage.StorageNames.weaponSlot].StorageVE.style.left.value.value;
-        slotArmorPosLeft = storages[Storage.StorageNames.armorSlot].StorageVE.style.left.value.value;
-        slotOtherPosLeft = storages[Storage.StorageNames.otherSlot].StorageVE.style.left.value.value;
-
         cardAsset = EditorGUIUtility.Load("Assets/UI/CardUI.uxml") as VisualTreeAsset;
 
-        SetSize(storages[Storage.StorageNames.weaponSlot].StorageVE, cardSize_small);
-        SetSize(storages[Storage.StorageNames.armorSlot].StorageVE, cardSize_small);
-        SetSize(storages[Storage.StorageNames.otherSlot].StorageVE, cardSize_small);
-        SetSize(inventoryButton, cardSize_small);
+        UIManager.Instance.SetSize(storages[Storage.StorageNames.weaponSlot].StorageVE, 
+            Storage.StorageNames.weaponSlot);
+        UIManager.Instance.SetSize(storages[Storage.StorageNames.armorSlot].StorageVE, 
+            Storage.StorageNames.armorSlot);
+        UIManager.Instance.SetSize(storages[Storage.StorageNames.otherSlot].StorageVE, 
+            Storage.StorageNames.otherSlot);
+        UIManager.Instance.SetSize(inventoryButton, Storage.StorageNames.weaponSlot);
     }
 
     private void Start()
     {
+        DragAndDropController.Instance.SetCardToDrag(cardAsset.CloneTree(), dragCardPanel);
+
         plEquipment.Storages[Storage.StorageNames.weaponSlot].OnStorageChanged += delegate
         { DisplayCards(Storage.StorageNames.weaponSlot); };
         plEquipment.Storages[Storage.StorageNames.armorSlot].OnStorageChanged += delegate
@@ -93,68 +87,9 @@ public class EquipmentUI : Singleton<EquipmentUI>
 
     private void GameUIEscape_performed()
     {
-        if (isInventoryOpen)
+        if (storages[Storage.StorageNames.inventory].IsActive)
         {
             ToggleOpenInvemtory();
-        }
-    }
-
-    private void SetSize(VisualElement vElement, Vector2 size)
-    {
-        vElement.style.width = size.x;
-        vElement.style.height = size.y;
-    }
-
-    private void StyleCard(Storage.StorageNames storageName, VisualElement cardVE, Card card)
-    {
-        var cardBackgroung = cardVE.Q(k_cardBackground);
-        var cardName = cardVE.Q<Label>(k_cardName);
-        cardName.text = card.CardName;
-        switch (storageName)
-        {
-            case Storage.StorageNames.weaponSlot:
-                {
-                    SetSize(cardBackgroung, cardSize_small);
-                    cardVE.style.position = Position.Absolute;
-                    cardVE.style.left = 0;
-                    cardBackgroung.style.marginBottom = slotCardMargin;
-                    cardBackgroung.style.marginTop = slotCardMargin;
-                    cardBackgroung.style.marginLeft = slotCardMargin;
-                    cardBackgroung.style.marginRight = slotCardMargin;
-                    break;
-                }
-            case Storage.StorageNames.armorSlot:
-                {
-                    SetSize(cardBackgroung, cardSize_small);
-                    cardVE.style.position = Position.Absolute;
-                    cardVE.style.left = 90;
-                    cardBackgroung.style.marginBottom = slotCardMargin;
-                    cardBackgroung.style.marginTop = slotCardMargin;
-                    cardBackgroung.style.marginLeft = slotCardMargin;
-                    cardBackgroung.style.marginRight = slotCardMargin;
-                    break;
-                }
-            case Storage.StorageNames.otherSlot:
-                {
-                    SetSize(cardBackgroung, cardSize_small);
-                    cardVE.style.position = Position.Absolute;
-                    cardVE.style.left = 180;
-                    cardBackgroung.style.marginBottom = slotCardMargin;
-                    cardBackgroung.style.marginTop = slotCardMargin;
-                    cardBackgroung.style.marginLeft = slotCardMargin;
-                    cardBackgroung.style.marginRight = slotCardMargin;
-                    break;
-                }
-            case Storage.StorageNames.inventory:
-                {
-                    SetSize(cardBackgroung, cardSize_big);
-                    cardVE.style.position = Position.Relative;
-                    cardBackgroung.style.marginBottom = inventoryCardMargin;
-                    cardBackgroung.style.marginTop = inventoryCardMargin;
-                    cardBackgroung.style.marginLeft = inventoryCardMargin;
-                    cardBackgroung.style.marginRight = inventoryCardMargin;
-                    break;
-                }
         }
     }
 
@@ -163,7 +98,7 @@ public class EquipmentUI : Singleton<EquipmentUI>
         if (plEquipment.Storages[Storage.StorageNames.inventory].Cards.Count == 0)
         {
             inventoryButton.style.display = DisplayStyle.None;
-            if (isInventoryOpen)
+            if (storages[Storage.StorageNames.inventory].IsActive)
             {
                 ToggleOpenInvemtory();
             }
@@ -176,23 +111,21 @@ public class EquipmentUI : Singleton<EquipmentUI>
 
     private void DisplayInventory()
     {
-        if (isInventoryOpen)
+        if (storages[Storage.StorageNames.inventory].IsActive)
         {
             inventoryScreen.style.display = DisplayStyle.Flex;
-            storages[Storage.StorageNames.inventory].SetIsActive(true);
         }
         else
         {
             inventoryScreen.style.display = DisplayStyle.None;
-            storages[Storage.StorageNames.inventory].SetIsActive(false);
         }
     }
 
     private void ToggleOpenInvemtory()
     {
-        isInventoryOpen = !isInventoryOpen;
+        storages[Storage.StorageNames.inventory].SetIsActive(!storages[Storage.StorageNames.inventory].IsActive);
         DisplayInventory();
-        OnToggleOpenInvemtory?.Invoke(isInventoryOpen);
+        OnToggleOpenInvemtory?.Invoke(storages[Storage.StorageNames.inventory].IsActive);
     }
 
     private void DisplayCards(Storage.StorageNames storageName)
@@ -200,16 +133,21 @@ public class EquipmentUI : Singleton<EquipmentUI>
         storages[storageName].Update();
         for (int i = 0; i < storages[storageName].Cards.Count; i++)
         {
-            var cardUI = cardAsset.CloneTree();
+            VisualElement cardUI = cardAsset.CloneTree();
             storages[storageName].SetCardVE(i, cardUI);
-            StyleCard(storageName, cardUI, storages[storageName].Cards[i].card);
-            cardUI.AddManipulator(new DragAndDropManipulator(cardUI, cardSize_small, 
-                storages[storageName].Cards[i].card, storageName));
+            UIManager.Instance.StyleCard(storageName, cardUI, storages[storageName].Cards[i].card);
+            cardUI.RegisterCallback<PointerDownEvent, (VisualElement, Card, Storage.StorageNames)>
+                (DragAndDropController.Instance.AddTarget, 
+                (cardUI, storages[storageName].Cards[i].card, storageName));
         }
         if (storageName == Storage.StorageNames.otherSlot && storages[storageName].Storage.ActiveSlot != -1)
         {
 
             storages[storageName].Cards[storages[storageName].Storage.ActiveSlot].cardVE.BringToFront();
+        }
+        else if (storageName == Storage.StorageNames.inventory)
+        {
+
         }
     }
 
@@ -246,17 +184,14 @@ public class EquipmentUI : Singleton<EquipmentUI>
         return res;
     }
 
-    public void CardWasMoved(Storage.StorageNames prevSlot, Storage.StorageNames newSlot)
+    public void CardWasMoved(VisualElement cardVE, Card card, Storage.StorageNames prevStorage, 
+        Storage.StorageNames newStorage)
     {
-        if (prevSlot == newSlot)
+        if (prevStorage != newStorage)
         {
-            DisplayCards(newSlot);
+            plEquipment.MoveCard(card, prevStorage, newStorage);
         }
-        else
-        {
-
-        }
-        Debug.Log($"Card was moved from {prevSlot} to {newSlot}");
+        Debug.Log($"Card was moved from {prevStorage} to {newStorage}");
     }
 }
 
