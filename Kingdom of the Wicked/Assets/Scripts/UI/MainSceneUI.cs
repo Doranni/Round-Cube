@@ -56,7 +56,6 @@ public class MainSceneUI : MonoBehaviour
 
     private void DisplayPlHealth((float currentHealth, float maxHealth) obj)
     {
-        Debug.Log("MainSceneUI DisplayPlHealth");
         plHealthLbl.text = "HP: " + obj.currentHealth + "/" + obj.maxHealth;
     }
 
