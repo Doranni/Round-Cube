@@ -5,76 +5,73 @@ using UnityEngine;
 [RequireComponent(typeof(StatsManager))]
 public class Equipment : MonoBehaviour
 {
-    public Card WeaponCard { get; private set; }
-    public Card ArmorCard { get; private set; }
-    public Dictionary<int, Card> OtherCards { get; private set; }
-
-    private int activeOtherSlot = 0;
-    public int ActiveOtherSlot => activeOtherSlot;
+    public Dictionary<IStorage.StorageNames, IStorage> Storages { get; private set; }
 
     private StatsManager statsManager;
 
-    public event Action OnEquippedWeaponCardChanged, OnEquippedArmorCardChanged,
-        OnEquippedOtherCardChanged;
+    public event Action<IStorage.StorageNames> OnStorageChanged;
 
     private void Awake()
     {
         statsManager = GetComponent<StatsManager>();
-        OtherCards = new Dictionary<int, Card>(GameManager.Instance.Equipment_OtherSlotsAmount);
-        for (int i = 0; i < GameManager.Instance.Equipment_OtherSlotsAmount; i++)
+
+        Storages = new();
+        Storages.Add(IStorage.StorageNames.weaponSlot, new Slot(IStorage.StorageNames.weaponSlot, 
+            IStorage.AvailableCardsTypes.weapon, 1));
+        Storages.Add(IStorage.StorageNames.armorSlot, new Slot(IStorage.StorageNames.armorSlot,
+            IStorage.AvailableCardsTypes.armor, 1));
+        Storages.Add(IStorage.StorageNames.otherSlot, new Slot(IStorage.StorageNames.otherSlot,
+            IStorage.AvailableCardsTypes.other, GameManager.Instance.Equipment_OtherSlotCapacity));
+        Storages.Add(IStorage.StorageNames.inventory, new Inventory());
+    }
+
+    public void AddCard(Card card, IStorage.StorageNames storageName)
+    {
+        var releasedCard = Storages[storageName].AddCard(card);
+        if (releasedCard != null)
         {
-            OtherCards.Add(i, null);
+            Storages[IStorage.StorageNames.inventory].AddCard(releasedCard);
+        }
+        if (Storages[storageName].AffectsStats)
+        {
+            foreach (StatBonus bonus in card.StatBonuses)
+            {
+                statsManager.AddBonus(bonus);
+            }
+            if (releasedCard != null)
+            {
+                foreach (StatBonus bonus in releasedCard.StatBonuses)
+                {
+                    statsManager.RemoveBonus(bonus);
+                }
+            }
+        }
+        OnStorageChanged?.Invoke(storageName);
+        if (releasedCard != null)
+        {
+            OnStorageChanged?.Invoke(IStorage.StorageNames.inventory);
         }
     }
 
-    public void EquipWeaponCard(Card card)
+    public void RemoveCard(Card card, IStorage.StorageNames storageName)
     {
-        if (WeaponCard != null)
+        var success = Storages[storageName].RemoveCard(card);
+        if (success && Storages[storageName].AffectsStats)
         {
-            foreach (StatBonus bonus in WeaponCard.StatBonuses)
+            foreach (StatBonus bonus in card.StatBonuses)
             {
                 statsManager.RemoveBonus(bonus);
             }
         }
-        WeaponCard = card;
-        foreach(StatBonus bonus in card.StatBonuses)
+        if (success)
         {
-            statsManager.AddBonus(bonus);
+            OnStorageChanged?.Invoke(storageName);
         }
-        OnEquippedWeaponCardChanged?.Invoke();
     }
 
-    public void EquipArmorCard(Card card)
+    public void MoveCard(Card card, IStorage.StorageNames prevSlot, IStorage.StorageNames newSlot)
     {
-        if (ArmorCard != null)
-        {
-            foreach (StatBonus bonus in ArmorCard.StatBonuses)
-            {
-                statsManager.RemoveBonus(bonus);
-            }
-        }
-        ArmorCard = card;
-        foreach (StatBonus bonus in card.StatBonuses)
-        {
-            statsManager.AddBonus(bonus);
-        }
-        OnEquippedArmorCardChanged?.Invoke();
-    }
-
-    public void EquipOtherCard(Card card)
-    {
-        if (OtherCards[activeOtherSlot] != null)
-        {
-            foreach (StatBonus bonus in OtherCards[activeOtherSlot].StatBonuses)
-            {
-                statsManager.RemoveBonus(bonus);
-            }
-        }
-        OtherCards[activeOtherSlot] = card;
-        foreach (StatBonus bonus in card.StatBonuses)
-        {
-            statsManager.AddBonus(bonus);
-        }
-        OnEquippedOtherCardChanged?.Invoke();
+        AddCard(card, newSlot);
+        RemoveCard(card, prevSlot);
     }
 }

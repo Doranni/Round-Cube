@@ -35,15 +35,6 @@ public partial class @GameInput : IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
-                },
-                {
-                    ""name"": ""MousePosition"",
-                    ""type"": ""PassThrough"",
-                    ""id"": ""3a034328-95a7-45b2-a9c7-c21f1dfa7385"",
-                    ""expectedControlType"": ""Vector2"",
-                    ""processors"": """",
-                    ""interactions"": """",
-                    ""initialStateCheck"": true
                 }
             ],
             ""bindings"": [
@@ -55,17 +46,6 @@ public partial class @GameInput : IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""groups"": ""Keyboard&Mouse"",
                     ""action"": ""Escape"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""5564f39e-6175-45eb-a08d-e9817e7641c4"",
-                    ""path"": ""<Mouse>/position"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": ""Keyboard&Mouse"",
-                    ""action"": ""MousePosition"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -801,7 +781,6 @@ public partial class @GameInput : IInputActionCollection2, IDisposable
         // GameUI
         m_GameUI = asset.FindActionMap("GameUI", throwIfNotFound: true);
         m_GameUI_Escape = m_GameUI.FindAction("Escape", throwIfNotFound: true);
-        m_GameUI_MousePosition = m_GameUI.FindAction("MousePosition", throwIfNotFound: true);
         // Camera
         m_Camera = asset.FindActionMap("Camera", throwIfNotFound: true);
         m_Camera_Move = m_Camera.FindAction("Move", throwIfNotFound: true);
@@ -878,13 +857,11 @@ public partial class @GameInput : IInputActionCollection2, IDisposable
     private readonly InputActionMap m_GameUI;
     private IGameUIActions m_GameUIActionsCallbackInterface;
     private readonly InputAction m_GameUI_Escape;
-    private readonly InputAction m_GameUI_MousePosition;
     public struct GameUIActions
     {
         private @GameInput m_Wrapper;
         public GameUIActions(@GameInput wrapper) { m_Wrapper = wrapper; }
         public InputAction @Escape => m_Wrapper.m_GameUI_Escape;
-        public InputAction @MousePosition => m_Wrapper.m_GameUI_MousePosition;
         public InputActionMap Get() { return m_Wrapper.m_GameUI; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -897,9 +874,6 @@ public partial class @GameInput : IInputActionCollection2, IDisposable
                 @Escape.started -= m_Wrapper.m_GameUIActionsCallbackInterface.OnEscape;
                 @Escape.performed -= m_Wrapper.m_GameUIActionsCallbackInterface.OnEscape;
                 @Escape.canceled -= m_Wrapper.m_GameUIActionsCallbackInterface.OnEscape;
-                @MousePosition.started -= m_Wrapper.m_GameUIActionsCallbackInterface.OnMousePosition;
-                @MousePosition.performed -= m_Wrapper.m_GameUIActionsCallbackInterface.OnMousePosition;
-                @MousePosition.canceled -= m_Wrapper.m_GameUIActionsCallbackInterface.OnMousePosition;
             }
             m_Wrapper.m_GameUIActionsCallbackInterface = instance;
             if (instance != null)
@@ -907,9 +881,6 @@ public partial class @GameInput : IInputActionCollection2, IDisposable
                 @Escape.started += instance.OnEscape;
                 @Escape.performed += instance.OnEscape;
                 @Escape.canceled += instance.OnEscape;
-                @MousePosition.started += instance.OnMousePosition;
-                @MousePosition.performed += instance.OnMousePosition;
-                @MousePosition.canceled += instance.OnMousePosition;
             }
         }
     }
@@ -1108,7 +1079,6 @@ public partial class @GameInput : IInputActionCollection2, IDisposable
     public interface IGameUIActions
     {
         void OnEscape(InputAction.CallbackContext context);
-        void OnMousePosition(InputAction.CallbackContext context);
     }
     public interface ICameraActions
     {

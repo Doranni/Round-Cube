@@ -15,7 +15,7 @@ MonoBehaviour:
   cards:
   - id: 101
     cardType: 0
-    cardName: Sword
+    cardName: Sword 1
     description: Old rusted sword
     statBonuses:
     - statTypeId: 2
@@ -24,14 +24,36 @@ MonoBehaviour:
       value: 2
     duration: -1
     image: {fileID: 0}
+  - id: 102
+    cardType: 0
+    cardName: Sword 2
+    description: Simple armor
+    statBonuses:
+    - statTypeId: 1
+      value: 9
+    - statTypeId: 0
+      value: 4
+    duration: -1
+    image: {fileID: 0}
   - id: 201
     cardType: 1
-    cardName: Chain
+    cardName: Chain 1
     description: Simple armor
     statBonuses:
     - statTypeId: 1
       value: 15
     - statTypeId: 0
       value: 20
+    duration: -1
+    image: {fileID: 0}
+  - id: 202
+    cardType: 1
+    cardName: Chain 2
+    description: Simple armor
+    statBonuses:
+    - statTypeId: 1
+      value: 6
+    - statTypeId: 0
+      value: 3
     duration: -1
     image: {fileID: 0}
