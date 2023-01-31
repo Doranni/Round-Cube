@@ -4,17 +4,16 @@ using UnityEngine;
 
 public class ItemsDatabase : Singleton<ItemsDatabase>
 {
-    [SerializeField] private CardsDatabaseData data;
-
     public Dictionary<int, CardData> Cards { get; private set; }
 
     public override void Awake()
     {
         base.Awake();
-        Cards = new(data.cards.Count);
-        for (int i = 0; i < data.cards.Count; i++)
+        CardData[] data = Resources.LoadAll<CardData>("Cards");
+        Cards = new(data.Length);
+        for (int i = 0; i < data.Length; i++)
         {
-            Cards.Add(data.cards[i].id, data.cards[i]);
+            Cards.Add(data[i].id, data[i]);
         }
     }
 
