@@ -1582,8 +1582,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   otherSlotCapacity: 3
   inventoryCapacity: 50
-  dragRangeMin: {x: 0, y: 0}
-  dragRangeMax: {x: 1920, y: 1080}
 --- !u!4 &569206833
 Transform:
   m_ObjectHideFlags: 0
@@ -5433,11 +5431,11 @@ GameObject:
   - component: {fileID: 2140604883}
   - component: {fileID: 2140604886}
   - component: {fileID: 2140604885}
+  - component: {fileID: 2140604891}
   - component: {fileID: 2140604887}
-  - component: {fileID: 2140604888}
   - component: {fileID: 2140604889}
   - component: {fileID: 2140604890}
-  - component: {fileID: 2140604891}
+  - component: {fileID: 2140604888}
   m_Layer: 5
   m_Name: UIDocument
   m_TagString: Untagged
@@ -5571,7 +5569,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a410569d6c8837349abe7411dcf5aa6c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  inventoryRowCardsCapacity: 0
   plEquipment: {fileID: 1307952733}
 --- !u!114 &2140604890
 MonoBehaviour:
@@ -5601,9 +5598,8 @@ MonoBehaviour:
   cardSize_big: {x: 120, y: 160}
   slotCardMargin: 0
   inventoryCardMargin: 20
-  inventoryRowCardsCapacity: 10
-  dragRangeMin: {x: 0, y: 0}
-  dragRangeMax: {x: 1920, y: 1080}
+  dragRangeMin: {x: 20, y: 20}
+  dragRangeMax: {x: 1900, y: 1060}
 --- !u!1001 &294601608747851552
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -5780,7 +5776,8 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 9124569182049458245, guid: 1711fa5ec2f03ca4eb484fd54cd1451f, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 1711fa5ec2f03ca4eb484fd54cd1451f, type: 3}
 --- !u!1001 &6283457473107636176
 PrefabInstance:

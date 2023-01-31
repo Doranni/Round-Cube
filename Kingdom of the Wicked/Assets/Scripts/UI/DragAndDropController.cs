@@ -7,7 +7,7 @@ public class DragAndDropController : Singleton<DragAndDropController>
 
     private VisualElement targetVE;
     private Card targetCard;
-    private Vector2 targetStartPos, targetSizeOffset;
+    private Vector2 targetStartPos;
     private IStorage.StorageNames targetPrevStorage;
 
     private Vector3 pointerStartPos;
@@ -24,12 +24,11 @@ public class DragAndDropController : Singleton<DragAndDropController>
     public void AddTarget(PointerDownEvent evt, (VisualElement targetVE, Card card,
         IStorage.StorageNames prevStorageName) target)
     {
-        UIManager.Instance.StyleCard(target.prevStorageName, cardToDrag, target.card);
+        UIManager.Instance.StyleCardToDrag(cardToDrag, target.card);
 
         targetVE = target.targetVE;
         targetCard = target.card;
         targetStartPos = cardToDrag.WorldToLocal(target.targetVE.LocalToWorld(target.targetVE.transform.position));
-        targetSizeOffset = UIManager.Instance.GetCardSizeOffset(target.prevStorageName);
         targetPrevStorage = target.prevStorageName;
         target.targetVE.style.display = DisplayStyle.None;
 
@@ -89,8 +88,11 @@ public class DragAndDropController : Singleton<DragAndDropController>
             Vector3 pointerDelta = evt.position - pointerStartPos;
 
             cardToDrag.transform.position = new Vector2(
-            Mathf.Clamp(targetStartPos.x + pointerDelta.x, 0, UIManager.Instance.DragRangeMax.x - targetSizeOffset.x),
-            Mathf.Clamp(targetStartPos.y + pointerDelta.y, 0, UIManager.Instance.DragRangeMax.y - targetSizeOffset.y));
+            Mathf.Clamp(targetStartPos.x + pointerDelta.x, UIManager.Instance.DragRangeMin.x,
+                UIManager.Instance.DragRangeMax.x - UIManager.Instance.CardToDragSizeOffset.x),
+            Mathf.Clamp(targetStartPos.y + pointerDelta.y, UIManager.Instance.DragRangeMin.y,
+                UIManager.Instance.DragRangeMax.y - UIManager.Instance.CardToDragSizeOffset.y));
+            Debug.Log("cardToDrag.transform.position - " + cardToDrag.transform.position);
         }
     }
 }

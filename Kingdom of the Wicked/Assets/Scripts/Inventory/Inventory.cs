@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Inventory : MonoBehaviour, IStorage
+public class Inventory : IStorage
 {
     public IStorage.StorageNames StorageName { get; private set; }
     public IStorage.AvailableCardsTypes CardsTypes { get; private set; }

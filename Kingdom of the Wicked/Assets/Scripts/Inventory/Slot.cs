@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Slot : MonoBehaviour, IStorage
+public class Slot : IStorage
 {
     public IStorage.StorageNames StorageName { get; private set; }
     public IStorage.AvailableCardsTypes CardsTypes { get; private set; }

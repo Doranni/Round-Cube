@@ -7,8 +7,6 @@ using UnityEngine.UIElements;
 [RequireComponent(typeof(UIDocument))]
 public class EquipmentUI : Singleton<EquipmentUI>
 {
-    [SerializeField] private int inventoryRowCardsCapacity = 10;
-
     [SerializeField] private Equipment plEquipment;
 
     private VisualElement plEquipmentScreen;
@@ -133,7 +131,7 @@ public class EquipmentUI : Singleton<EquipmentUI>
                 (DragAndDropController.Instance.AddTarget, 
                 (cardUI, storages[storageName].Cards[i].card, storageName));
         }
-        //if (storageName == IStorage.StorageNames.otherSlot && storages[storageName].Storage.ActiveSlot != -1)
+        //if (storageName == IStorage.StorageNames.otherSlot)
         //{
 
             //    storages[storageName].Cards[storages[storageName].Storage.ActiveSlot].cardVE.BringToFront();

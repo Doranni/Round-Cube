@@ -7,13 +7,13 @@ using UnityEngine.UIElements;
 public class UIManager : Singleton<UIManager>
 {
     [SerializeField]
-    private Vector2 cardSize_small = new Vector2(80, 120),
-        cardSize_big = new Vector2(120, 160);
+    private Vector2 cardSize_small = new (80, 120),
+        cardSize_big = new (120, 160);
     [SerializeField] private float slotCardMargin = 0, inventoryCardMargin = 20;
-    [SerializeField] private int inventoryRowCardsCapacity = 10;
-    [SerializeField] private Vector2 dragRangeMin = Vector2.zero, dragRangeMax = new (1920, 1080);
+    [SerializeField] private Vector2 dragRangeMin = new(20, 20), dragRangeMax = new (1900, 1060);
     public Vector2 DragRangeMin => dragRangeMin;
     public Vector2 DragRangeMax => dragRangeMax;
+    public Vector2 CardToDragSizeOffset => cardSize_big;
 
     const string k_cardBackground = "CardBackground";
     const string k_cardName = "CardName";
@@ -47,6 +47,14 @@ public class UIManager : Singleton<UIManager>
         }
     }
 
+    public void StyleCardToDrag(VisualElement cardVE, Card card)
+    {
+        var cardBackgroung = cardVE.Q(k_cardBackground);
+        var cardName = cardVE.Q<Label>(k_cardName);
+        cardName.text = card.CardName;
+        SetSize(cardBackgroung, IStorage.StorageNames.inventory);
+    }
+
     public void SetSize(VisualElement cardVE, IStorage.StorageNames storageName)
     {
         var size = RequiredCardSize(storageName);
@@ -69,28 +77,5 @@ public class UIManager : Singleton<UIManager>
                     return cardSize_big;
                 }
         }
-    }
-
-    public Vector2 GetCardSizeOffset(IStorage.StorageNames storageName)
-    {
-        var offset = RequiredCardSize(storageName);
-        switch (storageName)
-        {
-            case IStorage.StorageNames.weaponSlot:
-            case IStorage.StorageNames.armorSlot:
-            case IStorage.StorageNames.otherSlot:
-                {
-                    offset.x += slotCardMargin;
-                    offset.y += slotCardMargin;
-                    break;
-                }
-            case IStorage.StorageNames.inventory:
-                {
-                    offset.x += inventoryCardMargin;
-                    offset.y += inventoryCardMargin;
-                    break;
-                }
-        }
-        return offset;
     }
 }
