@@ -1,0 +1,173 @@
+.dice {
+    margin-left: 50px;
+    margin-right: 50px;
+    margin-top: 50px;
+    margin-bottom: 50px;
+}
+
+.dice_button {
+    width: 130px;
+    height: 130px;
+    font-size: 22px;
+    color: rgb(0, 0, 0);
+    -unity-text-align: middle-center;
+    background-color: rgb(183, 183, 183);
+    -unity-font-style: bold;
+}
+
+.pl_panel {
+    bottom: 0;
+    position: absolute;
+    left: 0;
+    flex-direction: row;
+    margin-left: 20px;
+    margin-right: 20px;
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+.pl_icon {
+    width: 180px;
+    height: 180px;
+    background-color: rgb(229, 231, 110);
+    border-top-left-radius: 100px;
+    border-bottom-left-radius: 100px;
+    border-top-right-radius: 100px;
+    border-bottom-right-radius: 100px;
+    color: rgb(0, 0, 0);
+    font-size: 22px;
+    -unity-font-style: bold;
+    justify-content: center;
+    align-items: center;
+    -unity-text-align: upper-center;
+    margin-left: 10px;
+    margin-right: 10px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+.pl_health_bar {
+    width: 250px;
+    height: 40px;
+    background-color: rgb(178, 68, 68);
+    justify-content: center;
+    margin-left: 10px;
+    margin-right: 10px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+.pl_equipment {
+    flex-direction: row;
+    width: 270px;
+    height: 130px;
+    margin-left: 10px;
+    margin-right: 10px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+.cardSlot {
+    width: 80px;
+    height: 120px;
+    border-top-left-radius: 14px;
+    border-bottom-left-radius: 14px;
+    border-top-right-radius: 14px;
+    border-bottom-right-radius: 14px;
+    background-color: rgba(255, 255, 255, 0.01);
+    color: rgb(0, 0, 0);
+    font-size: 17px;
+    -unity-text-align: middle-center;
+    -unity-font-style: bold;
+    justify-content: center;
+    align-items: center;
+    border-left-color: rgb(70, 70, 70);
+    border-right-color: rgb(70, 70, 70);
+    border-top-color: rgb(70, 70, 70);
+    border-bottom-color: rgb(70, 70, 70);
+    border-left-width: 0.5px;
+    border-right-width: 0.5px;
+    border-top-width: 0.5px;
+    border-bottom-width: 0.5px;
+    margin-left: 5px;
+    margin-right: 5px;
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+
+.inventory_button {
+    width: 80px;
+    height: 120px;
+    border-top-left-radius: 14px;
+    border-bottom-left-radius: 14px;
+    border-top-right-radius: 14px;
+    border-bottom-right-radius: 14px;
+    background-color: rgb(197, 192, 36);
+    color: rgb(0, 0, 0);
+    font-size: 17px;
+    -unity-text-align: middle-center;
+    -unity-font-style: bold;
+    justify-content: center;
+    align-items: center;
+    border-left-color: rgb(91, 89, 21);
+    border-right-color: rgb(91, 89, 21);
+    border-top-color: rgb(91, 89, 21);
+    border-bottom-color: rgb(91, 89, 21);
+    border-left-width: 3px;
+    border-right-width: 3px;
+    border-top-width: 3px;
+    border-bottom-width: 3px;
+    margin-left: 15px;
+    margin-right: 15px;
+    margin-top: 15px;
+    margin-bottom: 15px;
+}
+
+.inventory {
+    justify-content: center;
+    align-items: center;
+    margin-left: 250px;
+    margin-right: 250px;
+    margin-top: 100px;
+    margin-bottom: 300px;
+    position: absolute;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+}
+
+#InventoryScroll #unity-content-container {
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+}
+
+.InventoryCard {
+    width: 120px;
+    height: 180px;
+    border-top-left-radius: 14px;
+    border-bottom-left-radius: 14px;
+    border-top-right-radius: 14px;
+    border-bottom-right-radius: 14px;
+    color: rgb(0, 0, 0);
+    font-size: 17px;
+    -unity-text-align: middle-center;
+    -unity-font-style: bold;
+    justify-content: center;
+    align-items: center;
+    border-left-color: rgb(70, 70, 70);
+    border-right-color: rgb(70, 70, 70);
+    border-top-color: rgb(70, 70, 70);
+    border-bottom-color: rgb(70, 70, 70);
+    border-left-width: 0.5px;
+    border-right-width: 0.5px;
+    border-top-width: 0.5px;
+    border-bottom-width: 0.5px;
+    margin-left: 5px;
+    margin-right: 5px;
+    margin-top: 5px;
+    margin-bottom: 5px;
+    background-color: rgb(255, 85, 85);
+}
