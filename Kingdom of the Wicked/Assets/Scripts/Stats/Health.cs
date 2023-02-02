@@ -1,42 +1,22 @@
 using System;
 using UnityEngine;
 
-[RequireComponent(typeof(Collider))]
-[RequireComponent(typeof(StatsManager))]
-public class Health : MonoBehaviour
+public class Health
 {
     public float CurrentHealth { get; private set; }
     public float MaxHealth { get; private set; }
     public bool IsDead { get; private set; }
 
-    private StatsManager statsManager;
-
-    public event Action<(float currentHealth, float maxHealth)> OnChangeHealth, OnGetDamage, 
-        OnChangeMaxHealth;
+    public event Action<(float currentHealth, float maxHealth)> OnChangeHealth, OnGetDamage;
     public event Action OnDeath;
 
-    private void Start()
+    public Health(float maxValue) : this(maxValue, maxValue) { }
+
+    public Health(float maxValue, float currentValue)
     {
-        statsManager = GetComponent<StatsManager>();
-        CurrentHealth = MaxHealth = statsManager.Stats[Stat.StatId.health].BaseValue;
+        CurrentHealth = currentValue;
+        MaxHealth = maxValue;
         IsDead = false;
-
-        statsManager.Stats[Stat.StatId.health].OnAddBonus += Health_CalcBonus;
-        statsManager.Stats[Stat.StatId.health].OnRemoveBonus += x => Health_CalcBonus(-x);
-    }
-
-    private void Health_CalcBonus(int value)
-    {
-        Debug.Log("Health_CalcBonus");
-        ChangeMaxHealth(value);
-        ChangeHealth(value);
-        Debug.Log($"current health - {CurrentHealth}, max health - {MaxHealth}");
-    }
-
-    private void ChangeMaxHealth(float value)
-    {
-        MaxHealth = Mathf.Clamp(MaxHealth + value, 0, MaxHealth + value);
-        OnChangeMaxHealth?.Invoke((CurrentHealth, MaxHealth));
     }
 
     public void ChangeHealth(float value, bool effectDead = false)
@@ -55,6 +35,13 @@ public class Health : MonoBehaviour
         {
             Death();
         }
+    }
+
+    public void AddHealthBonus(float value)
+    {
+        MaxHealth += value;
+        CurrentHealth += value;
+        OnChangeHealth?.Invoke((CurrentHealth, MaxHealth));
     }
 
     public void Death()

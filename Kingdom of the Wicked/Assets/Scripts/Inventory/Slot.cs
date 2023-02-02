@@ -43,4 +43,16 @@ public class Slot : IStorage
         Cards.Remove(cardToRemove);
         return true;
     }
+
+    public void ChangeActiveCardIndex()
+    {
+        if (ActiveCardIndex == Cards.Capacity - 1)
+        {
+            ActiveCardIndex = 0;
+        }
+        else
+        {
+            ActiveCardIndex++;
+        }
+    }
 }

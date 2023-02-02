@@ -17,12 +17,13 @@ public class UIManager : Singleton<UIManager>
 
     const string k_cardBackground = "CardBackground";
     const string k_cardName = "CardName";
+    const string k_cardDescription = "CardDescription";
+    const string k_cardStatBonuses = "CardStatBonuses";
 
     public void StyleCard(IStorage.StorageNames storageName, VisualElement cardVE, Card card)
     {
+        SetText(cardVE, card);
         var cardBackgroung = cardVE.Q(k_cardBackground);
-        var cardName = cardVE.Q<Label>(k_cardName);
-        cardName.text = card.CardName;
         SetSize(cardBackgroung, storageName);
         switch (storageName)
         {
@@ -49,10 +50,25 @@ public class UIManager : Singleton<UIManager>
 
     public void StyleCardToDrag(VisualElement cardVE, Card card)
     {
+        SetText(cardVE, card);
         var cardBackgroung = cardVE.Q(k_cardBackground);
-        var cardName = cardVE.Q<Label>(k_cardName);
-        cardName.text = card.CardName;
         SetSize(cardBackgroung, IStorage.StorageNames.inventory);
+    }
+
+    private void SetText(VisualElement cardVE, Card card)
+    {
+        var cardName = cardVE.Q<Label>(k_cardName);
+        var cardDescription = cardVE.Q<Label>(k_cardDescription);
+        var cardStatBonuses = cardVE.Q<Label>(k_cardStatBonuses);
+        cardName.text = card.CardName;
+        cardDescription.text = card.Description;
+        var statBonuses = "";
+        foreach (StatBonus bonus in card.StatBonuses)
+        {
+            statBonuses += GameDatabase.Instance.StatsDescription[bonus.StatTypeId].name + ": "
+                + bonus.Value + "\n";
+        }
+        cardStatBonuses.text = statBonuses;
     }
 
     public void SetSize(VisualElement cardVE, IStorage.StorageNames storageName)

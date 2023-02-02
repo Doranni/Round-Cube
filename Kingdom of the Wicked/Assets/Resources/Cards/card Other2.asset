@@ -9,9 +9,17 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fae50b42d671b2141b5580e3209c9406, type: 3}
-  m_Name: stat Health
+  m_Script: {fileID: 11500000, guid: 350d0360796ab614286dfd5000702976, type: 3}
+  m_Name: card Other2
   m_EditorClassIdentifier: 
-  Id: 0
-  statName: Health
-  description: Your health value
+  id: 302
+  cardType: 2
+  cardName: Other2
+  description: Other card
+  statBonuses:
+  - statTypeId: 2
+    value: 20
+  - statTypeId: 1
+    value: 10
+  duration: 0
+  image: {fileID: 0}

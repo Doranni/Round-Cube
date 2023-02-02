@@ -15,7 +15,7 @@ MonoBehaviour:
   id: 202
   cardType: 1
   cardName: Armor2
-  description: Simple Armor
+  description: Simple\nArmor
   statBonuses:
   - statTypeId: 1
     value: 35

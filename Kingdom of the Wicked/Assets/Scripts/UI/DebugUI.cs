@@ -6,7 +6,7 @@ using UnityEngine.UIElements;
 [RequireComponent(typeof(UIDocument))]
 public class DebugUI : MonoBehaviour
 {
-    [SerializeField] private StatsManager plStats;
+    [SerializeField] private CharacterStats plStats;
 
     private VisualElement debugScreen;
     private Label plStatsLbl;
@@ -27,9 +27,9 @@ public class DebugUI : MonoBehaviour
     void Update()
     {
         var res = str_stats;
-        foreach (KeyValuePair<Stat.StatId, Stat> stat in plStats.Stats)
+        foreach (KeyValuePair<Stat.StatId, Stat> stat in plStats.ChStats.StatsValues)
         {
-            res += "\n" + stat.Value.StatName + ": " + stat.Value.TotalValue;
+            res += "\n" + GameDatabase.Instance.StatsDescription[stat.Key].name + ": " + stat.Value.TotalValue;
         }
         plStatsLbl.text = res;
     }

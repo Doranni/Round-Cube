@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using UnityEngine;
 
 public class Stat 
 {
@@ -11,18 +10,14 @@ public class Stat
         damage
     }
     public StatId Id { get; private set; }
-    public string StatName { get; private set; }
-    public string Description { get; private set; }
     public int BaseValue { get; private set; }
     public int TotalValue { get; private set; }
     public Dictionary<int, StatBonus> Bonuses { get; private set; }
 
     public event Action<int> OnAddBonus, OnRemoveBonus;
 
-    public Stat(string statName, string description, int baseValue)
+    public Stat(int baseValue)
     {
-        StatName = statName;
-        Description = description;
         BaseValue = baseValue;
         TotalValue = BaseValue;
         Bonuses = new();
