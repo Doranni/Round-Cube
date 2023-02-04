@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 7513097533583905226}
   - component: {fileID: 2344433192955149224}
   - component: {fileID: 7513097533583905231}
-  - component: {fileID: 4585442978948077998}
+  - component: {fileID: 6500325051780583033}
   m_Layer: 0
   m_Name: Node
   m_TagString: Untagged
@@ -114,7 +114,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   stayPoint: {fileID: 5481708871639028972}
   isStart: 0
---- !u!114 &4585442978948077998
+  meshRenderer: {fileID: 7513097533583905226}
+--- !u!114 &6500325051780583033
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}

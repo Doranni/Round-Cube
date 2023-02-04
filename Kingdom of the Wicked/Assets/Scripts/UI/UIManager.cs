@@ -84,6 +84,7 @@ public class UIManager : Singleton<UIManager>
         {
             case IStorage.StorageNames.weaponSlot:
             case IStorage.StorageNames.armorSlot:
+            case IStorage.StorageNames.shieldSlot:
             case IStorage.StorageNames.otherSlot:
                 {
                     return cardSize_small;

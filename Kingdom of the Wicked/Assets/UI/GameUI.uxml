@@ -14,7 +14,13 @@
             <ui:VisualElement style="flex-direction: row; flex-grow: 1;">
                 <ui:VisualElement name="PlayerSlots" class="pl_equipment">
                     <ui:VisualElement name="SlopWeapon" class="cardSlot" />
-                    <ui:VisualElement name="SlotArmor" class="cardSlot" />
+                    <ui:VisualElement name="ArmorAndShieldSlots" class="cardSlot">
+                        <ui:VisualElement name="SlotArmor" picking-mode="Ignore" style="position: absolute; left: 0; top: 0; right: 0; bottom: 0;" />
+                        <ui:VisualElement name="SlotShield" picking-mode="Ignore" style="position: absolute; left: 0; top: 0; right: 0; bottom: 0;" />
+                    </ui:VisualElement>
+                    <ui:VisualElement name="ToggleArmorShieldButton" style="width: 25px; height: 25px; top: 24px; background-color: rgb(92, 255, 0); align-items: center; justify-content: center;">
+                        <ui:Label text="-1" display-tooltip-when-elided="true" name="ActiveSlot" style="color: rgb(0, 0, 0); font-size: 15px; align-items: center; justify-content: center; padding-left: 0; padding-right: 0; padding-top: 0; padding-bottom: 0;" />
+                    </ui:VisualElement>
                     <ui:VisualElement name="SlotOther" class="cardSlot" />
                     <ui:VisualElement name="ChangeOtherSlotActiveCardButton" style="width: 25px; height: 25px; top: 24px; background-color: rgb(92, 255, 0); align-items: center; justify-content: center;">
                         <ui:Label text="-1" display-tooltip-when-elided="true" name="ActiveCard" style="color: rgb(0, 0, 0); font-size: 15px; align-items: center; justify-content: center; padding-left: 0; padding-right: 0; padding-top: 0; padding-bottom: 0;" />

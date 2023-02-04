@@ -17,6 +17,8 @@ public class Equipment : MonoBehaviour
             IStorage.AvailableCardsTypes.weapon, 1));
         Storages.Add(IStorage.StorageNames.armorSlot, new Slot(IStorage.StorageNames.armorSlot,
             IStorage.AvailableCardsTypes.armor, 1));
+        Storages.Add(IStorage.StorageNames.shieldSlot, new Slot(IStorage.StorageNames.shieldSlot,
+            IStorage.AvailableCardsTypes.shield, 1));
         Storages.Add(IStorage.StorageNames.otherSlot, new Slot(IStorage.StorageNames.otherSlot,
             IStorage.AvailableCardsTypes.other, GameManager.Instance.Equipment_OtherSlotCapacity));
         Storages.Add(IStorage.StorageNames.inventory, new Inventory());

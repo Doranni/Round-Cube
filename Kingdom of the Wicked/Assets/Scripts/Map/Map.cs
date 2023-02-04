@@ -3,6 +3,9 @@ using UnityEngine;
 
 public class Map : Singleton<Map>
 {
+    [SerializeField] private MapNode[] mapNodes;
+    [SerializeField] private NodeLink[] links;
+
     public List<MapNode> MapNodes { get; private set; }
     public List<NodeLink> Links { get; private set; }
     public int Index_start { get; private set; }
@@ -15,12 +18,8 @@ public class Map : Singleton<Map>
 
     private void InitMap()
     {
-        MapNodes = new();
-        GetComponentsInChildren(MapNodes);
-
-        Links = new();
-        GetComponentsInChildren(Links);
-
+        MapNodes = new(mapNodes);
+        Links = new(links);
         for (int i = 0; i < MapNodes.Count; i++)
         {
             MapNodes[i].SetIndex(i);

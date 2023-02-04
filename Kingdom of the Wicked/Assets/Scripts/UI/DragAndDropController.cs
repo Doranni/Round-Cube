@@ -54,11 +54,12 @@ public class DragAndDropController : Singleton<DragAndDropController>
                 return;
             }
         }
-        if (targetPrevStorage == IStorage.StorageNames.weaponSlot 
+        if (targetPrevStorage == IStorage.StorageNames.weaponSlot
             || targetPrevStorage == IStorage.StorageNames.armorSlot
+            || targetPrevStorage == IStorage.StorageNames.shieldSlot
             || targetPrevStorage == IStorage.StorageNames.otherSlot)
         {
-            EquipmentUI.Instance.CardWasMoved(targetVE, targetCard, targetPrevStorage, 
+            EquipmentUI.Instance.CardWasMoved(targetVE, targetCard, targetPrevStorage,
                 IStorage.StorageNames.inventory);
             ResetTarget(evt.pointerId);
             return;

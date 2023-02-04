@@ -8,12 +8,14 @@ public interface IStorage
     {
         weapon = 1,
         armor = 2,
-        other = 4
+        shield = 4,
+        other = 8
     }
     public enum StorageNames
     {
         weaponSlot,
         armorSlot,
+        shieldSlot,
         otherSlot,
         inventory,
         storage

@@ -8,6 +8,7 @@ public class Card
     {
         Weapon,
         Armor,
+        Shield,
         Other
     }
 
