@@ -14,7 +14,7 @@ public class Inventory : IStorage
     {
         StorageName = IStorage.StorageNames.inventory;
         CardsTypes = IStorage.AvailableCardsTypes.weapon | IStorage.AvailableCardsTypes.armor
-            | IStorage.AvailableCardsTypes.other;
+            | IStorage.AvailableCardsTypes.shield | IStorage.AvailableCardsTypes.other;
         Cards = new();
     }
 

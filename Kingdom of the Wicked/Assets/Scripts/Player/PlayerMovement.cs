@@ -16,6 +16,8 @@ public class PlayerMovement : MonoBehaviour
 
     [SerializeField] private float speed = 10, posOffset = 0.4f, timeDelay_diceRolled = 0.2f;
 
+    public int NodeIndex { get; private set; }
+
     private CharacterController characterController;
 
     public MoveStatus MStatus { get; private set; }
@@ -64,6 +66,7 @@ public class PlayerMovement : MonoBehaviour
                     {
                         destPoints.Clear();
                         MStatus = MoveStatus.onBetweenNode;
+                        NodeIndex = destNodeIndex;
                         OnStepFinished?.Invoke();
                         return;
                     }
@@ -101,6 +104,7 @@ public class PlayerMovement : MonoBehaviour
                 lockedLink.wasLocked = false;
                 lockedLink.link = null;
             }
+            Map.Instance.MapNodes[NodeIndex].NEvent.Visit();
         }
     }
 
@@ -113,11 +117,13 @@ public class PlayerMovement : MonoBehaviour
         characterController.enabled = true;
         characterController.Move(Vector3.up * yGravity);
         MStatus = MoveStatus.onDestinationNode;
+        NodeIndex = destNodeIndex;
+        Map.Instance.MapNodes[NodeIndex].NEvent.Visit();
     }
 
     private void Move()
     {
-        var links = Map.Instance.GetAvailableLinks(destNodeIndex);
+        var links = Map.Instance.GetAvailableLinks(NodeIndex);
         if (links.Count == 1)
         {
             SetDestination(links[0]);
@@ -130,16 +136,16 @@ public class PlayerMovement : MonoBehaviour
 
     public void ChooseMoveNode(MapNode node)
     {
-        if (Map.Instance.IsNodeReachable(destNodeIndex, node.Index))
+        if (Map.Instance.IsNodeReachable(NodeIndex, node.Index))
         {
-            var link = Map.Instance.MapNodes[destNodeIndex].Links[node.Index];
+            var link = Map.Instance.MapNodes[NodeIndex].Links[node.Index];
             SetDestination(link);
         }
     }
 
     public void ConsiderMoveNode(MapNode node)
     {
-        if (Map.Instance.IsNodeReachable(destNodeIndex, node.Index))
+        if (Map.Instance.IsNodeReachable(NodeIndex, node.Index))
         {
             // TODO: to outline this way
             Debug.Log("We can go there!");
@@ -155,9 +161,9 @@ public class PlayerMovement : MonoBehaviour
             lockedLink.wasLocked = false;
             lockedLink.link = null;
         }
-        if (Map.Instance.MapNodes[link.NodeTo.Index].Links.ContainsKey(destNodeIndex))
+        if (Map.Instance.MapNodes[link.NodeTo.Index].Links.ContainsKey(NodeIndex))
         {
-            var linkBack = Map.Instance.MapNodes[link.NodeTo.Index].Links[destNodeIndex];
+            var linkBack = Map.Instance.MapNodes[link.NodeTo.Index].Links[NodeIndex];
             linkBack.SetIsAvailable(false);
             lockedLink = (true, linkBack);
         }

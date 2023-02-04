@@ -2,24 +2,23 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-[RequireComponent(typeof(StatsManager))]
 public class Equipment : MonoBehaviour
 {
-    public Dictionary<IStorage.StorageNames, IStorage> Storages { get; private set; }
+    [SerializeField] private CharacterStats characterStats;
 
-    private StatsManager statsManager;
+    public Dictionary<IStorage.StorageNames, IStorage> Storages { get; private set; }
 
     public event Action<IStorage.StorageNames> OnStorageChanged;
 
     private void Awake()
     {
-        statsManager = GetComponent<StatsManager>();
-
         Storages = new();
         Storages.Add(IStorage.StorageNames.weaponSlot, new Slot(IStorage.StorageNames.weaponSlot, 
             IStorage.AvailableCardsTypes.weapon, 1));
         Storages.Add(IStorage.StorageNames.armorSlot, new Slot(IStorage.StorageNames.armorSlot,
             IStorage.AvailableCardsTypes.armor, 1));
+        Storages.Add(IStorage.StorageNames.shieldSlot, new Slot(IStorage.StorageNames.shieldSlot,
+            IStorage.AvailableCardsTypes.shield, 1));
         Storages.Add(IStorage.StorageNames.otherSlot, new Slot(IStorage.StorageNames.otherSlot,
             IStorage.AvailableCardsTypes.other, GameManager.Instance.Equipment_OtherSlotCapacity));
         Storages.Add(IStorage.StorageNames.inventory, new Inventory());
@@ -36,13 +35,13 @@ public class Equipment : MonoBehaviour
         {
             foreach (StatBonus bonus in card.StatBonuses)
             {
-                statsManager.AddBonus(bonus);
+                characterStats.ChStats.AddBonus(bonus);
             }
             if (releasedCard != null)
             {
                 foreach (StatBonus bonus in releasedCard.StatBonuses)
                 {
-                    statsManager.RemoveBonus(bonus);
+                    characterStats.ChStats.RemoveBonus(bonus);
                 }
             }
         }
@@ -60,7 +59,7 @@ public class Equipment : MonoBehaviour
         {
             foreach (StatBonus bonus in card.StatBonuses)
             {
-                statsManager.RemoveBonus(bonus);
+                characterStats.ChStats.RemoveBonus(bonus);
             }
         }
         if (success)

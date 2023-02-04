@@ -9,9 +9,17 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fae50b42d671b2141b5580e3209c9406, type: 3}
-  m_Name: stat Damage
+  m_Script: {fileID: 11500000, guid: 350d0360796ab614286dfd5000702976, type: 3}
+  m_Name: card Other3
   m_EditorClassIdentifier: 
-  Id: 2
-  statName: Damage
-  description: Your damage value
+  id: 403
+  cardType: 3
+  cardName: Other3
+  description: Other card
+  statBonuses:
+  - statTypeId: 2
+    value: 20
+  - statTypeId: 1
+    value: 10
+  duration: 0
+  image: {fileID: 0}
