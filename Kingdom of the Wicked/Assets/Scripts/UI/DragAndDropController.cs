@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -45,25 +46,15 @@ public class DragAndDropController : Singleton<DragAndDropController>
     private void PointerUpEventHandler(PointerUpEvent evt)
     {
         var storages = EquipmentUI.Instance.GetAvailableStorages(targetCard.CardType);
+        List<IStorage.StorageNames> overlapStorages = new();
         for (int i = 0; i < storages.Count; i++)
         {
             if (OverlapsCard(storages[i].storageUI))
             {
-                EquipmentUI.Instance.CardWasMoved(targetVE, targetCard, targetPrevStorage, storages[i].storageName);
-                ResetTarget(evt.pointerId);
-                return;
+                overlapStorages.Add(storages[i].storageName);
             }
         }
-        if (targetPrevStorage == IStorage.StorageNames.weaponSlot
-            || targetPrevStorage == IStorage.StorageNames.armorSlot
-            || targetPrevStorage == IStorage.StorageNames.shieldSlot
-            || targetPrevStorage == IStorage.StorageNames.otherSlot)
-        {
-            EquipmentUI.Instance.CardWasMoved(targetVE, targetCard, targetPrevStorage,
-                IStorage.StorageNames.inventory);
-            ResetTarget(evt.pointerId);
-            return;
-        }
+        EquipmentUI.Instance.CardWasMoved(targetCard, targetPrevStorage, overlapStorages);
         ResetTarget(evt.pointerId);
     }
 

@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: card Sword1
   m_EditorClassIdentifier: 
   id: 101
-  cardType: 0
+  cardType: 1
   cardName: Sword1
   description: Simple\nSword
   statBonuses:

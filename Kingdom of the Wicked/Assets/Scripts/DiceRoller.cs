@@ -49,12 +49,10 @@ public class DiceRoller : Singleton<DiceRoller>
     private List<int> GetsAvailableDiceValues()
     {
         List<int> diceValues = new();
-
         List<(int distance, int nodeIndex)>nodes = new()
         {
             (0, plMovement.NodeIndex)
         };
-
         for (int i = 1; i <= diceRange; i++)
         {
             var prevNodes = nodes.FindAll(x => x.distance == i - 1);
@@ -67,7 +65,6 @@ public class DiceRoller : Singleton<DiceRoller>
                 }
             }
         }
-
         for (int i = 1; i <= diceRange; i++)
         {
             var availableNodes = nodes.FindAll(x => x.distance == i);

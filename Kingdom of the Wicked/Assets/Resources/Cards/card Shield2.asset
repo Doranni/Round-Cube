@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: card Shield2
   m_EditorClassIdentifier: 
   id: 302
-  cardType: 2
+  cardType: 4
   cardName: Shield2
   description: Shield card
   statBonuses:

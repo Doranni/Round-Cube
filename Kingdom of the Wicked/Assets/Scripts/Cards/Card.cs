@@ -1,15 +1,16 @@
-using System.Collections;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class Card 
 {
+    [Flags]
     public enum CardsType
     {
-        Weapon,
-        Armor,
-        Shield,
-        Other
+        Weapon = 1,
+        Armor = 2,
+        Shield = 4,
+        Other = 8
     }
 
     public int Id { get; private set; }

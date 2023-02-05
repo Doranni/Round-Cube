@@ -243,33 +243,9 @@ public class EquipmentUI : Singleton<EquipmentUI>
         Card.CardsType type)
     {
         List<(IStorage.StorageNames, VisualElement)> res = new();
-        IStorage.AvailableCardsTypes flags = new();
-        switch (type)
-        {
-            case Card.CardsType.Weapon:
-                {
-                    flags = IStorage.AvailableCardsTypes.weapon;
-                    break;
-                }
-            case Card.CardsType.Armor:
-                {
-                    flags = IStorage.AvailableCardsTypes.armor;
-                    break;
-                }
-            case Card.CardsType.Shield:
-                {
-                    flags = IStorage.AvailableCardsTypes.shield;
-                    break;
-                }
-            case Card.CardsType.Other:
-                {
-                    flags = IStorage.AvailableCardsTypes.other;
-                    break;
-                }
-        }
         foreach (KeyValuePair<IStorage.StorageNames, StorageUI> storage in storages)
         {
-            if (storage.Value.IsActive && storage.Value.Storage.CardsTypes.HasFlag(flags))
+            if (storage.Value.IsActive)
             {
                 res.Add((storage.Key, storage.Value.StorageVE));
             }
@@ -277,14 +253,33 @@ public class EquipmentUI : Singleton<EquipmentUI>
         return res;
     }
 
-    public void CardWasMoved(VisualElement cardVE, Card card, IStorage.StorageNames prevStorage, 
-        IStorage.StorageNames newStorage)
+    public void CardWasMoved(Card card, IStorage.StorageNames prevStorage, 
+        List<IStorage.StorageNames> newStorages)
     {
-        if (prevStorage != newStorage)
+        if (newStorages.Count == 0 && 
+            (prevStorage != IStorage.StorageNames.inventory && prevStorage != IStorage.StorageNames.storage))
         {
-            plEquipment.MoveCard(card, prevStorage, newStorage);
+            plEquipment.MoveCard(card, prevStorage, IStorage.StorageNames.inventory);
+            Debug.Log($"Card was moved from {prevStorage} to inventory");
+            return;
         }
-        Debug.Log($"Card was moved from {prevStorage} to {newStorage}");
+        foreach(IStorage.StorageNames storage in newStorages)
+        {
+            if (prevStorage != storage
+            && ((storages[storage].Storage.CardsTypes.HasFlag(Card.CardsType.Weapon)
+                && card.CardType.HasFlag(Card.CardsType.Weapon))
+            || (storages[storage].Storage.CardsTypes.HasFlag(Card.CardsType.Armor)
+                && card.CardType.HasFlag(Card.CardsType.Armor))
+            || (storages[storage].Storage.CardsTypes.HasFlag(Card.CardsType.Shield)
+                && card.CardType.HasFlag(Card.CardsType.Shield))
+            || (storages[storage].Storage.CardsTypes.HasFlag(Card.CardsType.Other)
+                && card.CardType.HasFlag(Card.CardsType.Other))))
+            {
+                plEquipment.MoveCard(card, prevStorage, storage);
+                Debug.Log($"Card was moved from {prevStorage} to {storage}");
+                return;
+            }
+        }
     }
 }
 

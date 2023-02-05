@@ -3,14 +3,6 @@ using System.Collections.Generic;
 
 public interface IStorage
 {
-    [Flags]
-    public enum AvailableCardsTypes
-    {
-        weapon = 1,
-        armor = 2,
-        shield = 4,
-        other = 8
-    }
     public enum StorageNames
     {
         weaponSlot,
@@ -21,7 +13,7 @@ public interface IStorage
         storage
     }
     public StorageNames StorageName { get; }
-    public AvailableCardsTypes CardsTypes { get; }
+    public Card.CardsType CardsTypes { get; }
     public bool AffectsStats { get; }
     public int Capacity { get; }
     public List<Card> Cards { get; }
