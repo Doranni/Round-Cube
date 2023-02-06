@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: card Armor2
   m_EditorClassIdentifier: 
   id: 202
-  cardType: 1
+  cardType: 2
   cardName: Armor2
   description: Simple\nArmor
   statBonuses:

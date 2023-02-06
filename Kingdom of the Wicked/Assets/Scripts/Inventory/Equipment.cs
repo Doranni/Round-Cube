@@ -13,14 +13,14 @@ public class Equipment : MonoBehaviour
     private void Awake()
     {
         Storages = new();
-        Storages.Add(IStorage.StorageNames.weaponSlot, new Slot(IStorage.StorageNames.weaponSlot, 
-            IStorage.AvailableCardsTypes.weapon, 1));
+        Storages.Add(IStorage.StorageNames.weaponSlot, new Slot(IStorage.StorageNames.weaponSlot,
+            Card.CardsType.Weapon, 1));
         Storages.Add(IStorage.StorageNames.armorSlot, new Slot(IStorage.StorageNames.armorSlot,
-            IStorage.AvailableCardsTypes.armor, 1));
+            Card.CardsType.Armor, 1));
         Storages.Add(IStorage.StorageNames.shieldSlot, new Slot(IStorage.StorageNames.shieldSlot,
-            IStorage.AvailableCardsTypes.shield, 1));
+            Card.CardsType.Shield, 1));
         Storages.Add(IStorage.StorageNames.otherSlot, new Slot(IStorage.StorageNames.otherSlot,
-            IStorage.AvailableCardsTypes.other, GameManager.Instance.Equipment_OtherSlotCapacity));
+            Card.CardsType.Other, GameManager.Instance.Equipment_OtherSlotCapacity));
         Storages.Add(IStorage.StorageNames.inventory, new Inventory());
     }
 

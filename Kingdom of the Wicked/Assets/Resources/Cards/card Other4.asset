@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: card Other4
   m_EditorClassIdentifier: 
   id: 404
-  cardType: 3
+  cardType: 8
   cardName: Other4
   description: Other card
   statBonuses:
