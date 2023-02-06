@@ -10,16 +10,14 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 350d0360796ab614286dfd5000702976, type: 3}
-  m_Name: card Armor1
+  m_Name: card Shield2
   m_EditorClassIdentifier: 
-  id: 201
-  cardType: 2
-  cardName: Armor1
-  description: Simple\nArmor
+  id: 302
+  cardType: 4
+  cardName: Shield2
+  description: Shield card
   statBonuses:
-  - statTypeId: 0
-    value: 20
   - statTypeId: 1
-    value: 10
+    value: 30
   duration: 0
   image: {fileID: 0}

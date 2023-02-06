@@ -6,13 +6,13 @@ using UnityEngine;
 public class Slot : IStorage
 {
     public IStorage.StorageNames StorageName { get; private set; }
-    public IStorage.AvailableCardsTypes CardsTypes { get; private set; }
+    public Card.CardsType CardsTypes { get; private set; }
     public bool AffectsStats => true;
     public int Capacity { get; private set; }
     public List<Card> Cards { get; private set; }
     public int ActiveCardIndex { get; set; }
 
-    public Slot(IStorage.StorageNames name, IStorage.AvailableCardsTypes cardsType, int capacity)
+    public Slot(IStorage.StorageNames name, Card.CardsType cardsType, int capacity)
     {
         StorageName = name;
         CardsTypes = cardsType;
@@ -42,5 +42,17 @@ public class Slot : IStorage
         }
         Cards.Remove(cardToRemove);
         return true;
+    }
+
+    public void ChangeActiveCardIndex()
+    {
+        if (ActiveCardIndex == Cards.Capacity - 1)
+        {
+            ActiveCardIndex = 0;
+        }
+        else
+        {
+            ActiveCardIndex++;
+        }
     }
 }

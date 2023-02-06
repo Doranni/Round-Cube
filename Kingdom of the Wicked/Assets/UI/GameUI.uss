@@ -3,6 +3,9 @@
     margin-right: 50px;
     margin-top: 50px;
     margin-bottom: 50px;
+    position: absolute;
+    right: 0;
+    bottom: 0;
 }
 
 .dice_button {
@@ -59,12 +62,11 @@
 
 .pl_equipment {
     flex-direction: row;
-    width: 270px;
-    height: 130px;
     margin-left: 10px;
     margin-right: 10px;
     margin-top: 10px;
     margin-bottom: 10px;
+    flex-grow: 1;
 }
 
 .cardSlot {
