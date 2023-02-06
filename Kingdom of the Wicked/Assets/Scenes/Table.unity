@@ -225,7 +225,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 159367721}
   m_LocalRotation: {x: 0.5, y: 0, z: 0, w: 0.8660254}
-  m_LocalPosition: {x: 1.27, y: 39.631016, z: -44.5}
+  m_LocalPosition: {x: 1.27, y: 22.310505, z: -34.5}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -766,7 +766,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 330585543}
   m_LocalRotation: {x: 0.5, y: -0, z: -0, w: 0.8660254}
-  m_LocalPosition: {x: 1.27, y: 39.631016, z: -44.5}
+  m_LocalPosition: {x: 1.27, y: 22.310505, z: -34.5}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1582,6 +1582,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   otherSlotCapacity: 3
   inventoryCapacity: 50
+  cardSize_small: {x: 80, y: 120}
+  cardSize_big: {x: 120, y: 160}
+  inventoryCardMargin: 20
+  dragRangeMin: {x: 20, y: 20}
+  dragRangeMax: {x: 1900, y: 1060}
 --- !u!4 &569206833
 Transform:
   m_ObjectHideFlags: 0
@@ -5123,7 +5128,7 @@ MonoBehaviour:
   m_TargetMovementOnly: 1
   m_ScreenX: 0.5
   m_ScreenY: 0.5
-  m_CameraDistance: 40
+  m_CameraDistance: 20
   m_DeadZoneWidth: 0
   m_DeadZoneHeight: 0
   m_DeadZoneDepth: 0
@@ -5608,7 +5613,6 @@ GameObject:
   - component: {fileID: 2140604883}
   - component: {fileID: 2140604886}
   - component: {fileID: 2140604885}
-  - component: {fileID: 2140604891}
   - component: {fileID: 2140604887}
   - component: {fileID: 2140604889}
   - component: {fileID: 2140604890}
@@ -5759,24 +5763,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 939210d304003dc4a8ce4b6163f37296, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &2140604891
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2140604882}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 87f201fe191a658449b1a35de2f7db7b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  cardSize_small: {x: 80, y: 120}
-  cardSize_big: {x: 120, y: 160}
-  slotCardMargin: 0
-  inventoryCardMargin: 20
-  dragRangeMin: {x: 20, y: 20}
-  dragRangeMax: {x: 1900, y: 1060}
 --- !u!1001 &294601608747851552
 PrefabInstance:
   m_ObjectHideFlags: 0
