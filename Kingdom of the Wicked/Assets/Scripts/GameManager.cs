@@ -18,18 +18,23 @@ public class GameManager : Singleton<GameManager>
     public int Equipment_OtherSlotCapacity => otherSlotCapacity;
     public int Equipment_InventoryCapacity => inventoryCapacity;
 
-    [SerializeField] private Vector2 cardSize_small = new(80, 120),
-        cardSize_big = new(120, 160);
+    [SerializeField] private Vector2 cardSize_slot = new(80, 120),
+        cardSize_inventory = new(120, 160), cardSize_dragging = new(120, 160);
     [SerializeField] private float inventoryCardMargin = 20;
-    [SerializeField] private Vector2 dragRangeMin = new(20, 20), dragRangeMax = new(1820, 940);
-    private VisualTreeAsset cardAsset;
+    [SerializeField] private Vector2 dragRangeMin = new(20, 20), dragRangeMax = new(1780, 900);
+    [SerializeField] private Vector2 openSlotsRangeMin = new(20, 20), openSlotsRangeMax = new(1780, 900);
+    private VisualTreeAsset cardAsset, slotsHolderAsset;
 
-    public Vector2 CardSize_small => cardSize_small;
-    public Vector2 CardSize_big => cardSize_big;
+    public Vector2 CardSize_slot => cardSize_slot;
+    public Vector2 CardSize_inventory => cardSize_inventory;
+    public Vector2 CardSize_dragging => cardSize_dragging;
     public float InventoryCardMargin => inventoryCardMargin;
     public Vector2 DragRangeMin => dragRangeMin;
     public Vector2 DragRangeMax => dragRangeMax;
+    public Vector2 OpenSlotsRangeMin => openSlotsRangeMin;
+    public Vector2 OpenSlotsRangeMax => openSlotsRangeMax;
     public VisualTreeAsset CardAsset => cardAsset;
+    public VisualTreeAsset SlotsHolderAsset => slotsHolderAsset;
 
     public GameState State { get; private set; }
 
@@ -39,6 +44,7 @@ public class GameManager : Singleton<GameManager>
     {
         base.Awake();
         cardAsset = EditorGUIUtility.Load("Assets/UI/CardUI.uxml") as VisualTreeAsset;
+        slotsHolderAsset = EditorGUIUtility.Load("Assets/UI/SlotHolderUI.uxml") as VisualTreeAsset;
     }
 
     private void Start()
@@ -73,14 +79,14 @@ public class GameManager : Singleton<GameManager>
     {
         switch (storageName)
         {
-            case IStorage.StorageNames.inventory:
-            case IStorage.StorageNames.storage:
+            case IStorage.StorageNames.Inventory:
+            case IStorage.StorageNames.Storage:
                 {
-                    return cardSize_big;
+                    return cardSize_inventory;
                 }
             default:
                 {
-                    return cardSize_small;
+                    return cardSize_slot;
                 }
         }
     }

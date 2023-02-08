@@ -5,19 +5,21 @@ public interface IStorage
 {
     public enum StorageNames
     {
-        weaponSlot,
-        armorSlot,
-        shieldSlot,
-        otherSlot,
-        inventory,
-        storage
+        WeaponSlot,
+        ArmorSlot,
+        ShieldSlot,
+        OtherSlot1,
+        OtherSlot2,
+        OtherSlot3,
+        Inventory,
+        Storage
     }
     public StorageNames StorageName { get; }
-    public Card.CardsType CardsTypes { get; }
+    public Card.CardsType CardTypes { get; }
     public bool AffectsStats { get; }
-    public int Capacity { get; }
     public List<Card> Cards { get; }
-
+    public bool IsFull => !(Cards.Count < Cards.Capacity);
     public Card AddCard(Card card);
     public bool RemoveCard(Card card);
+    public event Action CardsChanged;
 }
