@@ -7,7 +7,7 @@ public class DragAndDropController : Singleton<DragAndDropController>
     private CardToDragVisualElement cardToDrag;
     private VisualElement root;
 
-    private CardVisualElement target;
+    private CardVE target;
     private Vector2 targetStartPos;
     private Vector3 pointerStartPos;
 
@@ -18,9 +18,9 @@ public class DragAndDropController : Singleton<DragAndDropController>
         this.root.Add(cardToDrag);
     }
 
-    public void AddTarget(PointerDownEvent evt, CardVisualElement target)
+    public void AddTarget(PointerDownEvent evt, CardVE target)
     {
-        cardToDrag.Init(target.CardInfo);
+        cardToDrag.Init(target.CardData);
 
         this.target = target;
         targetStartPos = cardToDrag.WorldToLocal(target.LocalToWorld(target.transform.position));
@@ -38,16 +38,16 @@ public class DragAndDropController : Singleton<DragAndDropController>
 
     private void PointerUpEventHandler(PointerUpEvent evt)
     {
-        var storages = EquipmentUI.Instance.GetAvailableStorages(target.CardInfo.CardType);
+        var storages = EquipmentUI.Instance.GetAvailableStorages(target.CardData.CardType);
         List<IStorage.StorageNames> overlapStorages = new();
         for (int i = 0; i < storages.Count; i++)
         {
-            if (OverlapsCard(storages[i].storageUI))
+            if (OverlapsCard(storages[i]))
             {
-                overlapStorages.Add(storages[i].storageName);
+                overlapStorages.Add(storages[i].Storage.StorageName);
             }
         }
-        EquipmentUI.Instance.CardWasMoved(target.CardInfo, target.Storage, overlapStorages);
+        EquipmentUI.Instance.CardWasMoved(target.CardData, target.Storage, overlapStorages);
         ResetTarget(evt.pointerId);
     }
 
@@ -81,6 +81,18 @@ public class DragAndDropController : Singleton<DragAndDropController>
                 GameManager.Instance.DragRangeMax.x),
             Mathf.Clamp(targetStartPos.y + pointerDelta.y, GameManager.Instance.DragRangeMin.y,
                 GameManager.Instance.DragRangeMax.y));
+
+            Vector2 pos = cardToDrag.transform.position;
+
+            if (pos.x > GameManager.Instance.OpenSlotsRangeMin.x && pos.y > GameManager.Instance.OpenSlotsRangeMin.y 
+                && pos.x < GameManager.Instance.OpenSlotsRangeMax.x && pos.y < GameManager.Instance.OpenSlotsRangeMax.y)
+            {
+                EquipmentUI.Instance.OpenSlotsHolders(target.CardData, true);
+            }
+            else
+            {
+                EquipmentUI.Instance.OpenSlotsHolders(target.CardData, false);
+            }
         }
     }
 }

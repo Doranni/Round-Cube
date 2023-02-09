@@ -3,8 +3,8 @@
     border-bottom-left-radius: 10px;
     border-top-right-radius: 10px;
     border-bottom-right-radius: 10px;
-    background-color: rgba(108, 176, 95, 255);
-    color: rgba(0, 0, 0, 255);
+    background-color: rgb(108, 176, 95);
+    color: rgb(0, 0, 0);
     font-size: 22px;
     justify-content: center;
     align-items: center;

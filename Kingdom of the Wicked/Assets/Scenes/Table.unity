@@ -225,7 +225,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 159367721}
   m_LocalRotation: {x: 0.5, y: 0, z: 0, w: 0.8660254}
-  m_LocalPosition: {x: 1.27, y: 22.310505, z: -34.5}
+  m_LocalPosition: {x: 1.27, y: 39.631016, z: -44.5}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -766,7 +766,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 330585543}
   m_LocalRotation: {x: 0.5, y: -0, z: -0, w: 0.8660254}
-  m_LocalPosition: {x: 1.27, y: 22.310505, z: -34.5}
+  m_LocalPosition: {x: 1.27, y: 39.631016, z: -44.5}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1582,11 +1582,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   otherSlotCapacity: 3
   inventoryCapacity: 50
-  cardSize_small: {x: 80, y: 120}
-  cardSize_big: {x: 120, y: 160}
+  cardSize_slot: {x: 80, y: 120}
+  cardSize_inventory: {x: 120, y: 160}
+  cardSize_dragging: {x: 80, y: 120}
   inventoryCardMargin: 20
   dragRangeMin: {x: 20, y: 20}
-  dragRangeMax: {x: 1900, y: 1060}
+  dragRangeMax: {x: 1820, y: 940}
+  openSlotsRangeMin: {x: 100, y: 600}
+  openSlotsRangeMax: {x: 600, y: 900}
 --- !u!4 &569206833
 Transform:
   m_ObjectHideFlags: 0
@@ -5128,7 +5131,7 @@ MonoBehaviour:
   m_TargetMovementOnly: 1
   m_ScreenX: 0.5
   m_ScreenY: 0.5
-  m_CameraDistance: 20
+  m_CameraDistance: 40
   m_DeadZoneWidth: 0
   m_DeadZoneHeight: 0
   m_DeadZoneDepth: 0

@@ -29,7 +29,8 @@ public class DebugUI : MonoBehaviour
         var res = str_stats;
         foreach (KeyValuePair<Stat.StatId, Stat> stat in plStats.ChStats.StatsValues)
         {
-            res += "\n" + GameDatabase.Instance.StatsDescription[stat.Key].name + ": " + stat.Value.TotalValue;
+            res += "\n" + GameDatabase.Instance.StatsDescription[stat.Key].name + ": " 
+                + stat.Value.BaseValue + " => " + stat.Value.TotalValue;
         }
         plStatsLbl.text = res;
     }
