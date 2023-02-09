@@ -1,58 +1,78 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
-using UnityEngine;
 
 public class Slot : IStorage
 {
     public IStorage.StorageNames StorageName { get; private set; }
-    public Card.CardsType CardsTypes { get; private set; }
+    public Card.CardsType CardTypes { get; private set; }
     public bool AffectsStats => true;
-    public int Capacity { get; private set; }
     public List<Card> Cards { get; private set; }
-    public int ActiveCardIndex { get; set; }
+    public bool CanBeEmpty { get; private set; }
 
-    public Slot(IStorage.StorageNames name, Card.CardsType cardsType, int capacity)
+    public event Action CardsChanged;
+
+    public Slot(IStorage.StorageNames name, Card.CardsType cardsType)
     {
         StorageName = name;
-        CardsTypes = cardsType;
-        Capacity = capacity;
-        Cards = new(Capacity);
-        ActiveCardIndex = 0;
+        CardTypes = cardsType;
+        Cards = new(1);
+        if (StorageName == IStorage.StorageNames.WeaponSlot)
+        {
+            CanBeEmpty = false;
+        }
+        else
+        {
+            CanBeEmpty = true;
+        }
     }
 
-    public Card AddCard(Card card)
+    public (bool, Card) AddCard(Card card, bool compareCardTypesFlags = true)
     {
-        if (Cards.Count < Capacity)
+        if (compareCardTypesFlags && !GameManager.Instance.ComperaCardTypesFlags(card.CardType, CardTypes))
+        {
+            return (false, null);
+        }
+        if (Cards.Count == 0)
         {
             Cards.Add(card);
-            return null;
+            CardsChanged?.Invoke();
+            return (true, null);
         }
-        var releasedCard = Cards[ActiveCardIndex];
-        Cards[ActiveCardIndex] = card;
-        return releasedCard;
+        var releasedCard = Cards[0];
+        Cards[0] = card;
+        CardsChanged?.Invoke();
+        return (true, releasedCard);
     }
 
     public bool RemoveCard(Card card)
     {
-        var cardToRemove = Cards.Find(x => x.Id == card.Id);
-        if (cardToRemove == null)
+        if (CanBeEmpty)
         {
-            return false;
+            if (Cards[0].InstanceId == card.InstanceId)
+            {
+                Cards.Clear();
+                CardsChanged?.Invoke();
+                return true;
+            }
         }
-        Cards.Remove(cardToRemove);
-        return true;
+        return false;
+    }
+}
+
+public class SlotsHolder
+{
+    public enum SlotsHolderNames
+    { 
+        Armor,
+        Other
     }
 
-    public void ChangeActiveCardIndex()
+    public SlotsHolderNames SlotsHolderName { get; private set; }
+    public List<Slot> Slots { get; private set; }
+
+    public SlotsHolder(SlotsHolderNames slotName, List<Slot> slots)
     {
-        if (ActiveCardIndex == Cards.Capacity - 1)
-        {
-            ActiveCardIndex = 0;
-        }
-        else
-        {
-            ActiveCardIndex++;
-        }
+        SlotsHolderName = slotName;
+        Slots = slots;
     }
 }

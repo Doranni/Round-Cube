@@ -1,36 +1,38 @@
 using System;
 using System.Collections.Generic;
-using UnityEngine;
 
 public class Inventory : IStorage
 {
     public IStorage.StorageNames StorageName { get; private set; }
-    public Card.CardsType CardsTypes { get; private set; }
+    public Card.CardsType CardTypes { get; private set; }
     public bool AffectsStats => false;
-    public int Capacity => -1;
     public List<Card> Cards { get; private set; }
+
+    public event Action CardsChanged;
 
     public Inventory()
     {
-        StorageName = IStorage.StorageNames.inventory;
-        CardsTypes = Card.CardsType.Weapon | Card.CardsType.Armor | Card.CardsType.Shield | Card.CardsType.Other;
+        StorageName = IStorage.StorageNames.Inventory;
+        CardTypes = Card.CardsType.Weapon | Card.CardsType.Armor | Card.CardsType.Shield | Card.CardsType.Other;
         Cards = new();
     }
 
-    public Card AddCard(Card card)
+    public (bool, Card) AddCard(Card card, bool compareCardTypesFlags = false)
     {
         Cards.Add(card);
-        return null;
+        CardsChanged?.Invoke();
+        return (true, null);
     }
 
     public bool RemoveCard(Card card)
     {
-        var cardToRemove = Cards.Find(x => x.Id == card.Id);
+        var cardToRemove = Cards.Find(x => x.NameId == card.NameId);
         if (cardToRemove == null)
         {
             return false;
         }
         Cards.Remove(cardToRemove);
+        CardsChanged?.Invoke();
         return true;
     }
 }

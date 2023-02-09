@@ -1,9 +1,9 @@
 using UnityEngine;
 using UnityEngine.UIElements;
 
-public class CardVisualElement : VisualElement
+public class CardVE : VisualElement
 {
-    public Card CardInfo { get; protected set; }
+    public Card CardData { get; protected set; }
     public IStorage.StorageNames Storage { get; private set; }
 
     protected VisualElement cardBackground;
@@ -14,7 +14,7 @@ public class CardVisualElement : VisualElement
     protected const string k_cardDescription = "CardDescription";
     protected const string k_cardStatBonuses = "CardStatBonuses";
 
-    protected CardVisualElement() 
+    protected CardVE() 
     {
         hierarchy.Add(GameManager.Instance.CardAsset.CloneTree());
         cardBackground = this.Q(k_cardBackground);
@@ -23,26 +23,21 @@ public class CardVisualElement : VisualElement
         cardStatBonuses = this.Q<Label>(k_cardStatBonuses);
     }
 
-    public CardVisualElement(Card card, IStorage.StorageNames Storage) : this()
+    public CardVE(Card card, IStorage.StorageNames Storage) : this()
     {
-        CardInfo = card;
+        CardData = card;
         this.Storage = Storage;
-        StyleCard();
-        RegisterCallback<PointerDownEvent, CardVisualElement>(DragAndDropController.Instance.AddTarget, this);
-    }
-
-    protected void StyleCard()
-    {
         SetText();
         SetSize();
+        RegisterCallback<PointerDownEvent, CardVE>(DragAndDropController.Instance.AddTarget, this);
     }
 
     protected void SetText()
     {
-        cardName.text = CardInfo.CardName;
-        cardDescription.text = CardInfo.Description;
+        cardName.text = CardData.CardName;
+        cardDescription.text = CardData.Description;
         var statBonuses = "";
-        foreach (StatBonus bonus in CardInfo.StatBonuses)
+        foreach (StatBonus bonus in CardData.StatBonuses)
         {
             statBonuses += GameDatabase.Instance.StatsDescription[bonus.StatTypeId].name + ": "
                 + bonus.Value + "\n";
@@ -64,8 +59,8 @@ public class CardVisualElement : VisualElement
         cardBackground.style.bottom = 0;
         switch (Storage)
         {
-            case IStorage.StorageNames.inventory:
-            case IStorage.StorageNames.storage:
+            case IStorage.StorageNames.Inventory:
+            case IStorage.StorageNames.Storage:
                 {
                     style.marginBottom = GameManager.Instance.InventoryCardMargin;
                     style.marginTop = GameManager.Instance.InventoryCardMargin;
@@ -77,22 +72,23 @@ public class CardVisualElement : VisualElement
     }
 }
 
-public class CardToDragVisualElement : CardVisualElement
+public class CardToDragVisualElement : CardVE
 {
     public CardToDragVisualElement() : base() 
     {
         Clean();
+        SetSize();
     }
 
     public void Init(Card card)
     {
-        CardInfo = card;
-        StyleCard();
+        CardData = card;
+        SetText();
     }
 
     public void Clean()
     {
-        CardInfo = null;
+        CardData = null;
         style.display = DisplayStyle.None;
         transform.position = Vector3.zero;
         style.top = 0;
@@ -101,11 +97,11 @@ public class CardToDragVisualElement : CardVisualElement
 
     protected override void SetSize()
     {
-        var size = GameManager.Instance.CardSize_big;
-        cardBackground.style.width = size.x;
-        cardBackground.style.height = size.y;
+        var size = GameManager.Instance.CardSize_dragging;
+        style.position = Position.Absolute;
         style.width = size.x;
         style.height = size.y;
-        style.position = Position.Absolute;
+        cardBackground.style.width = size.x;
+        cardBackground.style.height = size.y;
     }
 }
