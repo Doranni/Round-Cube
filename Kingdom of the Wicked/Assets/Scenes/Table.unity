@@ -1584,10 +1584,10 @@ MonoBehaviour:
   inventoryCapacity: 50
   cardSize_slot: {x: 80, y: 120}
   cardSize_inventory: {x: 120, y: 160}
-  cardSize_dragging: {x: 120, y: 160}
+  cardSize_dragging: {x: 80, y: 120}
   inventoryCardMargin: 20
   dragRangeMin: {x: 20, y: 20}
-  dragRangeMax: {x: 1780, y: 900}
+  dragRangeMax: {x: 1820, y: 940}
   openSlotsRangeMin: {x: 100, y: 600}
   openSlotsRangeMax: {x: 600, y: 900}
 --- !u!4 &569206833

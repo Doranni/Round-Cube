@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using UnityEngine;
 
 public class Inventory : IStorage
 {
@@ -18,11 +17,11 @@ public class Inventory : IStorage
         Cards = new();
     }
 
-    public Card AddCard(Card card)
+    public (bool, Card) AddCard(Card card, bool compareCardTypesFlags = false)
     {
         Cards.Add(card);
         CardsChanged?.Invoke();
-        return null;
+        return (true, null);
     }
 
     public bool RemoveCard(Card card)

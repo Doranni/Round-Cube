@@ -20,8 +20,8 @@ public class GameManager : Singleton<GameManager>
 
     [SerializeField] private Vector2 cardSize_slot = new(80, 120),
         cardSize_inventory = new(120, 160), cardSize_dragging = new(120, 160);
-    [SerializeField] private float inventoryCardMargin = 20;
-    [SerializeField] private Vector2 dragRangeMin = new(20, 20), dragRangeMax = new(1780, 900);
+    [SerializeField] private float inventoryCardMargin = 20, dragCardMargin = 10;
+    private Vector2 dragRangeMin, dragRangeMax;
     [SerializeField] private Vector2 openSlotsRangeMin = new(20, 20), openSlotsRangeMax = new(1780, 900);
     private VisualTreeAsset cardAsset, slotsHolderAsset;
 
@@ -45,11 +45,14 @@ public class GameManager : Singleton<GameManager>
         base.Awake();
         cardAsset = EditorGUIUtility.Load("Assets/UI/CardUI.uxml") as VisualTreeAsset;
         slotsHolderAsset = EditorGUIUtility.Load("Assets/UI/SlotHolderUI.uxml") as VisualTreeAsset;
+
+        dragRangeMin = new Vector2(dragCardMargin, dragCardMargin);
+        dragRangeMax = new Vector2(1920, 1080) - dragRangeMin - cardSize_dragging;
     }
 
     private void Start()
     {
-        EquipmentUI.Instance.OnToggleOpenInvemtory += ToggleOpenInvemtory;
+        EquipmentUI.Instance.OpenInvemtoryToggled += ToggleOpenInvemtory;
         State = GameState.active;
     }
 
@@ -91,5 +94,18 @@ public class GameManager : Singleton<GameManager>
         }
     }
 
-
+    public bool ComperaCardTypesFlags(Card.CardsType flags1, Card.CardsType flags2)
+    {
+        if ((flags1.HasFlag(Card.CardsType.Weapon) && flags2.HasFlag(Card.CardsType.Weapon))
+            || (flags1.HasFlag(Card.CardsType.Armor) && flags2.HasFlag(Card.CardsType.Armor))
+            || (flags1.HasFlag(Card.CardsType.Shield) && flags2.HasFlag(Card.CardsType.Shield))
+            || (flags1.HasFlag(Card.CardsType.Other) && flags2.HasFlag(Card.CardsType.Other)))
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
 }

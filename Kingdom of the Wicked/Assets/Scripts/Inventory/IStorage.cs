@@ -19,7 +19,7 @@ public interface IStorage
     public bool AffectsStats { get; }
     public List<Card> Cards { get; }
     public bool IsFull => !(Cards.Count < Cards.Capacity);
-    public Card AddCard(Card card);
+    public (bool success, Card releasedCard) AddCard(Card card, bool compareCardTypesFlags = true);
     public bool RemoveCard(Card card);
     public event Action CardsChanged;
 }

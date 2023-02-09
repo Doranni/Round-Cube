@@ -42,13 +42,16 @@ public class CharacterEquipment : MonoBehaviour
         Storages.Add(IStorage.StorageNames.Inventory, new Inventory());
     }
 
-    public void AddCard(Card card, IStorage.StorageNames storageName)
+    public bool AddCard(Card card, IStorage.StorageNames storageName, bool compareCardTypesFlags = true)
     {
-        // TODO: to fix it
-        var releasedCard = Storages[storageName].AddCard(card);
-        if (releasedCard != null)
+        var addRes = Storages[storageName].AddCard(card, compareCardTypesFlags);
+        if (!addRes.success)
         {
-            Storages[IStorage.StorageNames.Inventory].AddCard(releasedCard);
+            return false;
+        }
+        if (addRes.releasedCard != null)
+        {
+            Storages[IStorage.StorageNames.Inventory].AddCard(addRes.releasedCard);
         }
         if (Storages[storageName].AffectsStats)
         {
@@ -56,20 +59,20 @@ public class CharacterEquipment : MonoBehaviour
             {
                 characterStats.ChStats.AddBonus(bonus);
             }
-            if (releasedCard != null)
+            if (addRes.releasedCard != null)
             {
-                foreach (StatBonus bonus in releasedCard.StatBonuses)
+                foreach (StatBonus bonus in addRes.releasedCard.StatBonuses)
                 {
                     characterStats.ChStats.RemoveBonus(bonus);
                 }
             }
         }
-        card.SetInstanceId(GameManager.Instance.GetID());
+        card.SetInstanceId();
+        return true;
     }
 
     public void RemoveCard(Card card, IStorage.StorageNames storageName)
     {
-        // TODO: to fix it
         var success = Storages[storageName].RemoveCard(card);
         if (success && Storages[storageName].AffectsStats)
         {
@@ -80,17 +83,74 @@ public class CharacterEquipment : MonoBehaviour
         }
     }
 
-    public void MoveCard(Card card, IStorage.StorageNames prevSlot, IStorage.StorageNames newSlot)
+    public bool MoveCard(Card card, IStorage.StorageNames prevSlot, IStorage.StorageNames newSlot, 
+        bool compareCardTypesFlags = true)
     {
         if (Storages[prevSlot].RemoveCard(card))
         {
-            var releasedCard = Storages[newSlot].AddCard(card);
-            if (releasedCard != null)
+            var addRes = Storages[newSlot].AddCard(card, compareCardTypesFlags);
+            if (!addRes.success)
             {
-                Storages[IStorage.StorageNames.Inventory].AddCard(releasedCard);
+                var returnRes = Storages[prevSlot].AddCard(card, compareCardTypesFlags);
+                if (!returnRes.success)
+                {
+                    Storages[IStorage.StorageNames.Inventory].AddCard(card);
+                }
+                return false;
             }
+            if (addRes.releasedCard != null)
+            {
+                Storages[prevSlot].AddCard(addRes.releasedCard);
+            }
+            if (Storages[prevSlot].AffectsStats && !Storages[newSlot].AffectsStats)
+            {
+                if (addRes.releasedCard != null)
+                {
+                    foreach (StatBonus bonus in addRes.releasedCard.StatBonuses)
+                    {
+                        characterStats.ChStats.AddBonus(bonus);
+                    }
+                }
+                foreach (StatBonus bonus in card.StatBonuses)
+                {
+                    characterStats.ChStats.RemoveBonus(bonus);
+                }
+            }
+            if (!Storages[prevSlot].AffectsStats && Storages[newSlot].AffectsStats)
+            {
+                foreach (StatBonus bonus in card.StatBonuses)
+                {
+                    characterStats.ChStats.AddBonus(bonus);
+                }
+                if (addRes.releasedCard != null)
+                {
+                    foreach (StatBonus bonus in addRes.releasedCard.StatBonuses)
+                    {
+                        characterStats.ChStats.RemoveBonus(bonus);
+                    }
+                }
+            }
+            Debug.Log($"Card {card.CardName} was moved from {prevSlot} to {newSlot}");
+            return true;
         }
-        // TODO: to fix it
-        
+        if (Storages[prevSlot] is Slot && Storages[newSlot] is Slot && Storages[newSlot].Cards.Count == 1)
+        {
+            var addRes = Storages[newSlot].AddCard(card, compareCardTypesFlags);
+            if (!addRes.success)
+            {
+                return false;
+            }
+            if (!Storages[prevSlot].AddCard(addRes.releasedCard, compareCardTypesFlags).success)
+            {
+                if (!Storages[newSlot].AddCard(addRes.releasedCard, compareCardTypesFlags).success)
+                {
+                    Storages[IStorage.StorageNames.Inventory].AddCard(addRes.releasedCard);
+                }
+                return false;
+            }
+            Debug.Log($"Card {card.CardName} was moved from {prevSlot} to {newSlot}");
+            return true;
+        }
+        return false;
     }
 }

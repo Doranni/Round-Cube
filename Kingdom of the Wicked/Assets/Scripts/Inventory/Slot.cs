@@ -1,7 +1,5 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
-using UnityEngine;
 
 public class Slot : IStorage
 {
@@ -28,18 +26,22 @@ public class Slot : IStorage
         }
     }
 
-    public Card AddCard(Card card)
+    public (bool, Card) AddCard(Card card, bool compareCardTypesFlags = true)
     {
+        if (compareCardTypesFlags && !GameManager.Instance.ComperaCardTypesFlags(card.CardType, CardTypes))
+        {
+            return (false, null);
+        }
         if (Cards.Count == 0)
         {
             Cards.Add(card);
             CardsChanged?.Invoke();
-            return null;
+            return (true, null);
         }
         var releasedCard = Cards[0];
         Cards[0] = card;
         CardsChanged?.Invoke();
-        return releasedCard;
+        return (true, releasedCard);
     }
 
     public bool RemoveCard(Card card)

@@ -29,7 +29,7 @@ public class EquipmentUI : Singleton<EquipmentUI>
 
     const string k_dragCardPanel = "DragCardPanel";
 
-    public event Action<bool> OnToggleOpenInvemtory;
+    public event Action<bool> OpenInvemtoryToggled;
 
     public override void Awake()
     {
@@ -126,7 +126,7 @@ public class EquipmentUI : Singleton<EquipmentUI>
     {
         inventory.SetIsActive(!inventory.IsActive);
         DisplayInventory();
-        OnToggleOpenInvemtory?.Invoke(inventory.IsActive);
+        OpenInvemtoryToggled?.Invoke(inventory.IsActive);
     }
 
     public void OpenSlotsHolders(Card card, bool value)
@@ -173,14 +173,13 @@ public class EquipmentUI : Singleton<EquipmentUI>
             (prevStorage != IStorage.StorageNames.Inventory && prevStorage != IStorage.StorageNames.Storage))
         {
             plEquipment.MoveCard(card, prevStorage, IStorage.StorageNames.Inventory);
-            Debug.Log($"Card was moved from {prevStorage} to inventory");
             return;
         }
         int lastEquippedSlot = -1;
         for(int i = 0; i < newStorages.Count; i++)
         {
-            if ((prevStorage != newStorages[i])
-                && ComperaCardTypeFlags(card.CardType, plEquipment.Storages[newStorages[i]].CardTypes))
+            if ((prevStorage != newStorages[i]) && GameManager.Instance.ComperaCardTypesFlags(card.CardType, 
+                plEquipment.Storages[newStorages[i]].CardTypes))
             {
                 if (plEquipment.Storages[newStorages[i]].IsFull)
                 {
@@ -188,30 +187,13 @@ public class EquipmentUI : Singleton<EquipmentUI>
                     continue;
                 }
                 lastEquippedSlot = -1;
-                plEquipment.MoveCard(card, prevStorage, newStorages[i]);
-                Debug.Log($"Card was moved from {prevStorage} to {newStorages[i]}");
+                plEquipment.MoveCard(card, prevStorage, newStorages[i], false);
                 return;
             }
         }
         if (lastEquippedSlot != -1)
         {
-            plEquipment.MoveCard(card, prevStorage, newStorages[lastEquippedSlot]);
-            Debug.Log($"Card was moved from {prevStorage} to {newStorages[lastEquippedSlot]}");
-        }
-    }
-
-    private bool ComperaCardTypeFlags(Card.CardsType flags1, Card.CardsType flags2)
-    {
-        if ((flags1.HasFlag(Card.CardsType.Weapon) && flags2.HasFlag(Card.CardsType.Weapon))
-            || (flags1.HasFlag(Card.CardsType.Armor) && flags2.HasFlag(Card.CardsType.Armor))
-            || (flags1.HasFlag(Card.CardsType.Shield) && flags2.HasFlag(Card.CardsType.Shield))
-            || (flags1.HasFlag(Card.CardsType.Other) && flags2.HasFlag(Card.CardsType.Other)))
-        {
-            return true;
-        }
-        else
-        {
-            return false;
+            plEquipment.MoveCard(card, prevStorage, newStorages[lastEquippedSlot], false);
         }
     }
 }

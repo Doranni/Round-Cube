@@ -115,11 +115,8 @@ public class SlotsHolderVE : VisualElement
             Slots.Add((closed, open));
         }
 
-        slotsOpen.style.left = -(slotHolder.Slots.Count - 1) * 45 -30;
+        slotsOpen.style.left = -(slotHolder.Slots.Count - 1) * 45 - 45;
         ToggleSlotPanel(false);
-
-        //RegisterCallback<PointerOverEvent>(_ => ToggleSlotPanel(true));
-        //RegisterCallback<PointerOutEvent>(_ => ToggleSlotPanel(false));
     }
 
     public void Update()

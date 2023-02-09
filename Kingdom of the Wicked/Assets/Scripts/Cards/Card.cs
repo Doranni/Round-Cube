@@ -33,8 +33,11 @@ public class Card
         Image = data.image;
     }
 
-    public void SetInstanceId(int id)
+    public void SetInstanceId()
     {
-        InstanceId = id;
+        if (InstanceId == 0)
+        {
+            InstanceId = GameManager.Instance.GetID();
+        }
     }
 }
