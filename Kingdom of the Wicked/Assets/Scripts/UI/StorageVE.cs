@@ -161,7 +161,10 @@ public class SlotsHolderVE : VisualElement
 
         if(evt.eventTypeId == PointerEnterEvent.TypeId())
         {
-            ToggleSlotPanel(true);
+            if (!DragAndDropController.Instance.IsDragging)
+            {
+                ToggleSlotPanel(true);
+            }
         }
         if (evt.eventTypeId == PointerLeaveEvent.TypeId())
         {

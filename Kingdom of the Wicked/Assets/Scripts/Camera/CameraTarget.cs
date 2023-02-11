@@ -9,7 +9,7 @@ public class CameraTarget : MonoBehaviour
 
     void Start()
     {
-        InputManager.Instance.OnCameraMove_performed += CameraMove_performed;
+        InputManager.Instance.CameraMove_performed += CameraMove_performed;
     }
 
     private void CameraMove_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj)
@@ -34,6 +34,6 @@ public class CameraTarget : MonoBehaviour
 
     private void OnDestroy()
     {
-        InputManager.Instance.OnCameraMove_performed -= CameraMove_performed;
+        InputManager.Instance.CameraMove_performed -= CameraMove_performed;
     }
 }

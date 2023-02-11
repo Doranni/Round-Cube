@@ -13,17 +13,17 @@ public class DiceRoller : Singleton<DiceRoller>
     private int diceResult = 0;
     public int DiceResult => diceResult;
 
-    public event System.Action<int> OnDiceResChanged, OnDiceRolled;
+    public event System.Action<int> DiceResChanged, DiceWasRolled;
 
     private void Start()
     {
-        plMovement.OnStepFinished += DecreaseDiceRes;
+        plMovement.StepFinished += DecreaseDiceRes;
     }
 
     private void DecreaseDiceRes()
     {
         diceResult--;
-        OnDiceResChanged?.Invoke(diceResult);
+        DiceResChanged?.Invoke(diceResult);
     }
 
     public void RollTheDice()
@@ -43,7 +43,7 @@ public class DiceRoller : Singleton<DiceRoller>
             diceResult = availableDiceValues[Random.Range(1, (int)diceRange + 1)];
         }
         yield return new WaitForSeconds(timeDelay);
-        OnDiceRolled?.Invoke(diceResult);
+        DiceWasRolled?.Invoke(diceResult);
     }
 
     private List<int> GetsAvailableDiceValues()

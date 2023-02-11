@@ -6,13 +6,13 @@ public class Stats
 {
     public Dictionary<Stat.StatId, Stat> StatsValues { get; private set; }
 
-    public Stats(StatsValuesData stats)
+    public Stats(StatsValuesSO statsValues)
     {
         StatsValues = new(GameDatabase.Instance.StatsDescription.Count)
         {
-            { Stat.StatId.health, new(stats.baseHealthValue) },
-            { Stat.StatId.armor, new(stats.armorValue) },
-            { Stat.StatId.damage, new(stats.damageValue) }
+            { Stat.StatId.health, new(statsValues.baseHealthValue) },
+            { Stat.StatId.armor, new(statsValues.armorValue) },
+            { Stat.StatId.damage, new(statsValues.damageValue) }
         };
     }
 

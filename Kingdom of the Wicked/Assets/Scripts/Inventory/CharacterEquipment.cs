@@ -1,10 +1,9 @@
-using System;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class CharacterEquipment : MonoBehaviour
 {
-    [SerializeField] private CharacterStats characterStats;
+    [SerializeField] private Character characterStats;
 
     public Dictionary<IStorage.StorageNames, IStorage> Storages { get; private set; }
     public Dictionary<SlotsHolder.SlotsHolderNames, SlotsHolder> SlotsHolders { get; private set; }
@@ -26,12 +25,12 @@ public class CharacterEquipment : MonoBehaviour
             (Slot)Storages[IStorage.StorageNames.ShieldSlot]
         }));
 
-        Storages.Add(IStorage.StorageNames.OtherSlot1,
-            new Slot(IStorage.StorageNames.OtherSlot1, Card.CardsType.Other));
-        Storages.Add(IStorage.StorageNames.OtherSlot2,
-            new Slot(IStorage.StorageNames.OtherSlot2, Card.CardsType.Other));
-        Storages.Add(IStorage.StorageNames.OtherSlot3,
-            new Slot(IStorage.StorageNames.OtherSlot3, Card.CardsType.Other));
+        Storages.Add(IStorage.StorageNames.OtherSlot1, new Slot(IStorage.StorageNames.OtherSlot1, 
+            Card.CardsType.Magic | Card.CardsType.Potion | Card.CardsType.Artifact));
+        Storages.Add(IStorage.StorageNames.OtherSlot2, new Slot(IStorage.StorageNames.OtherSlot2, 
+            Card.CardsType.Magic | Card.CardsType.Potion | Card.CardsType.Artifact));
+        Storages.Add(IStorage.StorageNames.OtherSlot3, new Slot(IStorage.StorageNames.OtherSlot3, 
+            Card.CardsType.Magic | Card.CardsType.Potion | Card.CardsType.Artifact));
         SlotsHolders.Add(SlotsHolder.SlotsHolderNames.Other, new(SlotsHolder.SlotsHolderNames.Other, new()
         {
             (Slot)Storages[IStorage.StorageNames.OtherSlot1],
@@ -53,15 +52,15 @@ public class CharacterEquipment : MonoBehaviour
         {
             Storages[IStorage.StorageNames.Inventory].AddCard(addRes.releasedCard);
         }
-        if (Storages[storageName].AffectsStats)
+        if (Storages[storageName].AffectsStats && card is IAddStatBonuses)
         {
-            foreach (StatBonus bonus in card.StatBonuses)
+            foreach (StatBonus bonus in ((IAddStatBonuses)card).StatBonuses)
             {
                 characterStats.ChStats.AddBonus(bonus);
             }
-            if (addRes.releasedCard != null)
+            if (addRes.releasedCard != null && addRes.releasedCard is IAddStatBonuses)
             {
-                foreach (StatBonus bonus in addRes.releasedCard.StatBonuses)
+                foreach (StatBonus bonus in ((IAddStatBonuses)addRes.releasedCard).StatBonuses)
                 {
                     characterStats.ChStats.RemoveBonus(bonus);
                 }
@@ -74,9 +73,9 @@ public class CharacterEquipment : MonoBehaviour
     public void RemoveCard(Card card, IStorage.StorageNames storageName)
     {
         var success = Storages[storageName].RemoveCard(card);
-        if (success && Storages[storageName].AffectsStats)
+        if (success && Storages[storageName].AffectsStats && card is IAddStatBonuses)
         {
-            foreach (StatBonus bonus in card.StatBonuses)
+            foreach (StatBonus bonus in ((IAddStatBonuses)card).StatBonuses)
             {
                 characterStats.ChStats.RemoveBonus(bonus);
             }
@@ -104,27 +103,33 @@ public class CharacterEquipment : MonoBehaviour
             }
             if (Storages[prevSlot].AffectsStats && !Storages[newSlot].AffectsStats)
             {
-                if (addRes.releasedCard != null)
+                if (addRes.releasedCard != null && addRes.releasedCard is IAddStatBonuses)
                 {
-                    foreach (StatBonus bonus in addRes.releasedCard.StatBonuses)
+                    foreach (StatBonus bonus in ((IAddStatBonuses)addRes.releasedCard).StatBonuses)
                     {
                         characterStats.ChStats.AddBonus(bonus);
                     }
                 }
-                foreach (StatBonus bonus in card.StatBonuses)
+                if (card is IAddStatBonuses)
                 {
-                    characterStats.ChStats.RemoveBonus(bonus);
+                    foreach (StatBonus bonus in ((IAddStatBonuses)card).StatBonuses)
+                    {
+                        characterStats.ChStats.RemoveBonus(bonus);
+                    }
                 }
             }
             if (!Storages[prevSlot].AffectsStats && Storages[newSlot].AffectsStats)
             {
-                foreach (StatBonus bonus in card.StatBonuses)
+                if (card is IAddStatBonuses)
                 {
-                    characterStats.ChStats.AddBonus(bonus);
+                    foreach (StatBonus bonus in ((IAddStatBonuses)card).StatBonuses)
+                    {
+                        characterStats.ChStats.AddBonus(bonus);
+                    }
                 }
-                if (addRes.releasedCard != null)
+                if (addRes.releasedCard != null && addRes.releasedCard is IAddStatBonuses)
                 {
-                    foreach (StatBonus bonus in addRes.releasedCard.StatBonuses)
+                    foreach (StatBonus bonus in ((IAddStatBonuses)addRes.releasedCard).StatBonuses)
                     {
                         characterStats.ChStats.RemoveBonus(bonus);
                     }

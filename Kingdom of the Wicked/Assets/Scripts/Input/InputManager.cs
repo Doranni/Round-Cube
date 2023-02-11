@@ -3,8 +3,8 @@ using UnityEngine.InputSystem;
 
 public class InputManager : Singleton<InputManager>
 {
-    public event Action<InputAction.CallbackContext> OnUIEscape_performed,
-        OnCameraMove_performed, OnCameraZoom_performed;
+    public event Action<InputAction.CallbackContext> UIEscape_performed,
+        CameraMove_performed, CameraZoom_performed;
 
     private GameInput gameInput;
 
@@ -16,24 +16,24 @@ public class InputManager : Singleton<InputManager>
 
     private void Start()
     {
-        gameInput.GameUI.Escape.performed += UIEscape_performed;
-        gameInput.Camera.Move.performed += CameraMove_performed;
-        gameInput.Camera.Zoom.performed += CameraZoom_performed;
+        gameInput.GameUI.Escape.performed += OnUIEscape_performed;
+        gameInput.Camera.Move.performed += OnCameraMove_performed;
+        gameInput.Camera.Zoom.performed += OnCameraZoom_performed;
     }
 
-    private void UIEscape_performed(InputAction.CallbackContext obj)
+    private void OnUIEscape_performed(InputAction.CallbackContext obj)
     {
-        OnUIEscape_performed?.Invoke(obj);
+        UIEscape_performed?.Invoke(obj);
     }
 
-    private void CameraZoom_performed(InputAction.CallbackContext obj)
+    private void OnCameraZoom_performed(InputAction.CallbackContext obj)
     {
-        OnCameraZoom_performed?.Invoke(obj);
+        CameraZoom_performed?.Invoke(obj);
     }
 
-    private void CameraMove_performed(InputAction.CallbackContext obj)
+    private void OnCameraMove_performed(InputAction.CallbackContext obj)
     {
-        OnCameraMove_performed?.Invoke(obj);
+        CameraMove_performed?.Invoke(obj);
     }
 
     private void OnEnable()
@@ -48,8 +48,8 @@ public class InputManager : Singleton<InputManager>
 
     private void OnDestroy()
     {
-        gameInput.GameUI.Escape.performed -= UIEscape_performed;
-        gameInput.Camera.Move.performed -= CameraMove_performed;
-        gameInput.Camera.Zoom.performed -= CameraZoom_performed;
+        gameInput.GameUI.Escape.performed -= OnUIEscape_performed;
+        gameInput.Camera.Move.performed -= OnCameraMove_performed;
+        gameInput.Camera.Zoom.performed -= OnCameraZoom_performed;
     }
 }

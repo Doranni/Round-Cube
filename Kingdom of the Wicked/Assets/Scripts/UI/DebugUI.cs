@@ -6,7 +6,7 @@ using UnityEngine.UIElements;
 [RequireComponent(typeof(UIDocument))]
 public class DebugUI : MonoBehaviour
 {
-    [SerializeField] private CharacterStats plStats;
+    [SerializeField] private Character plStats;
 
     private VisualElement debugScreen;
     private Label plStatsLbl;

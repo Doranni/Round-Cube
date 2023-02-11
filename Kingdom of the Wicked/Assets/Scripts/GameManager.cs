@@ -93,19 +93,4 @@ public class GameManager : Singleton<GameManager>
                 }
         }
     }
-
-    public bool ComperaCardTypesFlags(Card.CardsType flags1, Card.CardsType flags2)
-    {
-        if ((flags1.HasFlag(Card.CardsType.Weapon) && flags2.HasFlag(Card.CardsType.Weapon))
-            || (flags1.HasFlag(Card.CardsType.Armor) && flags2.HasFlag(Card.CardsType.Armor))
-            || (flags1.HasFlag(Card.CardsType.Shield) && flags2.HasFlag(Card.CardsType.Shield))
-            || (flags1.HasFlag(Card.CardsType.Other) && flags2.HasFlag(Card.CardsType.Other)))
-        {
-            return true;
-        }
-        else
-        {
-            return false;
-        }
-    }
 }

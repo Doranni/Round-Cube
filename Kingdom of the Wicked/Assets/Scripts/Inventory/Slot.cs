@@ -28,7 +28,7 @@ public class Slot : IStorage
 
     public (bool, Card) AddCard(Card card, bool compareCardTypesFlags = true)
     {
-        if (compareCardTypesFlags && !GameManager.Instance.ComperaCardTypesFlags(card.CardType, CardTypes))
+        if (compareCardTypesFlags && !Card.ComperaCardTypesFlags(card.CardType, CardTypes))
         {
             return (false, null);
         }

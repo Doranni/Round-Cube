@@ -7,9 +7,11 @@ public class DragAndDropController : Singleton<DragAndDropController>
     private CardToDragVisualElement cardToDrag;
     private VisualElement root;
 
-    private CardVE target;
+    public CardVE target;
     private Vector2 targetStartPos;
     private Vector3 pointerStartPos;
+
+    public bool IsDragging => target != null;
 
     public void Init(VisualElement root)
     {

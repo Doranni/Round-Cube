@@ -4,6 +4,12 @@ using UnityEngine;
 
 public class NodeEvent
 {
+    public enum NodeEventType
+    {
+        neutral,
+        fighting
+    }
+
     public bool IsVisited { get; private set; }
 
     private Material material;

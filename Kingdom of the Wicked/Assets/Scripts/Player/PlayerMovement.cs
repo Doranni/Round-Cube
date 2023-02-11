@@ -15,11 +15,9 @@ public class PlayerMovement : MonoBehaviour
     }
 
     [SerializeField] private float speed = 10, posOffset = 0.4f, timeDelay_diceRolled = 0.2f;
+    [SerializeField] private CharacterController characterController;
 
     public int NodeIndex { get; private set; }
-
-    private CharacterController characterController;
-
     public MoveStatus MStatus { get; private set; }
 
     private float yOffset;
@@ -33,17 +31,12 @@ public class PlayerMovement : MonoBehaviour
 
     private Coroutine diceRolledRoutine;
 
-    public event Action OnStepStarted, OnStepFinished;
-
-    private void Awake()
-    {
-        characterController = GetComponent<CharacterController>();
-    }
+    public event Action StepStarted, StepFinished;
 
     void Start()
     {
-        DiceRoller.Instance.OnDiceRolled += DiceRolled;
-        DiceRoller.Instance.OnDiceResChanged += DiceResChanged;
+        DiceRoller.Instance.DiceWasRolled += DiceRolled;
+        DiceRoller.Instance.DiceResChanged += DiceResChanged;
 
         yOffset = GetComponent<Collider>().bounds.extents.y;
         yGravity = Physics.gravity.y;
@@ -67,7 +60,7 @@ public class PlayerMovement : MonoBehaviour
                         destPoints.Clear();
                         MStatus = MoveStatus.onBetweenNode;
                         NodeIndex = destNodeIndex;
-                        OnStepFinished?.Invoke();
+                        StepFinished?.Invoke();
                         return;
                     }
                     moveVector = (destPoints[passedDestPoints] - transform.position).normalized;
@@ -173,13 +166,13 @@ public class PlayerMovement : MonoBehaviour
             destPoints.Add(link.PathPoints[i]);
         }
         passedDestPoints = 0;
-        OnStepStarted?.Invoke();
+        StepStarted?.Invoke();
         MStatus = MoveStatus.moving;
     }
 
     private void OnDestroy()
     {
-        DiceRoller.Instance.OnDiceRolled -= DiceRolled;
-        DiceRoller.Instance.OnDiceResChanged -= DiceResChanged;
+        DiceRoller.Instance.DiceWasRolled -= DiceRolled;
+        DiceRoller.Instance.DiceResChanged -= DiceResChanged;
     }
 }

@@ -13,7 +13,8 @@ public class Inventory : IStorage
     public Inventory()
     {
         StorageName = IStorage.StorageNames.Inventory;
-        CardTypes = Card.CardsType.Weapon | Card.CardsType.Armor | Card.CardsType.Shield | Card.CardsType.Other;
+        CardTypes = Card.CardsType.Weapon | Card.CardsType.Armor | Card.CardsType.Shield | Card.CardsType.Magic 
+            | Card.CardsType.Potion | Card.CardsType.Artifact;
         Cards = new();
     }
 

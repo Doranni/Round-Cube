@@ -6,6 +6,7 @@ public class MapNode : MonoBehaviour
     [SerializeField] private Transform stayPoint;
     [SerializeField] private bool isStart = false;
     [SerializeField] private MeshRenderer meshRenderer;
+    [SerializeField] private NodeEvent.NodeEventType eventType;
 
     public Vector3 StayPoint => stayPoint.transform.position;
     public bool IsStart => isStart;

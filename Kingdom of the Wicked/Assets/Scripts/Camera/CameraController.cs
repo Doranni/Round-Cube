@@ -16,7 +16,7 @@ public class CameraController : MonoBehaviour
     {
         followFrTransposer = followCamera.GetCinemachineComponent<CinemachineFramingTransposer>();
 
-        InputManager.Instance.OnCameraZoom_performed += CameraZoom_performed;
+        InputManager.Instance.CameraZoom_performed += CameraZoom_performed;
 
         destDistFollowCam = followFrTransposer.m_CameraDistance;
     }
@@ -42,6 +42,6 @@ public class CameraController : MonoBehaviour
 
     private void OnDestroy()
     {
-        InputManager.Instance.OnCameraZoom_performed -= CameraZoom_performed;
+        InputManager.Instance.CameraZoom_performed -= CameraZoom_performed;
     }
 }

@@ -16,7 +16,7 @@ public class MainSceneUI : MonoBehaviour
     const string str_rollTheDice = "Roll the\nDice";
 
     //Player
-    [SerializeField] private CharacterStats plStats;
+    [SerializeField] private Character plStats;
 
     private VisualElement playerScreen;
     private Label plHealthLbl;
@@ -40,15 +40,15 @@ public class MainSceneUI : MonoBehaviour
     void Start()
     {
         //Dise
-        DiceRoller.Instance.OnDiceRolled += DisplayDiceRes;
-        DiceRoller.Instance.OnDiceResChanged += DisplayDiceRes;
+        DiceRoller.Instance.DiceWasRolled += DisplayDiceRes;
+        DiceRoller.Instance.DiceResChanged += DisplayDiceRes;
 
         rollDiceButton.RegisterCallback<ClickEvent>((_) => DiceRoller.Instance.RollTheDice());
 
         DisplayDiceRes(DiceRoller.Instance.DiceResult);
 
         //Player
-        plStats.ChHealth.OnChangeHealth += DisplayPlHealth;
+        plStats.ChHealth.HealthChanged += DisplayPlHealth;
 
         DisplayPlHealth((plStats.ChHealth.CurrentHealth, plStats.ChHealth.MaxHealth));
     }
@@ -74,7 +74,7 @@ public class MainSceneUI : MonoBehaviour
 
     private void OnDestroy()
     {
-        DiceRoller.Instance.OnDiceRolled -= DisplayDiceRes;
-        DiceRoller.Instance.OnDiceResChanged -= DisplayDiceRes;
+        DiceRoller.Instance.DiceWasRolled -= DisplayDiceRes;
+        DiceRoller.Instance.DiceResChanged -= DisplayDiceRes;
     }
 }

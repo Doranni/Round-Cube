@@ -75,7 +75,7 @@ public class EquipmentUI : Singleton<EquipmentUI>
         DragAndDropController.Instance.Init(dragCardPanel);
 
         inventoryButton.RegisterCallback<ClickEvent>(_ => ToggleOpenInvemtory()) ;
-        InputManager.Instance.OnUIEscape_performed += _ => GameUIEscape_performed();
+        InputManager.Instance.UIEscape_performed += _ => GameUIEscape_performed();
         plEquipment.Storages[IStorage.StorageNames.Inventory].CardsChanged += DisplayInventoryButton;
 
         foreach (StorageVE storage in storages)
@@ -142,7 +142,9 @@ public class EquipmentUI : Singleton<EquipmentUI>
                     }
                     break;
                 }
-            case Card.CardsType.Other:
+            case Card.CardsType.Magic:
+            case Card.CardsType.Potion:
+            case Card.CardsType.Artifact:
                 {
                     if (slotsHolders[SlotsHolder.SlotsHolderNames.Other].IsOpen != value)
                     {
@@ -178,7 +180,7 @@ public class EquipmentUI : Singleton<EquipmentUI>
         int lastEquippedSlot = -1;
         for(int i = 0; i < newStorages.Count; i++)
         {
-            if ((prevStorage != newStorages[i]) && GameManager.Instance.ComperaCardTypesFlags(card.CardType, 
+            if ((prevStorage != newStorages[i]) && Card.ComperaCardTypesFlags(card.CardType, 
                 plEquipment.Storages[newStorages[i]].CardTypes))
             {
                 if (plEquipment.Storages[newStorages[i]].IsFull)

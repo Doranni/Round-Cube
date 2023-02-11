@@ -9,7 +9,7 @@ public class NodeLink : MonoBehaviour
     [SerializeField] private bool isWayOpen;
     [SerializeField] private List<Transform> pathPoints;
 
-    public event Action OnWayOpen, OnWayClosed;
+    public event Action WayWasOpened, WayWasClosed;
 
     public MapNode NodeTo => nodeTo;
     public MapNode NodeFrom => nodeFrom;
@@ -40,11 +40,11 @@ public class NodeLink : MonoBehaviour
         isWayOpen = isOpen;
         if (!prevVal && isWayOpen)
         {
-            OnWayOpen?.Invoke();
+            WayWasOpened?.Invoke();
         }
         else if (prevVal && !isWayOpen)
         {
-            OnWayClosed?.Invoke();
+            WayWasClosed?.Invoke();
         }
     }
 
