@@ -175,6 +175,7 @@ public class EquipmentUI : Singleton<EquipmentUI>
             (prevStorage != IStorage.StorageNames.Inventory && prevStorage != IStorage.StorageNames.Storage))
         {
             plEquipment.MoveCard(card, prevStorage, IStorage.StorageNames.Inventory);
+            OpenSlotsHolders(card, false);
             return;
         }
         int lastEquippedSlot = -1;
@@ -196,6 +197,13 @@ public class EquipmentUI : Singleton<EquipmentUI>
         if (lastEquippedSlot != -1)
         {
             plEquipment.MoveCard(card, prevStorage, newStorages[lastEquippedSlot], false);
+        }
+        else
+        {
+            if (prevStorage == IStorage.StorageNames.Inventory)
+            {
+                OpenSlotsHolders(card, false);
+            }
         }
     }
 }

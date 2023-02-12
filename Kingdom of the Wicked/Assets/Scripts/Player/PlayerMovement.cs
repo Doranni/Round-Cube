@@ -3,7 +3,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[RequireComponent(typeof(CharacterController))]
 public class PlayerMovement : MonoBehaviour
 {
    public enum MoveStatus
@@ -14,14 +13,12 @@ public class PlayerMovement : MonoBehaviour
         waitingNodeChosen
     }
 
-    [SerializeField] private float speed = 10, posOffset = 0.4f, timeDelay_diceRolled = 0.2f;
-    [SerializeField] private CharacterController characterController;
+    [SerializeField] private float speed = 10, posOffset = 0.1f, timeDelay_diceRolled = 0.2f;
 
     public int NodeIndex { get; private set; }
     public MoveStatus MStatus { get; private set; }
 
     private float yOffset;
-    private float yGravity;
 
     private int destNodeIndex;
     private List<Vector3> destPoints = new();
@@ -39,7 +36,6 @@ public class PlayerMovement : MonoBehaviour
         DiceRoller.Instance.DiceResChanged += DiceResChanged;
 
         yOffset = GetComponent<Collider>().bounds.extents.y;
-        yGravity = Physics.gravity.y;
         
         MoveToStart();
     }
@@ -63,9 +59,8 @@ public class PlayerMovement : MonoBehaviour
                         StepFinished?.Invoke();
                         return;
                     }
-                    moveVector = (destPoints[passedDestPoints] - transform.position).normalized;
-                    moveVector.y = yGravity;
-                    characterController.Move(moveVector * speed * Time.deltaTime);
+                    moveVector = (destPoints[passedDestPoints] + Vector3.up * yOffset - transform.position).normalized;
+                    transform.Translate(moveVector * speed * Time.deltaTime);
                     break;
                 }
         }
@@ -104,11 +99,8 @@ public class PlayerMovement : MonoBehaviour
     private void MoveToStart()
     {
         destNodeIndex = Map.Instance.Index_start;
-        characterController.enabled = false;
         transform.position = Map.Instance.MapNodes[destNodeIndex].StayPoint
             + Vector3.up * yOffset;
-        characterController.enabled = true;
-        characterController.Move(Vector3.up * yGravity);
         MStatus = MoveStatus.onDestinationNode;
         NodeIndex = destNodeIndex;
         Map.Instance.MapNodes[NodeIndex].NEvent.Visit();

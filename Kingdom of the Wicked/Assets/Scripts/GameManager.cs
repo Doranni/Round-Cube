@@ -20,19 +20,13 @@ public class GameManager : Singleton<GameManager>
 
     [SerializeField] private Vector2 cardSize_slot = new(80, 120),
         cardSize_inventory = new(120, 160), cardSize_dragging = new(120, 160);
-    [SerializeField] private float inventoryCardMargin = 20, dragCardMargin = 10;
-    private Vector2 dragRangeMin, dragRangeMax;
-    [SerializeField] private Vector2 openSlotsRangeMin = new(20, 20), openSlotsRangeMax = new(1780, 900);
+    [SerializeField] private float inventoryCardMargin = 20;
     private VisualTreeAsset cardAsset, slotsHolderAsset;
 
     public Vector2 CardSize_slot => cardSize_slot;
     public Vector2 CardSize_inventory => cardSize_inventory;
     public Vector2 CardSize_dragging => cardSize_dragging;
     public float InventoryCardMargin => inventoryCardMargin;
-    public Vector2 DragRangeMin => dragRangeMin;
-    public Vector2 DragRangeMax => dragRangeMax;
-    public Vector2 OpenSlotsRangeMin => openSlotsRangeMin;
-    public Vector2 OpenSlotsRangeMax => openSlotsRangeMax;
     public VisualTreeAsset CardAsset => cardAsset;
     public VisualTreeAsset SlotsHolderAsset => slotsHolderAsset;
 
@@ -45,9 +39,6 @@ public class GameManager : Singleton<GameManager>
         base.Awake();
         cardAsset = EditorGUIUtility.Load("Assets/UI/CardUI.uxml") as VisualTreeAsset;
         slotsHolderAsset = EditorGUIUtility.Load("Assets/UI/SlotHolderUI.uxml") as VisualTreeAsset;
-
-        dragRangeMin = new Vector2(dragCardMargin, dragCardMargin);
-        dragRangeMax = new Vector2(1920, 1080) - dragRangeMin - cardSize_dragging;
     }
 
     private void Start()

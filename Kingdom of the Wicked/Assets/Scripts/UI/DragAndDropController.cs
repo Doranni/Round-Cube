@@ -11,6 +11,8 @@ public class DragAndDropController : Singleton<DragAndDropController>
     private Vector2 targetStartPos;
     private Vector3 pointerStartPos;
 
+    private Vector2 dragRange;
+
     public bool IsDragging => target != null;
 
     public void Init(VisualElement root)
@@ -36,6 +38,10 @@ public class DragAndDropController : Singleton<DragAndDropController>
         cardToDrag.CapturePointer(evt.pointerId);
         cardToDrag.RegisterCallback<PointerUpEvent>(PointerUpEventHandler);
         cardToDrag.RegisterCallback<PointerMoveEvent>(PointerMoveHandler);
+
+        EquipmentUI.Instance.OpenSlotsHolders(target.CardData, true);
+        dragRange = new Vector2(cardToDrag.panel.visualTree.worldBound.width - 80,
+            cardToDrag.panel.visualTree.worldBound.height - 120);
     }
 
     private void PointerUpEventHandler(PointerUpEvent evt)
@@ -79,22 +85,10 @@ public class DragAndDropController : Singleton<DragAndDropController>
             Vector3 pointerDelta = evt.position - pointerStartPos;
 
             cardToDrag.transform.position = new Vector2(
-            Mathf.Clamp(targetStartPos.x + pointerDelta.x, GameManager.Instance.DragRangeMin.x,
-                GameManager.Instance.DragRangeMax.x),
-            Mathf.Clamp(targetStartPos.y + pointerDelta.y, GameManager.Instance.DragRangeMin.y,
-                GameManager.Instance.DragRangeMax.y));
+            Mathf.Clamp(targetStartPos.x + pointerDelta.x, 0, dragRange.x),
+            Mathf.Clamp(targetStartPos.y + pointerDelta.y, 0, dragRange.y));
 
-            Vector2 pos = cardToDrag.transform.position;
-
-            if (pos.x > GameManager.Instance.OpenSlotsRangeMin.x && pos.y > GameManager.Instance.OpenSlotsRangeMin.y 
-                && pos.x < GameManager.Instance.OpenSlotsRangeMax.x && pos.y < GameManager.Instance.OpenSlotsRangeMax.y)
-            {
-                EquipmentUI.Instance.OpenSlotsHolders(target.CardData, true);
-            }
-            else
-            {
-                EquipmentUI.Instance.OpenSlotsHolders(target.CardData, false);
-            }
+            Debug.Log(cardToDrag.transform.position);
         }
     }
 }

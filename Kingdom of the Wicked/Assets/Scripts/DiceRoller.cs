@@ -40,7 +40,7 @@ public class DiceRoller : Singleton<DiceRoller>
         }
         else
         {
-            diceResult = availableDiceValues[Random.Range(1, (int)diceRange + 1)];
+            diceResult = Random.Range(1, (int)diceRange + 1);
         }
         yield return new WaitForSeconds(timeDelay);
         DiceWasRolled?.Invoke(diceResult);
