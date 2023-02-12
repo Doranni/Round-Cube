@@ -12,6 +12,9 @@ public class GameManager : Singleton<GameManager>
         active
     }
 
+    [SerializeField] private float plMovementHeight = 4;
+    public float PlMovementHeight => plMovementHeight;
+
     [SerializeField] [Range(1, 5)] private int otherSlotCapacity = 3;
     [SerializeField][Range(1, 100)] private int inventoryCapacity = 50;
 

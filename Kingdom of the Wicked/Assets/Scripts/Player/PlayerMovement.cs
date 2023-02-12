@@ -10,7 +10,8 @@ public class PlayerMovement : MonoBehaviour
         onDestinationNode,
         moving,
         onBetweenNode,
-        waitingNodeChosen
+        waitingNodeChosen,
+        movingDown
     }
 
     [SerializeField] private float speed = 10, posOffset = 0.1f, timeDelay_diceRolled = 0.2f;
@@ -18,7 +19,7 @@ public class PlayerMovement : MonoBehaviour
     public int NodeIndex { get; private set; }
     public MoveStatus MStatus { get; private set; }
 
-    private float yOffset;
+    private float yOffset = 1;
 
     private int destNodeIndex;
     private List<Vector3> destPoints = new();
@@ -35,7 +36,7 @@ public class PlayerMovement : MonoBehaviour
         DiceRoller.Instance.DiceWasRolled += DiceRolled;
         DiceRoller.Instance.DiceResChanged += DiceResChanged;
 
-        yOffset = GetComponent<Collider>().bounds.extents.y;
+        //yOffset = GetComponent<Collider>().bounds.extents.y;
         
         MoveToStart();
     }
@@ -46,8 +47,11 @@ public class PlayerMovement : MonoBehaviour
         {
             case MoveStatus.moving:
                 {
-                    if (Mathf.Abs(transform.position.x - destPoints[passedDestPoints].x) < posOffset
-                        && Mathf.Abs(transform.position.z - destPoints[passedDestPoints].z) < posOffset)
+                    if (
+                        //Mathf.Abs(transform.position.x - destPoints[passedDestPoints].x) < posOffset
+                        //&& Mathf.Abs(transform.position.z - destPoints[passedDestPoints].z) < posOffset
+                        Vector3.Distance(transform.position, destPoints[passedDestPoints] + Vector3.up * yOffset) 
+                        < posOffset)
                     {
                         passedDestPoints++;
                     }
@@ -61,6 +65,29 @@ public class PlayerMovement : MonoBehaviour
                     }
                     moveVector = (destPoints[passedDestPoints] + Vector3.up * yOffset - transform.position).normalized;
                     transform.Translate(moveVector * speed * Time.deltaTime);
+                    break;
+                }
+            case MoveStatus.movingDown:
+                {
+                    if (Vector3.Distance(transform.position, 
+                        Map.Instance.MapNodes[destNodeIndex].StayPoint + Vector3.up * yOffset) < posOffset)
+                    {
+                        Debug.Log("onDestinationNode");
+                        MStatus = MoveStatus.onDestinationNode;
+                        if (lockedLink.wasLocked)
+                        {
+                            lockedLink.link.SetIsAvailable(true);
+                            lockedLink.wasLocked = false;
+                            lockedLink.link = null;
+                        }
+                        Map.Instance.MapNodes[NodeIndex].NEvent.Visit();
+                    }
+                    else
+                    {
+                        moveVector = (Map.Instance.MapNodes[destNodeIndex].StayPoint + Vector3.up * yOffset 
+                            - transform.position).normalized;
+                        transform.Translate(moveVector * speed * Time.deltaTime);
+                    }
                     break;
                 }
         }
@@ -85,14 +112,7 @@ public class PlayerMovement : MonoBehaviour
         }
         else
         {
-            MStatus = MoveStatus.onDestinationNode;
-            if (lockedLink.wasLocked)
-            {
-                lockedLink.link.SetIsAvailable(true);
-                lockedLink.wasLocked = false;
-                lockedLink.link = null;
-            }
-            Map.Instance.MapNodes[NodeIndex].NEvent.Visit();
+            MStatus = MoveStatus.movingDown;
         }
     }
 
@@ -153,7 +173,7 @@ public class PlayerMovement : MonoBehaviour
             lockedLink = (true, linkBack);
         }
         destNodeIndex = link.NodeTo.Index;
-        for (int i = 1; i < link.PathPoints.Count; i++)
+        for (int i = 0; i < link.PathPoints.Count; i++)
         {
             destPoints.Add(link.PathPoints[i]);
         }

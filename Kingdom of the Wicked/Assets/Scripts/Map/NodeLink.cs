@@ -26,12 +26,12 @@ public class NodeLink : MonoBehaviour
     private void InitPathPoints()
     {
         PathPoints = new(pathPoints.Count + 2);
-        PathPoints.Add(nodeFrom.StayPoint);
+        PathPoints.Add(nodeFrom.AbowePoint);
         for (int i = 0; i < pathPoints.Count; i++)
         {
             PathPoints.Add(pathPoints[i].position);
         }
-        PathPoints.Add(nodeTo.StayPoint);
+        PathPoints.Add(nodeTo.AbowePoint);
     }
 
     public void SetWayIsOpen(bool isOpen)
