@@ -9,7 +9,8 @@ public class GameManager : Singleton<GameManager>
     public enum GameState
     {
         inMenu,
-        active
+        active,
+        fighting
     }
 
     [SerializeField] private float plMovementHeight = 4;
@@ -47,7 +48,20 @@ public class GameManager : Singleton<GameManager>
     private void Start()
     {
         EquipmentUI.Instance.OpenInvemtoryToggled += ToggleOpenInvemtory;
+        FightingManager.Instance.FightStarted += OnFightStarted; 
         State = GameState.active;
+    }
+
+    private void OnFightStarted(bool value)
+    {
+        if (value)
+        {
+            State = GameState.fighting;
+        }
+        else
+        {
+            State = GameState.active;
+        }
     }
 
     private void ToggleOpenInvemtory(bool isInventoryOpen)

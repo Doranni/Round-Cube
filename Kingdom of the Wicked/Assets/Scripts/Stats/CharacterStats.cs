@@ -2,25 +2,25 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Character : MonoBehaviour
+public class CharacterStats
 {
-    [SerializeField] private StatsValuesSO chStatsValues;
-
     public Health ChHealth { get; private set; }
-    public Stats ChStats { get; private set; }
+    public Dictionary<Stat.StatId, Stat> ChStats { get; private set; }
     public Dictionary<int, Effect> Effects { get; private set; }
 
-    private void Awake()
+    public CharacterStats(StatsValuesSO chStatsValues)
     {
-        ChStats = new Stats(chStatsValues);
-        ChHealth = new Health(ChStats.StatsValues[Stat.StatId.health].BaseValue);
+        ChStats = new(GameDatabase.Instance.StatsDescription.Count)
+        {
+            { Stat.StatId.health, new(chStatsValues.baseHealthValue) },
+            { Stat.StatId.armor, new(chStatsValues.armorValue) },
+            { Stat.StatId.damage, new(chStatsValues.damageValue) }
+        };
+        ChHealth = new Health(ChStats[Stat.StatId.health].BaseValue);
         Effects = new();
-    }
 
-    private void Start()
-    {
-        ChStats.StatsValues[Stat.StatId.health].BonusAdded += x => ChHealth.AddHealthBonus(x);
-        ChStats.StatsValues[Stat.StatId.health].BonusRemoved += x => ChHealth.AddHealthBonus(-x);
+        ChStats[Stat.StatId.health].BonusAdded += x => ChHealth.AddHealthBonus(x);
+        ChStats[Stat.StatId.health].BonusRemoved += x => ChHealth.AddHealthBonus(-x);
     }
 
     public void AddEffect(Effect effect)
@@ -29,7 +29,7 @@ public class Character : MonoBehaviour
         {
             return;
         }
-        Debug.Log($"Added effect {effect.Name} to {name}.");
+        //Debug.Log($"Added effect {effect.Name} to {name}.");
         var targetEffect = effect.Clone();
         targetEffect.SetId();
         Effects.Add(targetEffect.Id, targetEffect);
@@ -77,5 +77,21 @@ public class Character : MonoBehaviour
     private void UseCard(IUsable card, Character target)
     {
         card.Use(target);
+    }
+
+    public void AddBonus(StatBonus bonus)
+    {
+        if (ChStats.ContainsKey(bonus.StatTypeId))
+        {
+            ChStats[bonus.StatTypeId].AddBonus(bonus);
+        }
+    }
+
+    public void RemoveBonus(StatBonus bonus)
+    {
+        if (ChStats.ContainsKey(bonus.StatTypeId))
+        {
+            ChStats[bonus.StatTypeId].RemoveBonus(bonus);
+        }
     }
 }

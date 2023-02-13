@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class NodeEvent
+public class NodeEvent : MonoBehaviour
 {
     public enum NodeEventType
     {
@@ -10,19 +10,22 @@ public class NodeEvent
         fighting
     }
 
-    public bool IsVisited { get; private set; }
+    [SerializeField] protected List<IInteractable> objects;
+    [SerializeField] protected MeshRenderer meshRenderer;
 
-    private Material material;
+    public List<IInteractable> Objects => objects;
+    public bool IsVisited { get; protected set; }
 
-    public NodeEvent(Material material)
+    protected virtual void Awake()
     {
         IsVisited = false;
-        this.material = material;
     }
 
-    public void Visit()
+    public virtual void Visit()
     {
         IsVisited = true;
-        material.color = Color.gray;
+        meshRenderer.material.color = Color.gray;
     }
 }
+
+

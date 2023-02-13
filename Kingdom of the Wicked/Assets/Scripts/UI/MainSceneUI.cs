@@ -16,7 +16,7 @@ public class MainSceneUI : MonoBehaviour
     const string str_rollTheDice = "Roll the\nDice";
 
     //Player
-    [SerializeField] private Character plStats;
+    [SerializeField] private Character player;
 
     private VisualElement playerScreen;
     private Label plHealthLbl;
@@ -48,9 +48,9 @@ public class MainSceneUI : MonoBehaviour
         DisplayDiceRes(DiceRoller.Instance.DiceResult);
 
         //Player
-        plStats.ChHealth.HealthChanged += DisplayPlHealth;
+        player.Stats.ChHealth.HealthChanged += DisplayPlHealth;
 
-        DisplayPlHealth((plStats.ChHealth.CurrentHealth, plStats.ChHealth.MaxHealth));
+        DisplayPlHealth((player.Stats.ChHealth.CurrentHealth, player.Stats.ChHealth.MaxHealth));
     }
 
     private void DisplayPlHealth((float currentHealth, float maxHealth) obj)

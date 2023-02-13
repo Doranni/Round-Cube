@@ -3,7 +3,7 @@ using Cinemachine;
 
 public class CameraController : MonoBehaviour
 {
-    [SerializeField] private CinemachineVirtualCamera followCamera;
+    [SerializeField] private CinemachineVirtualCamera followCamera, fightingCamera;
     [SerializeField] private float zoomSpeed = 50, zoomStrength = 400;
     [SerializeField] private float followCamDistMin = 10, followCamDistMax = 60;
 
@@ -17,8 +17,36 @@ public class CameraController : MonoBehaviour
         followFrTransposer = followCamera.GetCinemachineComponent<CinemachineFramingTransposer>();
 
         InputManager.Instance.CameraZoom_performed += CameraZoom_performed;
+        FightingManager.Instance.FightStarted += _ => SetPriority();
 
         destDistFollowCam = followFrTransposer.m_CameraDistance;
+
+        SetPriority();
+    }
+
+    private void SetPriority()
+    {
+        switch (GameManager.Instance.State)
+        {
+            case GameManager.GameState.fighting:
+                {
+                    followCamera.Priority = 10;
+                    fightingCamera.Priority = 11;
+                    break;
+                }
+            default:
+                {
+                    followCamera.Priority = 11;
+                    fightingCamera.Priority = 10;
+                    break;
+                }
+        }
+    }
+
+    public void SetFightingCameraTarget(Transform target)
+    {
+        fightingCamera.Follow = target;
+        fightingCamera.LookAt = target;
     }
 
     private void CameraZoom_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj)

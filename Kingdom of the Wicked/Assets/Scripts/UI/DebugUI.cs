@@ -6,7 +6,7 @@ using UnityEngine.UIElements;
 [RequireComponent(typeof(UIDocument))]
 public class DebugUI : MonoBehaviour
 {
-    [SerializeField] private Character plStats;
+    [SerializeField] private Character player;
 
     private VisualElement debugScreen;
     private Label plStatsLbl;
@@ -27,7 +27,7 @@ public class DebugUI : MonoBehaviour
     void Update()
     {
         var res = str_stats;
-        foreach (KeyValuePair<Stat.StatId, Stat> stat in plStats.ChStats.StatsValues)
+        foreach (KeyValuePair<Stat.StatId, Stat> stat in player.Stats.ChStats)
         {
             res += "\n" + GameDatabase.Instance.StatsDescription[stat.Key].name + ": " 
                 + stat.Value.BaseValue + " => " + stat.Value.TotalValue;

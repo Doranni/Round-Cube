@@ -65,7 +65,7 @@ public interface IUsable
     {
         foreach(Effect effect in Effects)
         {
-            target.AddEffect(effect);
+            target.Stats.AddEffect(effect);
         }
     }
 }

@@ -6,7 +6,7 @@ using UnityEngine.UIElements;
 [RequireComponent(typeof(UIDocument))]
 public class EquipmentUI : Singleton<EquipmentUI>
 {
-    [SerializeField] private CharacterEquipment plEquipment;
+    [SerializeField] private Character player;
 
     private List<StorageVE> storages;
     private Dictionary<SlotsHolder.SlotsHolderNames, SlotsHolderVE> slotsHolders;
@@ -58,13 +58,13 @@ public class EquipmentUI : Singleton<EquipmentUI>
 
     private void Start()
     {
-        weaponSlot.Init(plEquipment.Storages[IStorage.StorageNames.WeaponSlot]);
-        inventory.Init(plEquipment.Storages[IStorage.StorageNames.Inventory]);
+        weaponSlot.Init(player.Equipment.Storages[IStorage.StorageNames.WeaponSlot]);
+        inventory.Init(player.Equipment.Storages[IStorage.StorageNames.Inventory]);
         inventory.SetIsActive(false);
 
         foreach (KeyValuePair<SlotsHolder.SlotsHolderNames, SlotsHolderVE> slotHolder in slotsHolders)
         {
-            slotHolder.Value.Init(plEquipment.SlotsHolders[slotHolder.Key]);
+            slotHolder.Value.Init(player.Equipment.SlotsHolders[slotHolder.Key]);
             foreach ((SlotVE closedSlot, SlotVE openSlot) in slotHolder.Value.Slots)
             {
                 storages.Add(closedSlot);
@@ -76,7 +76,7 @@ public class EquipmentUI : Singleton<EquipmentUI>
 
         inventoryButton.RegisterCallback<ClickEvent>(_ => ToggleOpenInvemtory()) ;
         InputManager.Instance.UIEscape_performed += _ => GameUIEscape_performed();
-        plEquipment.Storages[IStorage.StorageNames.Inventory].CardsChanged += DisplayInventoryButton;
+        player.Equipment.Storages[IStorage.StorageNames.Inventory].CardsChanged += DisplayInventoryButton;
 
         foreach (StorageVE storage in storages)
         {
@@ -96,7 +96,7 @@ public class EquipmentUI : Singleton<EquipmentUI>
 
     private void DisplayInventoryButton()
     {
-        if (plEquipment.Storages[IStorage.StorageNames.Inventory].Cards.Count == 0)
+        if (player.Equipment.Storages[IStorage.StorageNames.Inventory].Cards.Count == 0)
         {
             inventoryButton.style.display = DisplayStyle.None;
             if (inventory.IsActive)
@@ -174,7 +174,7 @@ public class EquipmentUI : Singleton<EquipmentUI>
         if (newStorages.Count == 0 &&
             (prevStorage != IStorage.StorageNames.Inventory && prevStorage != IStorage.StorageNames.Storage))
         {
-            plEquipment.MoveCard(card, prevStorage, IStorage.StorageNames.Inventory);
+            player.Equipment.MoveCard(card, prevStorage, IStorage.StorageNames.Inventory);
             OpenSlotsHolders(card, false);
             return;
         }
@@ -182,21 +182,21 @@ public class EquipmentUI : Singleton<EquipmentUI>
         for(int i = 0; i < newStorages.Count; i++)
         {
             if ((prevStorage != newStorages[i]) && Card.ComperaCardTypesFlags(card.CardType, 
-                plEquipment.Storages[newStorages[i]].CardTypes))
+                player.Equipment.Storages[newStorages[i]].CardTypes))
             {
-                if (plEquipment.Storages[newStorages[i]].IsFull)
+                if (player.Equipment.Storages[newStorages[i]].IsFull)
                 {
                     lastEquippedSlot = i;
                     continue;
                 }
                 lastEquippedSlot = -1;
-                plEquipment.MoveCard(card, prevStorage, newStorages[i], false);
+                player.Equipment.MoveCard(card, prevStorage, newStorages[i], false);
                 return;
             }
         }
         if (lastEquippedSlot != -1)
         {
-            plEquipment.MoveCard(card, prevStorage, newStorages[lastEquippedSlot], false);
+            player.Equipment.MoveCard(card, prevStorage, newStorages[lastEquippedSlot], false);
         }
         else
         {

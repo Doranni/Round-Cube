@@ -1,15 +1,15 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CharacterEquipment : MonoBehaviour
+public class CharacterEquipment
 {
-    [SerializeField] private Character characterStats;
-
+    private CharacterStats characterStats;
     public Dictionary<IStorage.StorageNames, IStorage> Storages { get; private set; }
     public Dictionary<SlotsHolder.SlotsHolderNames, SlotsHolder> SlotsHolders { get; private set; }
 
-    private void Awake()
+    public CharacterEquipment(CharacterStats characterStats)
     {
+        this.characterStats = characterStats;
         Storages = new();
         SlotsHolders = new();
         Storages.Add(IStorage.StorageNames.WeaponSlot, 
@@ -56,13 +56,13 @@ public class CharacterEquipment : MonoBehaviour
         {
             foreach (StatBonus bonus in ((IAddStatBonuses)card).StatBonuses)
             {
-                characterStats.ChStats.AddBonus(bonus);
+                characterStats.AddBonus(bonus);
             }
             if (addRes.releasedCard != null && addRes.releasedCard is IAddStatBonuses)
             {
                 foreach (StatBonus bonus in ((IAddStatBonuses)addRes.releasedCard).StatBonuses)
                 {
-                    characterStats.ChStats.RemoveBonus(bonus);
+                    characterStats.RemoveBonus(bonus);
                 }
             }
         }
@@ -77,7 +77,7 @@ public class CharacterEquipment : MonoBehaviour
         {
             foreach (StatBonus bonus in ((IAddStatBonuses)card).StatBonuses)
             {
-                characterStats.ChStats.RemoveBonus(bonus);
+                characterStats.RemoveBonus(bonus);
             }
         }
     }
@@ -107,14 +107,14 @@ public class CharacterEquipment : MonoBehaviour
                 {
                     foreach (StatBonus bonus in ((IAddStatBonuses)addRes.releasedCard).StatBonuses)
                     {
-                        characterStats.ChStats.AddBonus(bonus);
+                        characterStats.AddBonus(bonus);
                     }
                 }
                 if (card is IAddStatBonuses)
                 {
                     foreach (StatBonus bonus in ((IAddStatBonuses)card).StatBonuses)
                     {
-                        characterStats.ChStats.RemoveBonus(bonus);
+                        characterStats.RemoveBonus(bonus);
                     }
                 }
             }
@@ -124,14 +124,14 @@ public class CharacterEquipment : MonoBehaviour
                 {
                     foreach (StatBonus bonus in ((IAddStatBonuses)card).StatBonuses)
                     {
-                        characterStats.ChStats.AddBonus(bonus);
+                        characterStats.AddBonus(bonus);
                     }
                 }
                 if (addRes.releasedCard != null && addRes.releasedCard is IAddStatBonuses)
                 {
                     foreach (StatBonus bonus in ((IAddStatBonuses)addRes.releasedCard).StatBonuses)
                     {
-                        characterStats.ChStats.RemoveBonus(bonus);
+                        characterStats.RemoveBonus(bonus);
                     }
                 }
             }
