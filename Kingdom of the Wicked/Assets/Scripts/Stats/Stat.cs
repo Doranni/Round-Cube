@@ -14,7 +14,7 @@ public class Stat
     public int TotalValue { get; private set; }
     public Dictionary<int, StatBonus> Bonuses { get; private set; }
 
-    public event Action<int> OnAddBonus, OnRemoveBonus;
+    public event Action<int> BonusAdded, BonusRemoved;
 
     public Stat(int baseValue)
     {
@@ -29,7 +29,7 @@ public class Stat
         Bonuses.Add(id, bonus);
         bonus.SetId(id);
         TotalValue += bonus.Value;
-        OnAddBonus?.Invoke(bonus.Value);
+        BonusAdded?.Invoke(bonus.Value);
     }
 
     public void RemoveBonus(StatBonus bonus)
@@ -38,7 +38,7 @@ public class Stat
         {
             TotalValue -= bonus.Value;
             Bonuses.Remove(bonus.BonusId);
-            OnRemoveBonus?.Invoke(bonus.Value);
+            BonusRemoved?.Invoke(bonus.Value);
         }
     }
 }

@@ -36,13 +36,16 @@ public class CardVE : VisualElement
     {
         cardName.text = CardData.CardName;
         cardDescription.text = CardData.Description;
-        var statBonuses = "";
-        foreach (StatBonus bonus in CardData.StatBonuses)
+        if (CardData is IAddStatBonuses)
         {
-            statBonuses += GameDatabase.Instance.StatsDescription[bonus.StatTypeId].name + ": "
-                + bonus.Value + "\n";
+            var statBonuses = "";
+            foreach (StatBonus bonus in ((IAddStatBonuses)CardData).StatBonuses)
+            {
+                statBonuses += GameDatabase.Instance.StatsDescription[bonus.StatTypeId].name + ": "
+                    + bonus.Value + "\n";
+            }
+            cardStatBonuses.text = statBonuses;
         }
-        cardStatBonuses.text = statBonuses;
     }
 
     protected virtual void SetSize()

@@ -3,7 +3,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[RequireComponent(typeof(CharacterController))]
 public class PlayerMovement : MonoBehaviour
 {
    public enum MoveStatus
@@ -11,19 +10,16 @@ public class PlayerMovement : MonoBehaviour
         onDestinationNode,
         moving,
         onBetweenNode,
-        waitingNodeChosen
+        waitingNodeChosen,
+        movingDown
     }
 
-    [SerializeField] private float speed = 10, posOffset = 0.4f, timeDelay_diceRolled = 0.2f;
+    [SerializeField] private float speed = 10, posOffset = 0.1f, timeDelay_diceRolled = 0.2f;
 
     public int NodeIndex { get; private set; }
-
-    private CharacterController characterController;
-
     public MoveStatus MStatus { get; private set; }
 
-    private float yOffset;
-    private float yGravity;
+    private float yOffset = 1;
 
     private int destNodeIndex;
     private List<Vector3> destPoints = new();
@@ -33,20 +29,14 @@ public class PlayerMovement : MonoBehaviour
 
     private Coroutine diceRolledRoutine;
 
-    public event Action OnStepStarted, OnStepFinished;
-
-    private void Awake()
-    {
-        characterController = GetComponent<CharacterController>();
-    }
+    public event Action StepStarted, StepFinished;
 
     void Start()
     {
-        DiceRoller.Instance.OnDiceRolled += DiceRolled;
-        DiceRoller.Instance.OnDiceResChanged += DiceResChanged;
+        DiceRoller.Instance.DiceWasRolled += DiceRolled;
+        DiceRoller.Instance.DiceResChanged += DiceResChanged;
 
-        yOffset = GetComponent<Collider>().bounds.extents.y;
-        yGravity = Physics.gravity.y;
+        //yOffset = GetComponent<Collider>().bounds.extents.y;
         
         MoveToStart();
     }
@@ -57,8 +47,11 @@ public class PlayerMovement : MonoBehaviour
         {
             case MoveStatus.moving:
                 {
-                    if (Mathf.Abs(transform.position.x - destPoints[passedDestPoints].x) < posOffset
-                        && Mathf.Abs(transform.position.z - destPoints[passedDestPoints].z) < posOffset)
+                    if (
+                        //Mathf.Abs(transform.position.x - destPoints[passedDestPoints].x) < posOffset
+                        //&& Mathf.Abs(transform.position.z - destPoints[passedDestPoints].z) < posOffset
+                        Vector3.Distance(transform.position, destPoints[passedDestPoints] + Vector3.up * yOffset) 
+                        < posOffset)
                     {
                         passedDestPoints++;
                     }
@@ -67,12 +60,34 @@ public class PlayerMovement : MonoBehaviour
                         destPoints.Clear();
                         MStatus = MoveStatus.onBetweenNode;
                         NodeIndex = destNodeIndex;
-                        OnStepFinished?.Invoke();
+                        StepFinished?.Invoke();
                         return;
                     }
-                    moveVector = (destPoints[passedDestPoints] - transform.position).normalized;
-                    moveVector.y = yGravity;
-                    characterController.Move(moveVector * speed * Time.deltaTime);
+                    moveVector = (destPoints[passedDestPoints] + Vector3.up * yOffset - transform.position).normalized;
+                    transform.Translate(moveVector * speed * Time.deltaTime);
+                    break;
+                }
+            case MoveStatus.movingDown:
+                {
+                    if (Vector3.Distance(transform.position, 
+                        Map.Instance.MapNodes[destNodeIndex].StayPoint + Vector3.up * yOffset) < posOffset)
+                    {
+                        Debug.Log("onDestinationNode");
+                        MStatus = MoveStatus.onDestinationNode;
+                        if (lockedLink.wasLocked)
+                        {
+                            lockedLink.link.SetIsAvailable(true);
+                            lockedLink.wasLocked = false;
+                            lockedLink.link = null;
+                        }
+                        Map.Instance.MapNodes[NodeIndex].NEvent.Visit();
+                    }
+                    else
+                    {
+                        moveVector = (Map.Instance.MapNodes[destNodeIndex].StayPoint + Vector3.up * yOffset 
+                            - transform.position).normalized;
+                        transform.Translate(moveVector * speed * Time.deltaTime);
+                    }
                     break;
                 }
         }
@@ -97,25 +112,15 @@ public class PlayerMovement : MonoBehaviour
         }
         else
         {
-            MStatus = MoveStatus.onDestinationNode;
-            if (lockedLink.wasLocked)
-            {
-                lockedLink.link.SetIsAvailable(true);
-                lockedLink.wasLocked = false;
-                lockedLink.link = null;
-            }
-            Map.Instance.MapNodes[NodeIndex].NEvent.Visit();
+            MStatus = MoveStatus.movingDown;
         }
     }
 
     private void MoveToStart()
     {
         destNodeIndex = Map.Instance.Index_start;
-        characterController.enabled = false;
         transform.position = Map.Instance.MapNodes[destNodeIndex].StayPoint
             + Vector3.up * yOffset;
-        characterController.enabled = true;
-        characterController.Move(Vector3.up * yGravity);
         MStatus = MoveStatus.onDestinationNode;
         NodeIndex = destNodeIndex;
         Map.Instance.MapNodes[NodeIndex].NEvent.Visit();
@@ -168,18 +173,18 @@ public class PlayerMovement : MonoBehaviour
             lockedLink = (true, linkBack);
         }
         destNodeIndex = link.NodeTo.Index;
-        for (int i = 1; i < link.PathPoints.Count; i++)
+        for (int i = 0; i < link.PathPoints.Count; i++)
         {
             destPoints.Add(link.PathPoints[i]);
         }
         passedDestPoints = 0;
-        OnStepStarted?.Invoke();
+        StepStarted?.Invoke();
         MStatus = MoveStatus.moving;
     }
 
     private void OnDestroy()
     {
-        DiceRoller.Instance.OnDiceRolled -= DiceRolled;
-        DiceRoller.Instance.OnDiceResChanged -= DiceResChanged;
+        DiceRoller.Instance.DiceWasRolled -= DiceRolled;
+        DiceRoller.Instance.DiceResChanged -= DiceResChanged;
     }
 }

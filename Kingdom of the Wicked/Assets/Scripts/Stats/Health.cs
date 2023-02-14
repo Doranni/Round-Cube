@@ -7,8 +7,8 @@ public class Health
     public float MaxHealth { get; private set; }
     public bool IsDead { get; private set; }
 
-    public event Action<(float currentHealth, float maxHealth)> OnChangeHealth, OnGetDamage;
-    public event Action OnDeath;
+    public event Action<(float currentHealth, float maxHealth)> HealthChanged, GotDamage;
+    public event Action Died;
 
     public Health(float maxValue) : this(maxValue, maxValue) { }
 
@@ -28,9 +28,9 @@ public class Health
         CurrentHealth = Mathf.Clamp(CurrentHealth + value, 0, MaxHealth);
         if (value < 0)
         {
-            OnGetDamage?.Invoke((CurrentHealth, MaxHealth));
+            GotDamage?.Invoke((CurrentHealth, MaxHealth));
         }
-        OnChangeHealth?.Invoke((CurrentHealth, MaxHealth));
+        HealthChanged?.Invoke((CurrentHealth, MaxHealth));
         if (CurrentHealth == 0)
         {
             Death();
@@ -41,12 +41,12 @@ public class Health
     {
         MaxHealth += value;
         CurrentHealth += value;
-        OnChangeHealth?.Invoke((CurrentHealth, MaxHealth));
+        HealthChanged?.Invoke((CurrentHealth, MaxHealth));
     }
 
     public void Death()
     {
         IsDead = true;
-        OnDeath?.Invoke();
+        Died?.Invoke();
     }
 }
