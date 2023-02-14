@@ -3,15 +3,15 @@ using UnityEngine;
 
 public class GameDatabase : Singleton<GameDatabase>
 {
-    [SerializeField] StatsDescriptionData statsDescriptionData;
+    [SerializeField] StatsDescriptionSO statsDescriptionData;
 
-    public Dictionary<int, CardData> Cards { get; private set; }
+    public Dictionary<int, CardSO> Cards { get; private set; }
     public Dictionary<Stat.StatId, (string name, string description)> StatsDescription { get; private set; }
 
     public override void Awake()
     {
         base.Awake();
-        CardData[] data = Resources.LoadAll<CardData>("Cards");
+        CardSO[] data = Resources.LoadAll<CardSO>("Cards");
         Cards = new(data.Length);
         for (int i = 0; i < data.Length; i++)
         {
@@ -27,11 +27,35 @@ public class GameDatabase : Singleton<GameDatabase>
             statsDescriptionData.damageStatDescription));
     }
 
-    public Card GetCard(int id)
+    public Card GetCard(int nameId)
     {
-        if (Cards.ContainsKey(id))
+        if (Cards.ContainsKey(nameId))
         {
-            return new Card(Cards[id]);
+            if (Cards[nameId] is WeaponCardSO)
+            {
+                return new WeaponCard((WeaponCardSO)Cards[nameId]);
+            }
+            if (Cards[nameId] is ArmorCardSO)
+            {
+                return new ArmorCard((ArmorCardSO)Cards[nameId]);
+            }
+            if (Cards[nameId] is ShieldCardSO)
+            {
+                return new ShieldCard((ShieldCardSO)Cards[nameId]);
+            }
+            if (Cards[nameId] is MagicCardSO)
+            {
+                return new MagicCard((MagicCardSO)Cards[nameId]);
+            }
+            if (Cards[nameId] is PotionCardSO)
+            {
+                return new PotionCard((PotionCardSO)Cards[nameId]);
+            }
+            if (Cards[nameId] is ArtifactCardSO)
+            {
+                return new ArtifactCard((ArtifactCardSO)Cards[nameId]);
+
+            }
         }
         return null;
     }

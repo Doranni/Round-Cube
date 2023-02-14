@@ -2,21 +2,30 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class NodeEvent
+public class NodeEvent : MonoBehaviour
 {
-    public bool IsVisited { get; private set; }
+    public enum NodeEventType
+    {
+        neutral,
+        fighting
+    }
 
-    private Material material;
+    [SerializeField] protected List<IInteractable> objects;
+    [SerializeField] protected MeshRenderer meshRenderer;
 
-    public NodeEvent(Material material)
+    public List<IInteractable> Objects => objects;
+    public bool IsVisited { get; protected set; }
+
+    protected virtual void Awake()
     {
         IsVisited = false;
-        this.material = material;
     }
 
-    public void Visit()
+    public virtual void Visit()
     {
         IsVisited = true;
-        material.color = Color.gray;
+        meshRenderer.material.color = Color.gray;
     }
 }
+
+
