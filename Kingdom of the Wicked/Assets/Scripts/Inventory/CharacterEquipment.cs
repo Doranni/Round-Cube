@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class CharacterEquipment
 {
-    private CharacterStats characterStats;
+    private readonly CharacterStats characterStats;
     public Dictionary<IStorage.StorageNames, IStorage> Storages { get; private set; }
     public Dictionary<SlotsHolder.SlotsHolderNames, SlotsHolder> SlotsHolders { get; private set; }
 
@@ -157,5 +157,43 @@ public class CharacterEquipment
             return true;
         }
         return false;
+    }
+
+    public void EquipCard(Card card)
+    {
+        switch (card.CardType)
+        {
+            case Card.CardsType.Weapon:
+                {
+                    AddCard(card, IStorage.StorageNames.WeaponSlot, false);
+                    break;
+                }
+            case Card.CardsType.Armor:
+                {
+                    AddCard(card, IStorage.StorageNames.ArmorSlot, false);
+                    break;
+                }
+            case Card.CardsType.Shield:
+                {
+                    AddCard(card, IStorage.StorageNames.ShieldSlot, false);
+                    break;
+                }
+            default:
+                {
+                    if (Storages[IStorage.StorageNames.OtherSlot1].Cards.Count == 0)
+                    {
+                        AddCard(card, IStorage.StorageNames.OtherSlot1, false);
+                    }
+                    else if (Storages[IStorage.StorageNames.OtherSlot2].Cards.Count == 0)
+                    {
+                        AddCard(card, IStorage.StorageNames.OtherSlot2, false);
+                    }
+                    else
+                    {
+                        AddCard(card, IStorage.StorageNames.OtherSlot3, false);
+                    }
+                    break;
+                }
+        }
     }
 }

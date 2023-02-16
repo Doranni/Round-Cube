@@ -12,22 +12,24 @@ public class EquipmentUI : Singleton<EquipmentUI>
     private Dictionary<SlotsHolder.SlotsHolderNames, SlotsHolderVE> slotsHolders;
 
     private VisualElement plEquipmentScreen;
-    private VisualElement inventoryButton, inventoryScreen;
+    private VisualElement plSlots, inventoryButton, inventoryScreen;
     private VisualElement dragCardPanel;
     private StorageVE weaponSlot, inventory;
+    private BattleCardsHolderVE battleCards;
 
     const string k_equipmentScreen = "PlayerEquipment";
 
-    const string k_slotsHolder_armor = "SlotsHolder_Armor";
-    const string k_slotsHolder_other = "SlotsHolder_Other";
-
-    const string k_slot_weapon = "Slot_Weapon";
+    const string k_plSlots = "PlayerSlots";
+    const string k_slotsHolder_armor = "PlSlotsHolder_Armor";
+    const string k_slotsHolder_other = "PlSlotsHolder_Other";
+    const string k_slot_weapon = "PlSlot_Weapon";
+    const string k_battleCards = "PlayerBattleCards";
 
     const string k_inventoryButton = "InventoryButton";
     const string k_inventoryScreen = "Inventory";
     const string k_inventoryContent = "InventoryContent";
 
-    const string k_dragCardPanel = "DragCardPanel";
+    const string k_dragCardPanel = "DragCardPanel";  
 
     public event Action<bool> OpenInvemtoryToggled;
 
@@ -37,11 +39,13 @@ public class EquipmentUI : Singleton<EquipmentUI>
 
         VisualElement rootElement = GetComponent<UIDocument>().rootVisualElement;
         plEquipmentScreen = rootElement.Q(k_equipmentScreen);
+        plSlots = rootElement.Q(k_plSlots);
         inventoryButton = rootElement.Q(k_inventoryButton);
         inventoryScreen = rootElement.Q(k_inventoryScreen);
         dragCardPanel = rootElement.Q(k_dragCardPanel);
         weaponSlot = rootElement.Q<SlotVE>(k_slot_weapon);
         inventory = rootElement.Q<InventoryVE>(k_inventoryContent);
+        battleCards = rootElement.Q<BattleCardsHolderVE>(k_battleCards);
 
         storages = new();
         storages.Add(weaponSlot);
@@ -54,10 +58,16 @@ public class EquipmentUI : Singleton<EquipmentUI>
         var size = GameManager.Instance.CardSize_slot;
         inventoryButton.style.width = size.x;
         inventoryButton.style.height = size.y;
+
+        plSlots.style.display = DisplayStyle.Flex;
+        battleCards.style.display = DisplayStyle.None;
     }
 
     private void Start()
     {
+        FightingManager.Instance.FightStarted += () => OnFightStarted(true);
+        FightingManager.Instance.FightEnded += () => OnFightStarted(false);
+
         weaponSlot.Init(player.Equipment.Storages[IStorage.StorageNames.WeaponSlot]);
         inventory.Init(player.Equipment.Storages[IStorage.StorageNames.Inventory]);
         inventory.SetIsActive(false);
@@ -73,6 +83,7 @@ public class EquipmentUI : Singleton<EquipmentUI>
         }
 
         DragAndDropController.Instance.Init(dragCardPanel);
+        battleCards.Init(player);
 
         inventoryButton.RegisterCallback<ClickEvent>(_ => ToggleOpenInvemtory()) ;
         InputManager.Instance.UIEscape_performed += _ => GameUIEscape_performed();
@@ -84,6 +95,25 @@ public class EquipmentUI : Singleton<EquipmentUI>
         }
         DisplayInventoryButton();
         DisplayInventory();
+    }
+
+    private void OnFightStarted(bool inFighting)
+    {
+        if (inFighting)
+        {
+            if (inventory.IsActive)
+            {
+                ToggleOpenInvemtory();
+            }
+            battleCards.Update();
+            plSlots.style.display = DisplayStyle.None;
+            battleCards.style.display = DisplayStyle.Flex;
+        }
+        else
+        {
+            plSlots.style.display = DisplayStyle.Flex;
+            battleCards.style.display = DisplayStyle.None;
+        }
     }
 
     private void GameUIEscape_performed()

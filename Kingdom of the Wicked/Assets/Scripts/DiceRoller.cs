@@ -34,14 +34,15 @@ public class DiceRoller : Singleton<DiceRoller>
     private IEnumerator RollTheDiceRoutine()
     {
         var availableDiceValues = GetsAvailableDiceValues();
-        if (availableDiceValues.Count > 0)
-        {
-            diceResult = availableDiceValues[Random.Range(0, availableDiceValues.Count)];
-        }
-        else
-        {
-            diceResult = Random.Range(1, (int)diceRange + 1);
-        }
+        //if (availableDiceValues.Count > 0)
+        //{
+        //    diceResult = availableDiceValues[Random.Range(0, availableDiceValues.Count)];
+        //}
+        //else
+        //{
+        //    diceResult = Random.Range(1, (int)diceRange + 1);
+        //}
+        diceResult = 1;
         yield return new WaitForSeconds(timeDelay);
         DiceWasRolled?.Invoke(diceResult);
     }

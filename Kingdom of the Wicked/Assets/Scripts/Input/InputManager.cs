@@ -48,8 +48,11 @@ public class InputManager : Singleton<InputManager>
 
     private void OnDestroy()
     {
-        gameInput.GameUI.Escape.performed -= OnUIEscape_performed;
-        gameInput.Camera.Move.performed -= OnCameraMove_performed;
-        gameInput.Camera.Zoom.performed -= OnCameraZoom_performed;
+        if(gameInput != null)
+        {
+            gameInput.GameUI.Escape.performed -= OnUIEscape_performed;
+            gameInput.Camera.Move.performed -= OnCameraMove_performed;
+            gameInput.Camera.Zoom.performed -= OnCameraZoom_performed;
+        }
     }
 }

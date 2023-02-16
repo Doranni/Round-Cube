@@ -42,6 +42,8 @@ public class MainSceneUI : MonoBehaviour
         //Dise
         DiceRoller.Instance.DiceWasRolled += DisplayDiceRes;
         DiceRoller.Instance.DiceResChanged += DisplayDiceRes;
+        FightingManager.Instance.FightStarted += () => ToggleDiceScreenVisibility(true);
+        FightingManager.Instance.FightEnded += () => ToggleDiceScreenVisibility(false);
 
         rollDiceButton.RegisterCallback<ClickEvent>((_) => DiceRoller.Instance.RollTheDice());
 
@@ -51,6 +53,18 @@ public class MainSceneUI : MonoBehaviour
         player.Stats.ChHealth.HealthChanged += DisplayPlHealth;
 
         DisplayPlHealth((player.Stats.ChHealth.CurrentHealth, player.Stats.ChHealth.MaxHealth));
+    }
+
+    private void ToggleDiceScreenVisibility(bool value)
+    {
+        if (value)
+        {
+            diceScreen.style.display = DisplayStyle.None;
+        }
+        else
+        {
+            diceScreen.style.display = DisplayStyle.Flex;
+        }
     }
 
     private void DisplayPlHealth((float currentHealth, float maxHealth) obj)

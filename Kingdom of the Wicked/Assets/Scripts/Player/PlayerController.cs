@@ -8,7 +8,6 @@ public class PlayerController : MonoBehaviour
 
     void Start()
     {
-
         //test
         player.Equipment.AddCard(GameDatabase.Instance.GetCard(101), IStorage.StorageNames.WeaponSlot);
         player.Equipment.AddCard(GameDatabase.Instance.GetCard(201), IStorage.StorageNames.ArmorSlot);
@@ -23,7 +22,5 @@ public class PlayerController : MonoBehaviour
         player.Equipment.AddCard(GameDatabase.Instance.GetCard(502), IStorage.StorageNames.WeaponSlot);
         player.Equipment.AddCard(GameDatabase.Instance.GetCard(601), IStorage.StorageNames.Inventory);
         player.Equipment.AddCard(GameDatabase.Instance.GetCard(602), IStorage.StorageNames.Inventory);
-
-        ((IUsable)player.Equipment.Storages[IStorage.StorageNames.WeaponSlot].Cards[0]).Use(GetComponent<Character>());
     }
 }

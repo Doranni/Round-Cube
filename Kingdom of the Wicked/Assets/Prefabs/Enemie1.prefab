@@ -9,7 +9,10 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1439392381520010680}
+  - component: {fileID: 2922462089943766789}
   - component: {fileID: 1439392381520010679}
+  - component: {fileID: 1466082793}
+  - component: {fileID: 6461539962172062246}
   m_Layer: 0
   m_Name: Enemie1
   m_TagString: Untagged
@@ -34,6 +37,20 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 180, z: 0}
+--- !u!136 &2922462089943766789
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1439392381520010681}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  m_Radius: 0.5
+  m_Height: 2.75
+  m_Direction: 1
+  m_Center: {x: 0, y: 0.4, z: 0}
 --- !u!114 &1439392381520010679
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -47,6 +64,33 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   statsValues: {fileID: 11400000, guid: 5314ccf0b2ade704c9f35e882c4908da, type: 2}
+--- !u!114 &1466082793
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1439392381520010681}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0a9524930680c7b42a7c9d8898e1f883, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  enemie: {fileID: 1439392381520010679}
+  cards: 
+--- !u!114 &6461539962172062246
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1439392381520010681}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d0384db8e55f63940a55e06556aa0173, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  character: {fileID: 1439392381520010679}
 --- !u!1 &1439392382436411024
 GameObject:
   m_ObjectHideFlags: 0

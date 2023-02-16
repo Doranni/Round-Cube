@@ -107,6 +107,7 @@ public class SlotsHolderVE : VisualElement
             open.Init(slotHolder.Slots[i]);
 
             closed.AddToClassList("slot_closed");
+            open.AddToClassList("background");
             open.AddToClassList("slot_open");
 
             slotsClosed.Add(closed);

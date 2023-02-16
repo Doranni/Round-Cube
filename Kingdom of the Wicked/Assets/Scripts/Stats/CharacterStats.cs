@@ -6,7 +6,7 @@ public class CharacterStats
 {
     public Health ChHealth { get; private set; }
     public Dictionary<Stat.StatId, Stat> ChStats { get; private set; }
-    public Dictionary<int, Effect> Effects { get; private set; }
+    public List<Effect> Effects { get; private set; }
 
     public CharacterStats(StatsValuesSO chStatsValues)
     {
@@ -29,29 +29,28 @@ public class CharacterStats
         {
             return;
         }
-        //Debug.Log($"Added effect {effect.Name} to {name}.");
         var targetEffect = effect.Clone();
         targetEffect.SetId();
-        Effects.Add(targetEffect.Id, targetEffect);
+        Effects.Add(targetEffect);
     }
 
-    private void ExecuteEffects()
+    public void ExecuteEffects()
     {
-        foreach (Effect effect in Effects.Values)
+        for (int i = 0; i < Effects.Count; i++)
         {
             var chance = Random.value;
-            if (chance <= effect.Chance)
+            if (chance <= Effects[i].Chance)
             {
                 float effectValue = 0;
-                if (effect.ValueType == Effect.ValueTypes.percentage)
+                if (Effects[i].ValueType == Effect.ValueTypes.percentage)
                 {
-                    effectValue = ChHealth.CurrentHealth * effect.Value;
+                    effectValue = ChHealth.CurrentHealth * Effects[i].Value;
                 }
                 else
                 {
-                    effectValue = effect.Value;
+                    effectValue = Effects[i].Value;
                 }
-                switch (effect.EffectType)
+                switch (Effects[i].EffectType)
                 {
                     case Effect.EffectTypes.damage:
                     case Effect.EffectTypes.fireDamage:
@@ -65,18 +64,14 @@ public class CharacterStats
                             break;
                         }
                 }
-                effect.DecreaseDuration();
-                if (effect.Duration <= 0)
+                Effects[i].DecreaseDuration();
+                if (Effects[i].Duration <= 0)
                 {
-                    Effects.Remove(effect.Id);
+                    Effects.RemoveAt(i);
+                    --i;
                 }
             }
         }
-    }
-
-    private void UseCard(IUsable card, Character target)
-    {
-        card.Use(target);
     }
 
     public void AddBonus(StatBonus bonus)

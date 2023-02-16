@@ -17,7 +17,8 @@ public class CameraController : MonoBehaviour
         followFrTransposer = followCamera.GetCinemachineComponent<CinemachineFramingTransposer>();
 
         InputManager.Instance.CameraZoom_performed += CameraZoom_performed;
-        FightingManager.Instance.FightStarted += _ => SetPriority();
+        FightingManager.Instance.FightStarted += SetPriority;
+        FightingManager.Instance.FightEnded += SetPriority;
 
         destDistFollowCam = followFrTransposer.m_CameraDistance;
 

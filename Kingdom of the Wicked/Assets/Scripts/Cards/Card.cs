@@ -86,6 +86,15 @@ public class WeaponCard : Card, IUsable, IAddStatBonuses
         Effects = cardSO.effects;
         StatBonuses = cardSO.statBonuses;
     }
+
+    public void Use(Character target)
+    {
+        foreach (Effect effect in Effects)
+        {
+            target.Stats.AddEffect(effect);
+        }
+        Debug.Log($"Use {CardName} on {target.name}");
+    }
 }
 
 public class ArmorCard : Card, IAddStatBonuses

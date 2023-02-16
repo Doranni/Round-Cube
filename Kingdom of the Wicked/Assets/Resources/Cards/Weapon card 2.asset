@@ -21,7 +21,7 @@ MonoBehaviour:
   - effectType: 0
     name: 
     description: 
-    duration: 0
+    duration: 1
     valueType: 0
     value: 20
     chance: 1
