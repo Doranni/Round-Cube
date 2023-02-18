@@ -48,11 +48,12 @@ public class GameManager : Singleton<GameManager>
     private void Start()
     {
         EquipmentUI.Instance.OpenInvemtoryToggled += ToggleOpenInvemtory;
-        FightingManager.Instance.FightStarted += OnFightStarted; 
+        FightingManager.Instance.FightStarted += () => ToggleFightState(true);
+        FightingManager.Instance.FightEnded += () => ToggleFightState(false);
         State = GameState.active;
     }
 
-    private void OnFightStarted(bool value)
+    private void ToggleFightState(bool value)
     {
         if (value)
         {
@@ -70,7 +71,7 @@ public class GameManager : Singleton<GameManager>
         {
             SetState(GameState.inMenu);
         }
-        else
+        else if (State != GameState.fighting)
         {
             SetState(GameState.active);
         }

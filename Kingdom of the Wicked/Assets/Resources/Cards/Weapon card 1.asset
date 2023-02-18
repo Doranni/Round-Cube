@@ -15,16 +15,32 @@ MonoBehaviour:
   id: 101
   cardName: Sword 1
   description: Simple\nSword
+  duration: 0
+  image: {fileID: 0}
+  effects:
+  - effectType: 0
+    name: 
+    description: 
+    duration: 1
+    valueType: 0
+    value: 10
+    chance: 1
+  - effectType: 0
+    name: 
+    description: 
+    duration: 3
+    valueType: 0
+    value: 2
+    chance: 1
+  - effectType: 0
+    name: 
+    description: 
+    duration: 3
+    valueType: 0
+    value: 5
+    chance: 1
   statBonuses:
   - statTypeId: 2
     value: 20
   - statTypeId: 1
     value: 10
-  duration: 0
-  image: {fileID: 0}
-  effects:
-  - effectType: 0
-    duration: 1
-    valueType: 0
-    value: 10
-    chance: 1

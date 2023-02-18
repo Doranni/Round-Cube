@@ -1,4 +1,5 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="False">
     <Style src="project://database/Assets/UI/Slot.uss?fileID=7433441132597879392&amp;guid=9b888f42ef57dcc4dbe40695474dc410&amp;type=3#Slot" />
+    <Style src="project://database/Assets/UI/SlotHolder.uss?fileID=7433441132597879392&amp;guid=cad0837409d707b47baf5333ead1fdce&amp;type=3#SlotHolder" />
     <ui:VisualElement name="Background" class="background" />
 </ui:UXML>
