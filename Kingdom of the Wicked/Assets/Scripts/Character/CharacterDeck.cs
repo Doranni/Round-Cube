@@ -2,19 +2,21 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CharacterFighting 
+public class CharacterDeck 
 {
     private readonly Character character;
 
     public List<Card> BattleCards { get; private set; }
+    public List<Card> BattleCardsUsable { get; private set; }
     public Card SelectedBattleCard { get; private set; }
 
     public event Action<(int unselectedCardId, int selectedCardId)> SelectedCardChanged;
 
-    public CharacterFighting(Character character)
+    public CharacterDeck(Character character)
     {
         this.character = character;
         BattleCards = new();
+        BattleCardsUsable = new();
     }
 
     public void UpdateCards()
@@ -38,11 +40,18 @@ public class CharacterFighting
                 BattleCards.Add(slot.Cards[0]);
             }
         }
+        foreach(Card card in BattleCards)
+        {
+            if (card is IUsable)
+            {
+                BattleCardsUsable.Add(card);
+            }
+        }
     }
 
     public void SelectBattleCard(int cardId)
     {
-        var card = BattleCards.Find(x => x.InstanceId == cardId);
+        var card = BattleCardsUsable.Find(x => x.InstanceId == cardId);
         if (card != null)
         {
             int unselectedCardId = -1;
@@ -63,13 +72,11 @@ public class CharacterFighting
         }
     }
 
-    public void UseBattleCard(Character target)
+    public void UnselectCards()
     {
-        if (SelectedBattleCard != null && SelectedBattleCard is IUsable)
+        if (SelectedBattleCard != null)
         {
-            ((IUsable)SelectedBattleCard).Use(target);
             SelectBattleCard(SelectedBattleCard.InstanceId);
-            FightingManager.Instance.NextTurn();
         }
     }
 }

@@ -4,23 +4,33 @@ using UnityEngine;
 
 public class Character : MonoBehaviour
 {
-    [SerializeField] private StatsValuesSO statsValues;
+    [SerializeField] protected StatsValuesSO statsValues;
     private Quaternion originRotation;
 
     public CharacterStats Stats { get; private set; }
     public CharacterEquipment Equipment { get; private set; }
-    public CharacterFighting Fighting { get; private set; }
+    public CharacterDeck Deck { get; private set; }
 
-    void Awake()
+    protected virtual void Awake()
     {
         Stats = new CharacterStats(statsValues);
         Equipment = new CharacterEquipment(Stats);
-        Fighting = new CharacterFighting(this);
+        Deck = new CharacterDeck(this);
         originRotation = transform.rotation;
+    }
+
+    protected virtual void Start()
+    {
+        Stats.ChHealth.Died += Death;
     }
 
     public void ResetRotation()
     {
         transform.rotation = originRotation;
+    }
+
+    protected virtual void Death()
+    {
+        Destroy(gameObject);
     }
 }

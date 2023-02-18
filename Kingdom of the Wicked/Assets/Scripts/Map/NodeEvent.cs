@@ -7,12 +7,12 @@ public class NodeEvent : MonoBehaviour
     [SerializeField] protected MeshRenderer meshRenderer;
     [SerializeField] protected List<Chest> chests;
     [SerializeField] protected List<NPC> npcs;
-    [SerializeField] protected Character enemie;
+    [SerializeField] protected EnemyController enemy;
     [SerializeField] protected Transform cameraPoint;
 
     public List<Chest> Chests => chests;
     public List<NPC> Npcs => npcs;
-    public Character Enemie => enemie;
+    public EnemyController Enemy => enemy;
     public Transform CameraPoint => cameraPoint;
     public bool IsVisited { get; protected set; }
 
@@ -33,9 +33,9 @@ public class NodeEvent : MonoBehaviour
         }
         IsVisited = true;
         meshRenderer.material.color = Color.gray;
-        if (enemie != null && cameraPoint != null)
+        if (enemy != null && cameraPoint != null)
         {
-            FightingManager.Instance.StartFight(enemie, cameraPoint);
+            FightingManager.Instance.StartFight(enemy, cameraPoint);
         }
     }
 }

@@ -8,21 +8,16 @@ public class CharacterInput : MonoBehaviour, IPointerDownHandler, IPointerEnterH
 
     public void OnPointerDown(PointerEventData eventData)
     {
-        if (GameManager.Instance.State == GameManager.GameState.fighting 
-            && FightingManager.Instance.CurrentTurn == FightingManager.Instance.Player
-            && FightingManager.Instance.Enemie == character)
-        {
-            FightingManager.Instance.Player.Fighting.UseBattleCard(character);
-        }
+        MapInput.Instance.Character_Clicked(character);
     }
 
     public void OnPointerEnter(PointerEventData eventData)
     {
-        
+        MapInput.Instance.Character_PointerEnter(character);
     }
 
     public void OnPointerExit(PointerEventData eventData)
     {
-        
+        MapInput.Instance.Character_PointerExit(character);
     }
 }

@@ -15,7 +15,7 @@ public class MapInput : Singleton<MapInput>
         }
     }
 
-    public void MapNode_MouseEnter(MapNode node)
+    public void MapNode_PointerEnter(MapNode node)
     {
         if (pMovement.MStatus == PlayerMovement.MoveStatus.waitingNodeChosen)
         {
@@ -23,9 +23,24 @@ public class MapInput : Singleton<MapInput>
         }
     }
 
-    public void MapNode_MouseExit(MapNode node)
+    public void MapNode_PointerExit(MapNode node)
     {
         
+    }
+
+    public void Character_Clicked(Character character)
+    {
+        FightingManager.Instance.TrySetTarget(character);
+    }
+
+    public void Character_PointerEnter(Character character)
+    {
+
+    }
+
+    public void Character_PointerExit(Character character)
+    {
+
     }
 }
 

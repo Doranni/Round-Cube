@@ -13,11 +13,11 @@ public class MapNodeInput : MonoBehaviour, IPointerDownHandler, IPointerEnterHan
 
     public void OnPointerEnter(PointerEventData eventData)
     {
-        MapInput.Instance.MapNode_MouseEnter(mapNode);
+        MapInput.Instance.MapNode_PointerEnter(mapNode);
     }
 
     public void OnPointerExit(PointerEventData eventData)
     {
-        MapInput.Instance.MapNode_MouseExit(mapNode);
+        MapInput.Instance.MapNode_PointerExit(mapNode);
     }
 }

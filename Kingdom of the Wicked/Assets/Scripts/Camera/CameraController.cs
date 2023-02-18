@@ -17,37 +17,24 @@ public class CameraController : MonoBehaviour
         followFrTransposer = followCamera.GetCinemachineComponent<CinemachineFramingTransposer>();
 
         InputManager.Instance.CameraZoom_performed += CameraZoom_performed;
-        FightingManager.Instance.FightStarted += SetPriority;
-        FightingManager.Instance.FightEnded += SetPriority;
 
         destDistFollowCam = followFrTransposer.m_CameraDistance;
 
-        SetPriority();
+        SwitchToFollowCamera();
     }
 
-    private void SetPriority()
-    {
-        switch (GameManager.Instance.State)
-        {
-            case GameManager.GameState.fighting:
-                {
-                    followCamera.Priority = 10;
-                    fightingCamera.Priority = 11;
-                    break;
-                }
-            default:
-                {
-                    followCamera.Priority = 11;
-                    fightingCamera.Priority = 10;
-                    break;
-                }
-        }
-    }
-
-    public void SetFightingCameraTarget(Transform target)
+    public void SwitchToFightingCamera(Transform target)
     {
         fightingCamera.Follow = target;
         fightingCamera.LookAt = target;
+        followCamera.Priority = 10;
+        fightingCamera.Priority = 11;
+    }
+
+    public void SwitchToFollowCamera()
+    {
+        followCamera.Priority = 11;
+        fightingCamera.Priority = 10;
     }
 
     private void CameraZoom_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj)

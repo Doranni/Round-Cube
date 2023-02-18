@@ -144,12 +144,9 @@ public class BattleCardVE : CardVE
 
     public void SelectCard()
     {
-        if (GameManager.Instance.State == GameManager.GameState.fighting 
-            && FightingManager.Instance.CurrentTurn == CardsHolder.CardsOwner
-)
+        if (FightingManager.Instance.CurrentState == FightingManager.State.playersTurn)
         {
-            Debug.Log($"Card {CardData.CardName} was selected");
-            CardsHolder.CardsOwner.Fighting.SelectBattleCard(CardData.InstanceId);
+            CardsHolder.CardsOwner.Deck.SelectBattleCard(CardData.InstanceId);
         }
     }
 
@@ -187,14 +184,14 @@ public class BattleCardsHolderVE : VisualElement
     public void Init(Character character)
     {
         CardsOwner = character;
-        CardsOwner.Fighting.SelectedCardChanged += OnSelectedCardChanged;
+        CardsOwner.Deck.SelectedCardChanged += OnSelectedCardChanged;
     }
 
     public void Update()
     {
         Clear();
         Cards.Clear();
-        foreach (Card card in CardsOwner.Fighting.BattleCards)
+        foreach (Card card in CardsOwner.Deck.BattleCards)
         {
             var battleCard = new BattleCardVE(card, this);
             Add(battleCard);
@@ -204,7 +201,7 @@ public class BattleCardsHolderVE : VisualElement
 
     public void UnInit()
     {
-        CardsOwner.Fighting.SelectedCardChanged -= OnSelectedCardChanged;
+        CardsOwner.Deck.SelectedCardChanged -= OnSelectedCardChanged;
         CardsOwner = null;
         Clear();
         Cards.Clear();
