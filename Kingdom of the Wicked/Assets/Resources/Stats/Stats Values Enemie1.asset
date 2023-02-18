@@ -12,6 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d9e16204c21960347b9de559a64c9779, type: 3}
   m_Name: Stats Values Enemie1
   m_EditorClassIdentifier: 
-  baseHealthValue: 100
+  baseHealthValue: 90
   armorValue: 10
   damageValue: 8

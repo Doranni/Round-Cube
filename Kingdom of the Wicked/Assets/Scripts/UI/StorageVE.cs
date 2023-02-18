@@ -84,11 +84,16 @@ public class SlotsHolderVE : VisualElement
     public SlotsHolder SlotHolderData { get; private set; }
     public List<(SlotVE closedSlot, SlotVE openSlot)> Slots { get; private set; }
     public bool IsOpen { get; private set; }
-    private int equippedCardsEmount, firstCardIndex;
+    private int firstCardIndex;
 
     private VisualElement slotsClosed, slotsOpen;
+
     private const string k_slotsClosed = "Slots_Closed";
     private const string k_slotsOpen = "Slots_Open";
+
+    private const string k_slotClosed_class = "slot_closed";
+    private const string k_background_class = "background";
+    private const string k_slotOpen_class = "slot_open";
 
     public void Init(SlotsHolder slotHolder)
     {
@@ -106,8 +111,9 @@ public class SlotsHolderVE : VisualElement
             closed.Init(slotHolder.Slots[i]);
             open.Init(slotHolder.Slots[i]);
 
-            closed.AddToClassList("slot_closed");
-            open.AddToClassList("slot_open");
+            closed.AddToClassList(k_slotClosed_class);
+            open.AddToClassList(k_background_class);
+            open.AddToClassList(k_slotOpen_class);
 
             slotsClosed.Add(closed);
             slotsOpen.Add(open);
@@ -121,13 +127,11 @@ public class SlotsHolderVE : VisualElement
 
     public void Update()
     {
-        int equippedCardsEmountRes = 0;
         firstCardIndex = -1;
         for (int i = 0; i < Slots.Count; i++)
         {
             if (Slots[i].closedSlot.Cards.Count > 0)
             {
-                equippedCardsEmountRes++;
                 if (firstCardIndex == -1)
                 {
                     firstCardIndex = i;
@@ -139,7 +143,6 @@ public class SlotsHolderVE : VisualElement
                 }
             }
         }
-        equippedCardsEmount = equippedCardsEmountRes;
     }
 
     public void ToggleSlotPanel(bool open)

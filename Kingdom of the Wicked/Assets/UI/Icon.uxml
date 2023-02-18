@@ -1,0 +1,6 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="False">
+    <Style src="project://database/Assets/UI/Character.uss?fileID=7433441132597879392&amp;guid=4b2075c905032144d86c1fa86fa1db30&amp;type=3#Character" />
+    <ui:VisualElement name="Icon" class="icon">
+        <ui:Label text="Character&#10;Icon" display-tooltip-when-elided="true" />
+    </ui:VisualElement>
+</ui:UXML>
