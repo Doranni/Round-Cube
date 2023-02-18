@@ -44,6 +44,8 @@ public class FightingManager : Singleton<FightingManager>
 
     private void EndFight()
     {
+        Player.Deck.UnselectCards();
+        Enemy.Deck.UnselectCards();
         EnemieUI.Instance.EndFight();
         player.ResetRotation();
         Enemy.ResetRotation();
@@ -104,13 +106,24 @@ public class FightingManager : Singleton<FightingManager>
         NextTurn();
     }
 
-    public void TrySetTarget(Character target)
+    public bool TrySetTarget(Character target)
+    {
+        if (IsTarget(target))
+        {
+            ((IUsable)Player.Deck.SelectedBattleCard).Use(Enemy);
+            NextTurn();
+            return true;
+        }
+        return false;
+    }
+
+    public bool IsTarget(Character target)
     {
         if (CurrentState == State.playersTurn && target.gameObject == Enemy.gameObject
             && Player.Deck.SelectedBattleCard != null)
         {
-            ((IUsable)Player.Deck.SelectedBattleCard).Use(Enemy);
-            NextTurn();
+            return true;
         }
+        return false;
     }
 }
