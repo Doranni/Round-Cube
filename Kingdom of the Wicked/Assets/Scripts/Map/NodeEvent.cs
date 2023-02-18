@@ -4,11 +4,11 @@ using UnityEngine;
 
 public class NodeEvent : MonoBehaviour
 {
-    [SerializeField] protected MeshRenderer meshRenderer;
-    [SerializeField] protected List<Chest> chests;
-    [SerializeField] protected List<NPC> npcs;
-    [SerializeField] protected EnemyController enemy;
-    [SerializeField] protected Transform cameraPoint;
+    [SerializeField] private Outline outline;
+    [SerializeField] private List<Chest> chests;
+    [SerializeField] private List<NPC> npcs;
+    [SerializeField] private EnemyController enemy;
+    [SerializeField] private Transform cameraPoint;
 
     public List<Chest> Chests => chests;
     public List<NPC> Npcs => npcs;
@@ -32,11 +32,15 @@ public class NodeEvent : MonoBehaviour
             npc.Unlock();
         }
         IsVisited = true;
-        meshRenderer.material.color = Color.gray;
         if (enemy != null && cameraPoint != null)
         {
             FightingManager.Instance.StartFight(enemy, cameraPoint);
         }
+    }
+
+    public void Outline(Color color)
+    {
+        outline.OutlineColor = color;
     }
 }
 

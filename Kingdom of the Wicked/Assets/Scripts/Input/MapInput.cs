@@ -6,26 +6,33 @@ using UnityEngine.EventSystems;
 public class MapInput : Singleton<MapInput>
 {
     [SerializeField] private PlayerMovement pMovement;
+    [SerializeField] private Color outline_mapNodeAvailable, outline_fightTargetAvailable, 
+        outline_unavailable;
+    private Color outline_default = new Color(0, 0, 0, 0);
 
     public void MapNode_Clicked(MapNode node)
     {
-        if (pMovement.MStatus == PlayerMovement.MoveStatus.waitingNodeChosen)
+        if (pMovement.TrySetMoveNode(node))
         {
-            pMovement.ChooseMoveNode(node);
+            node.NEvent.Outline(outline_default);
         }
     }
 
     public void MapNode_PointerEnter(MapNode node)
     {
-        if (pMovement.MStatus == PlayerMovement.MoveStatus.waitingNodeChosen)
+        if (pMovement.IsNodeReachable(node))
         {
-            pMovement.ConsiderMoveNode(node);
+            node.NEvent.Outline(outline_mapNodeAvailable);
+        }
+        else if (node.Index != pMovement.NodeIndex)
+        {
+            node.NEvent.Outline(outline_unavailable);
         }
     }
 
     public void MapNode_PointerExit(MapNode node)
     {
-        
+        node.NEvent.Outline(outline_default);
     }
 
     public void Character_Clicked(Character character)

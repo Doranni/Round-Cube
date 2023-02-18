@@ -7,9 +7,6 @@
             <InventoryVE name="InventoryContent" style="align-items: center; justify-content: center; flex-direction: row; flex-wrap: wrap;" />
         </ui:ScrollView>
     </ui:VisualElement>
-    <ui:VisualElement name="Dice" class="dice">
-        <ui:Button text="Roll the&#10;Dice" display-tooltip-when-elided="true" name="Button_RollTheDice" class="dice_button" style="border-top-left-radius: 25px; border-bottom-left-radius: 25px; border-top-right-radius: 25px; border-bottom-right-radius: 25px;" />
-    </ui:VisualElement>
     <ui:VisualElement name="Player" class="character_panel">
         <ui:VisualElement name="PlayerIcon" class="icon">
             <ui:Label text="Player&#10;Icon" display-tooltip-when-elided="true" />

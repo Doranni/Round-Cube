@@ -42,10 +42,11 @@ GameObject:
   - component: {fileID: 3319636122618680378}
   - component: {fileID: 3270461551760691440}
   - component: {fileID: 7599707248171526426}
-  - component: {fileID: 4351617623978456563}
-  - component: {fileID: 6175837059347348660}
-  - component: {fileID: 4754698695648423985}
   - component: {fileID: 3174261364780796256}
+  - component: {fileID: 4351617623978456563}
+  - component: {fileID: 4754698695648423985}
+  - component: {fileID: 6175837059347348660}
+  - component: {fileID: 5009646482568624993}
   m_Layer: 0
   m_Name: Map Node
   m_TagString: Untagged
@@ -97,7 +98,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 31321ba15b8f8eb4c954353edc038b1d, type: 2}
+  - {fileID: 2100000, guid: 1b57e878f731c6345bf5158295eb8db9, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -119,6 +120,20 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!64 &3174261364780796256
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2415029244760039652}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 4
+  m_Convex: 0
+  m_CookingOptions: 30
+  m_Mesh: {fileID: 4300000, guid: 9e2a520794dcaa84d923244b01156036, type: 2}
 --- !u!114 &4351617623978456563
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -134,6 +149,23 @@ MonoBehaviour:
   stayPoint: {fileID: 2147623605935183966}
   isStart: 0
   nEvent: {fileID: 4754698695648423985}
+--- !u!114 &4754698695648423985
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2415029244760039652}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 107a824c5586b694a9d27c18a7fcde33, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  outline: {fileID: 5009646482568624993}
+  chests: []
+  npcs: []
+  enemy: {fileID: 0}
+  cameraPoint: {fileID: 0}
 --- !u!114 &6175837059347348660
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -147,7 +179,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   mapNode: {fileID: 4351617623978456563}
---- !u!114 &4754698695648423985
+--- !u!114 &5009646482568624993
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -156,25 +188,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 2415029244760039652}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 107a824c5586b694a9d27c18a7fcde33, type: 3}
+  m_Script: {fileID: 11500000, guid: 5fea29bb7c508c244a1f805a5fd3fc4d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  meshRenderer: {fileID: 7599707248171526426}
-  chests: []
-  npcs: []
-  enemie: {fileID: 0}
-  cameraPoint: {fileID: 0}
---- !u!64 &3174261364780796256
-MeshCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2415029244760039652}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 4
-  m_Convex: 0
-  m_CookingOptions: 30
-  m_Mesh: {fileID: 4300000, guid: 9e2a520794dcaa84d923244b01156036, type: 2}
+  outlineMode: 0
+  outlineColor: {r: 1, g: 1, b: 1, a: 0}
+  outlineWidth: 3
+  precomputeOutline: 0
+  bakeKeys: []
+  bakeValues: []
