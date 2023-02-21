@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-public class MapInput : Singleton<MapInput>
+public class BoardInputManager : Singleton<BoardInputManager>
 {
     [SerializeField] private PlayerMovement pMovement;
     [SerializeField] private Color outline_mapNodeAvailable, outline_fightTargetAvailable, 
@@ -14,7 +14,7 @@ public class MapInput : Singleton<MapInput>
     {
         if (pMovement.TrySetMoveNode(node))
         {
-            node.NEvent.Outline(outline_default);
+            node.Outline(outline_default);
         }
     }
 
@@ -22,17 +22,17 @@ public class MapInput : Singleton<MapInput>
     {
         if (pMovement.IsNodeReachable(node))
         {
-            node.NEvent.Outline(outline_mapNodeAvailable);
+            node.Outline(outline_mapNodeAvailable);
         }
         else if (node.Index != pMovement.NodeIndex)
         {
-            node.NEvent.Outline(outline_unavailable);
+            node.Outline(outline_unavailable);
         }
     }
 
     public void MapNode_PointerExit(MapNode node)
     {
-        node.NEvent.Outline(outline_default);
+        node.Outline(outline_default);
     }
 
     public void Character_Clicked(Character character)

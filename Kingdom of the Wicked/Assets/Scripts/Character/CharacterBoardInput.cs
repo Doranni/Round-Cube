@@ -2,22 +2,22 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 
 [RequireComponent(typeof(Character))]
-public class CharacterInput : MonoBehaviour, IPointerDownHandler, IPointerEnterHandler, IPointerExitHandler
+public class CharacterBoardInput : MonoBehaviour, IPointerDownHandler, IPointerEnterHandler, IPointerExitHandler
 {
     [SerializeField] private Character character;
 
     public void OnPointerDown(PointerEventData eventData)
     {
-        MapInput.Instance.Character_Clicked(character);
+        BoardInputManager.Instance.Character_Clicked(character);
     }
 
     public void OnPointerEnter(PointerEventData eventData)
     {
-        MapInput.Instance.Character_PointerEnter(character);
+        BoardInputManager.Instance.Character_PointerEnter(character);
     }
 
     public void OnPointerExit(PointerEventData eventData)
     {
-        MapInput.Instance.Character_PointerExit(character);
+        BoardInputManager.Instance.Character_PointerExit(character);
     }
 }

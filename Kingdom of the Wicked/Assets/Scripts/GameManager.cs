@@ -3,14 +3,15 @@ using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.UIElements;
+using UnityEngine.SceneManagement;
 
 public class GameManager : Singleton<GameManager>
 {
     public enum GameState
     {
-        inMenu,
-        active,
-        fighting
+        BoardMenu,
+        BoardActive,
+        Fighting
     }
 
     [SerializeField] private float plMovementHeight = 4;
@@ -47,33 +48,33 @@ public class GameManager : Singleton<GameManager>
 
     private void Start()
     {
-        EquipmentUI.Instance.OpenInvemtoryToggled += ToggleOpenInvemtory;
-        FightingManager.Instance.FightStarted += () => ToggleFightState(true);
-        FightingManager.Instance.FightEnded += () => ToggleFightState(false);
-        State = GameState.active;
+        BoardPlayerUI.Instance.OpenInvemtoryToggled += ToggleOpenInvemtory;
+        State = GameState.BoardActive;
     }
 
-    private void ToggleFightState(bool value)
+    public void StartFight(int mapNode_index)
     {
-        if (value)
-        {
-            State = GameState.fighting;
-        }
-        else
-        {
-            State = GameState.active;
-        }
+        State = GameState.Fighting;
+        SceneManager.LoadScene(2, LoadSceneMode.Additive);
+        SceneManager.UnloadSceneAsync(1);
+    }
+
+    public void EndFight()
+    {
+        State = GameState.BoardActive;
+        SceneManager.LoadScene(1, LoadSceneMode.Additive);
+        SceneManager.UnloadSceneAsync(2);
     }
 
     private void ToggleOpenInvemtory(bool isInventoryOpen)
     {
         if (isInventoryOpen)
         {
-            SetState(GameState.inMenu);
+            SetState(GameState.BoardMenu);
         }
-        else if (State != GameState.fighting)
+        else if (State != GameState.Fighting)
         {
-            SetState(GameState.active);
+            SetState(GameState.BoardActive);
         }
     }
 
