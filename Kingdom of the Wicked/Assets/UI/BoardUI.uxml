@@ -12,9 +12,7 @@
             <ui:Label text="Player&#10;Icon" display-tooltip-when-elided="true" />
         </ui:VisualElement>
         <ui:VisualElement style="align-items: flex-start; justify-content: space-between;">
-            <ui:VisualElement name="PlayerHP" class="health_bar" style="border-top-left-radius: 16px; border-bottom-left-radius: 16px; border-top-right-radius: 16px; border-bottom-right-radius: 16px;">
-                <ui:Label text="Health 100/100" display-tooltip-when-elided="true" name="Lbl_PlHealth" style="color: rgb(0, 0, 0); -unity-font-style: bold; font-size: 18px; -unity-text-align: middle-left;" />
-            </ui:VisualElement>
+            <HealthBarVE name="PlayerHP" />
             <ui:VisualElement name="PlayerSlots" style="flex-direction: row; flex-grow: 1; align-items: center; display: flex; height: 100px;">
                 <ui:VisualElement name="PlayerSlots" class="character_equipment" style="flex-direction: row; flex-wrap: nowrap; align-items: center;">
                     <ui:VisualElement name="Weapon" style="position: relative; border-left-color: rgba(255, 255, 255, 0); border-right-color: rgba(255, 255, 255, 0); border-top-color: rgba(255, 255, 255, 0); border-bottom-color: rgba(255, 255, 255, 0); border-left-width: 0; border-right-width: 0; border-top-width: 0; border-bottom-width: 0; border-top-left-radius: 0; border-bottom-left-radius: 0; border-top-right-radius: 0; border-bottom-right-radius: 0; background-color: rgba(255, 255, 255, 0); margin-left: 5px; margin-right: 5px; margin-top: 5px; margin-bottom: 5px;">
@@ -31,18 +29,6 @@
                     <ui:Label text="C&#10;A&#10;R&#10;D&#10;S" display-tooltip-when-elided="true" />
                 </ui:VisualElement>
             </ui:VisualElement>
-            <BattleCardsHolderVE name="PlayerBattleCards" picking-mode="Ignore" class="character_equipment" style="display: none; height: 100px;" />
-        </ui:VisualElement>
-    </ui:VisualElement>
-    <ui:VisualElement name="Enemie" picking-mode="Ignore" class="character_panel" style="display: flex; flex-direction: row-reverse; right: 0; left: auto;">
-        <ui:VisualElement name="EnemieIcon" class="icon">
-            <ui:Label text="Enemie&#10;Icon" display-tooltip-when-elided="true" name="Lbl_EnemieIcon" />
-        </ui:VisualElement>
-        <ui:VisualElement style="align-items: flex-end; justify-content: space-between;">
-            <ui:VisualElement name="EnemieHP" class="health_bar" style="border-top-left-radius: 16px; border-bottom-left-radius: 16px; border-top-right-radius: 16px; border-bottom-right-radius: 16px;">
-                <ui:Label text="Health 100/100" display-tooltip-when-elided="true" name="Lbl_EnemieHealth" style="color: rgb(0, 0, 0); -unity-font-style: bold; font-size: 18px; -unity-text-align: middle-left;" />
-            </ui:VisualElement>
-            <BattleCardsHolderVE name="EnemieCards" class="character_equipment" style="justify-content: flex-end; height: 100px;" />
         </ui:VisualElement>
     </ui:VisualElement>
     <ui:VisualElement name="Debug" picking-mode="Ignore">

@@ -5,7 +5,7 @@ using UnityEngine;
 public class Character : MonoBehaviour
 {
     [SerializeField] protected StatsValuesSO statsValues;
-    private Quaternion originRotation;
+    [SerializeField] protected Outline outline;
 
     public CharacterStats Stats { get; private set; }
     public CharacterEquipment Equipment { get; private set; }
@@ -16,7 +16,6 @@ public class Character : MonoBehaviour
         Stats = new CharacterStats(statsValues);
         Equipment = new CharacterEquipment(Stats);
         Deck = new CharacterDeck(this);
-        originRotation = transform.rotation;
     }
 
     protected virtual void Start()
@@ -24,13 +23,13 @@ public class Character : MonoBehaviour
         Stats.ChHealth.Died += Death;
     }
 
-    public void ResetRotation()
-    {
-        transform.rotation = originRotation;
-    }
-
     protected virtual void Death()
     {
         Destroy(gameObject);
+    }
+
+    public void Outline(Color color)
+    {
+        outline.OutlineColor = color;
     }
 }

@@ -1,0 +1,22 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="False">
+    <Style src="project://database/Assets/UI/Character.uss?fileID=7433441132597879392&amp;guid=4b2075c905032144d86c1fa86fa1db30&amp;type=3#Character" />
+    <Style src="project://database/Assets/UI/Cards.uss?fileID=7433441132597879392&amp;guid=cad0837409d707b47baf5333ead1fdce&amp;type=3#Cards" />
+    <ui:VisualElement name="Player" class="character_panel">
+        <ui:VisualElement name="PlayerIcon" class="icon">
+            <ui:Label text="Player&#10;Icon" display-tooltip-when-elided="true" />
+        </ui:VisualElement>
+        <ui:VisualElement style="align-items: flex-start; justify-content: space-between;">
+            <HealthBarVE name="PlayerHP" />
+            <BattleCardsHolderVE name="PlayerCards" picking-mode="Ignore" class="character_equipment" style="height: 100px;" />
+        </ui:VisualElement>
+    </ui:VisualElement>
+    <ui:VisualElement name="Enemie" picking-mode="Ignore" class="character_panel" style="display: flex; flex-direction: row-reverse; right: 0; left: auto;">
+        <ui:VisualElement name="EnemieIcon" class="icon">
+            <ui:Label text="Enemie&#10;Icon" display-tooltip-when-elided="true" name="Lbl_EnemieIcon" />
+        </ui:VisualElement>
+        <ui:VisualElement style="align-items: flex-end; justify-content: space-between;">
+            <HealthBarVE name="EnemieHP" />
+            <BattleCardsHolderVE name="EnemieCards" class="character_equipment" style="justify-content: flex-end; height: 100px;" />
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>

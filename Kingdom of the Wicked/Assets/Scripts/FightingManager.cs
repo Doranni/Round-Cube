@@ -2,63 +2,39 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class FightingManager : Singleton<FightingManager>
 {
-    public enum State
-    {
-        notInFight,
-        playersTurn,
-        enemiesTurn
-    }
-
-    [SerializeField] private CameraController cameraController;
     [SerializeField] private PlayerController player;
-    public PlayerController Player => player;
-    public EnemyController Enemy { get; private set; }
-    public State CurrentState { get; private set; }
+    [SerializeField] private EnemyController enemy;
 
-    public event Action FightStarted, FightEnded;
+    public PlayerController Player => player;
+    public EnemyController Enemy => enemy;
+    public Character CurrentTurn { get; private set; }
 
     public override void Awake()
     {
         base.Awake();
-        CurrentState = State.notInFight;
+        
+        StartFight();
     }
 
-    public void StartFight(EnemyController enemy, Transform cameraPoint)
+    public void StartFight()
     {
-        Enemy = enemy;
-        cameraController.SwitchToFightingCamera(cameraPoint);
-        Player.Deck.UpdateCards();
-        Enemy.Deck.UpdateCards();
-        EnemieUI.Instance.StartFight(Enemy);
-        Player.transform.rotation = cameraPoint.transform.rotation;
-        Vector3 enemmieRot = cameraPoint.transform.rotation.eulerAngles;
-        enemmieRot.y += 180;
-        Enemy.transform.rotation = Quaternion.Euler(enemmieRot);
-        CurrentState = State.playersTurn;
-
-        FightStarted?.Invoke();
+        CurrentTurn = player;
     }
 
     private void EndFight()
     {
-        Player.Deck.UnselectCards();
-        Enemy.Deck.UnselectCards();
-        EnemieUI.Instance.EndFight();
-        player.ResetRotation();
-        Enemy.ResetRotation();
-        Enemy = null;
-        cameraController.SwitchToFollowCamera();
-        CurrentState = State.notInFight;
-        FightEnded?.Invoke();
+        GameManager.Instance.EndFight();
     }
 
     public void NextTurn()
     {
         Player.Stats.ExecuteEffects();
         Enemy.Stats.ExecuteEffects();
+        CurrentTurn.Deck.UnselectCards();
         if (Player.Stats.ChHealth.IsDead)
         {
             Debug.Log($"Player died");
@@ -71,21 +47,14 @@ public class FightingManager : Singleton<FightingManager>
             EndFight();
             return;
         }
-        switch (CurrentState)
+        if (CurrentTurn.gameObject == Player.gameObject)
         {
-            case State.playersTurn:
-                {
-                    Player.Deck.UnselectCards();
-                    CurrentState = State.enemiesTurn;
-                    StartCoroutine(EnemyFightRoutine());
-                    break;
-                }
-            case State.enemiesTurn:
-                {
-                    Enemy.Deck.UnselectCards();
-                    CurrentState = State.playersTurn;
-                    break;
-                }
+            CurrentTurn = Enemy;
+            StartCoroutine(EnemyFightRoutine());
+        }
+        else
+        {
+            CurrentTurn = Player;
         }
     }
 
@@ -119,8 +88,7 @@ public class FightingManager : Singleton<FightingManager>
 
     public bool IsTarget(Character target)
     {
-        if (CurrentState == State.playersTurn && target.gameObject == Enemy.gameObject
-            && Player.Deck.SelectedBattleCard != null)
+        if (CurrentTurn == Player && Player.Deck.SelectedBattleCard != null)
         {
             return true;
         }

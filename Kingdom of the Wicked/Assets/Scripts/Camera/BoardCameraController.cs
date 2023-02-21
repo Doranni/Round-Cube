@@ -1,9 +1,9 @@
 using UnityEngine;
 using Cinemachine;
 
-public class CameraController : MonoBehaviour
+public class BoardCameraController : MonoBehaviour
 {
-    [SerializeField] private CinemachineVirtualCamera followCamera, fightingCamera;
+    [SerializeField] private CinemachineVirtualCamera followCamera;
     [SerializeField] private float zoomSpeed = 50, zoomStrength = 400;
     [SerializeField] private float followCamDistMin = 10, followCamDistMax = 60;
 
@@ -19,27 +19,11 @@ public class CameraController : MonoBehaviour
         InputManager.Instance.CameraZoom_performed += CameraZoom_performed;
 
         destDistFollowCam = followFrTransposer.m_CameraDistance;
-
-        SwitchToFollowCamera();
-    }
-
-    public void SwitchToFightingCamera(Transform target)
-    {
-        fightingCamera.Follow = target;
-        fightingCamera.LookAt = target;
-        followCamera.Priority = 10;
-        fightingCamera.Priority = 11;
-    }
-
-    public void SwitchToFollowCamera()
-    {
-        followCamera.Priority = 11;
-        fightingCamera.Priority = 10;
     }
 
     private void CameraZoom_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj)
     {
-        if (GameManager.Instance.State == GameManager.GameState.active)
+        if (GameManager.Instance.State == GameManager.GameState.BoardActive)
         {
             cameraZoomInput = Mathf.Clamp(obj.ReadValue<float>(), -1, 1);
             destDistFollowCam = Mathf.Clamp(destDistFollowCam + cameraZoomInput * zoomStrength * Time.deltaTime,
