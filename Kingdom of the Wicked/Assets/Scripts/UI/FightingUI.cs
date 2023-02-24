@@ -28,7 +28,7 @@ public class FightingUI : MonoBehaviour
 
     private void Start()
     {
-        enemyIconLabel.text = enemy.name;
+        enemyIconLabel.text = enemy.CharacterName;
         playerHealthBar.Init(player.Stats.ChHealth);
         enemyHealthBar.Init(enemy.Stats.ChHealth);
         playerCards.Init(player);

@@ -43,6 +43,7 @@ public class PlayerMovement : MonoBehaviour
                         {
                             destPoints.Clear();
                             MStatus = MoveStatus.onNode;
+                            SavesManager.Instance.UpdatePlayerPos(NodeIndex);
                             Map.Instance.MapNodes[NodeIndex].Visit();
                             return;
                         }
@@ -57,7 +58,7 @@ public class PlayerMovement : MonoBehaviour
 
     private void MoveToStart()
     {
-        NodeIndex = Map.Instance.Index_start;
+        NodeIndex = SavesManager.Instance.PlayerNodeIndex;
         transform.position = Map.Instance.MapNodes[NodeIndex].StayPoint
             + Vector3.up * yOffset;
         MStatus = MoveStatus.onNode;

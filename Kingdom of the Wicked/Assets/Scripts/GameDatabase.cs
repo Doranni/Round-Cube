@@ -7,15 +7,16 @@ public class GameDatabase : Singleton<GameDatabase>
 
     public Dictionary<int, CardSO> Cards { get; private set; }
     public Dictionary<Stat.StatId, (string name, string description)> StatsDescription { get; private set; }
+    public Dictionary<int, CharacterSO> Characters { get; private set; }
 
-    public override void Awake()
+    protected override void Awake()
     {
         base.Awake();
-        CardSO[] data = Resources.LoadAll<CardSO>("Cards");
-        Cards = new(data.Length);
-        for (int i = 0; i < data.Length; i++)
+        CardSO[] cards = Resources.LoadAll<CardSO>("Cards");
+        Cards = new(cards.Length);
+        for (int i = 0; i < cards.Length; i++)
         {
-            Cards.Add(data[i].id, data[i]);
+            Cards.Add(cards[i].id, cards[i]);
         }
 
         StatsDescription = new();
@@ -25,6 +26,13 @@ public class GameDatabase : Singleton<GameDatabase>
             statsDescriptionData.armorStatDescription));
         StatsDescription.Add(Stat.StatId.damage, (statsDescriptionData.damageStatName,
             statsDescriptionData.damageStatDescription));
+
+        CharacterSO[] characters = Resources.LoadAll<CharacterSO>("Characters");
+        Characters = new(characters.Length);
+        for (int i = 0; i < characters.Length; i++)
+        {
+            Characters.Add(characters[i].id, characters[i]);
+        }
     }
 
     public Card GetCard(int nameId)

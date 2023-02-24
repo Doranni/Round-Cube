@@ -19,6 +19,11 @@ public class Health
         IsDead = false;
     }
 
+    public void SetCurrentHealth(float health)
+    {
+        CurrentHealth = health;
+    }
+
     public void ChangeHealth(float value, bool effectDead = false)
     {
         if (IsDead && !effectDead)

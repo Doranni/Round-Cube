@@ -29,6 +29,11 @@ public class MapNode : MonoBehaviour
     public void SetIndex(int index)
     {
         Index = index;
+        var data = SavesManager.Instance.MapNodes.Find(x => x.index == Index);
+        if (data != null)
+        {
+            IsVisited = data.isVisited;
+        }
     }
     public void SetIsStart(bool isStart)
     {
@@ -42,6 +47,10 @@ public class MapNode : MonoBehaviour
 
     public virtual void Visit()
     {
+        if (IsVisited)
+        {
+            return;
+        }
         foreach (Chest chest in chests)
         {
             chest.Unlock();
@@ -51,8 +60,10 @@ public class MapNode : MonoBehaviour
             npc.Unlock();
         }
         IsVisited = true;
+        SavesManager.Instance.UpdateMapNode(Index, true);
         if (enemy != null)
         {
+            SavesManager.Instance.SetEnemieForFight(enemy.Id);
             GameManager.Instance.StartFight(Index);
         }
     }

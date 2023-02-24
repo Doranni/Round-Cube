@@ -8,13 +8,13 @@ public class CharacterStats
     public Dictionary<Stat.StatId, Stat> ChStats { get; private set; }
     public List<Effect> Effects { get; private set; }
 
-    public CharacterStats(StatsValuesSO chStatsValues)
+    public CharacterStats(CharacterSO characterSO)
     {
         ChStats = new(GameDatabase.Instance.StatsDescription.Count)
         {
-            { Stat.StatId.health, new(chStatsValues.baseHealthValue) },
-            { Stat.StatId.armor, new(chStatsValues.armorValue) },
-            { Stat.StatId.damage, new(chStatsValues.damageValue) }
+            { Stat.StatId.health, new(characterSO.baseHealthValue) },
+            { Stat.StatId.armor, new(characterSO.armorValue) },
+            { Stat.StatId.damage, new(characterSO.damageValue) }
         };
         ChHealth = new Health(ChStats[Stat.StatId.health].BaseValue);
         Effects = new();

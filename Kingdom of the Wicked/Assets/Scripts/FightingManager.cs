@@ -13,20 +13,29 @@ public class FightingManager : Singleton<FightingManager>
     public EnemyController Enemy => enemy;
     public Character CurrentTurn { get; private set; }
 
-    public override void Awake()
+    protected override void Awake()
     {
         base.Awake();
-        
-        StartFight();
+        if (GameDatabase.Instance.Characters.ContainsKey(SavesManager.Instance.EnemyForFightId))
+        {
+            Enemy.InitEnemie(GameDatabase.Instance.Characters[SavesManager.Instance.EnemyForFightId]);
+            StartFight();
+        }
+        else
+        {
+            EndFight();
+        }
     }
 
     public void StartFight()
     {
-        CurrentTurn = player;
+        CurrentTurn = Player;
     }
 
     private void EndFight()
     {
+        Player.Save();
+        Enemy.Save();
         GameManager.Instance.EndFight();
     }
 

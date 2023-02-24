@@ -29,7 +29,7 @@ public class BoardPlayerUI : Singleton<BoardPlayerUI>
 
     public event Action<bool> OpenInvemtoryToggled;
 
-    public override void Awake()
+    protected override void Awake()
     {
         base.Awake();
 
