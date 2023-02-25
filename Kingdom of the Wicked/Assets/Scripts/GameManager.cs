@@ -39,7 +39,7 @@ public class GameManager : Singleton<GameManager>
 
     private int id = 0;
 
-    public override void Awake()
+    protected override void Awake()
     {
         base.Awake();
         cardAsset = EditorGUIUtility.Load("Assets/UI/CardUI.uxml") as VisualTreeAsset;

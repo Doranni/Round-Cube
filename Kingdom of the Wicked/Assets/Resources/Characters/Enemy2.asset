@@ -10,8 +10,16 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d9e16204c21960347b9de559a64c9779, type: 3}
-  m_Name: Stats Values Player
+  m_Name: Enemy2
   m_EditorClassIdentifier: 
-  baseHealthValue: 100
-  armorValue: 10
-  damageValue: 8
+  id: 202
+  characterName: Enemy 2
+  characterDescription: 
+  baseHealthValue: 10
+  armorValue: 0
+  damageValue: 0
+  cards:
+  - cardId: 101
+    storage: 0
+  - cardId: 502
+    storage: 4

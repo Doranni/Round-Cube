@@ -23,6 +23,7 @@ public class Map : Singleton<Map>
         for (int i = 0; i < MapNodes.Count; i++)
         {
             MapNodes[i].SetIndex(i);
+            MapNodes[i].Load();
         }
         Index_start = GetStartIndex();
         SetLinks();

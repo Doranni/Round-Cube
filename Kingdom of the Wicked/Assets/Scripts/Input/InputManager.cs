@@ -8,7 +8,7 @@ public class InputManager : Singleton<InputManager>
 
     private GameInput gameInput;
 
-    public override void Awake()
+    protected override void Awake()
     {
         base.Awake();
         gameInput = new GameInput();

@@ -2026,6 +2026,12 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 7044852390212137937, guid: 439046f5e1f5fcb448848a8896eb50ab,
         type: 3}
+      propertyPath: characterSO
+      value: 
+      objectReference: {fileID: 11400000, guid: 885ddd9b1bbc36d48a13c36f1ff73d2e,
+        type: 2}
+    - target: {fileID: 7044852390212137937, guid: 439046f5e1f5fcb448848a8896eb50ab,
+        type: 3}
       propertyPath: statsValues
       value: 
       objectReference: {fileID: 11400000, guid: c090ba77a2e9e454db47c0418189573b,
@@ -2978,6 +2984,12 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 439805151}
     m_Modifications:
+    - target: {fileID: 7044852390212137937, guid: 439046f5e1f5fcb448848a8896eb50ab,
+        type: 3}
+      propertyPath: characterSO
+      value: 
+      objectReference: {fileID: 11400000, guid: 67a6a9717dd22244fb9b4d98229e837f,
+        type: 2}
     - target: {fileID: 7044852390212137937, guid: 439046f5e1f5fcb448848a8896eb50ab,
         type: 3}
       propertyPath: statsValues
@@ -9922,6 +9934,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1307952734, guid: 1711fa5ec2f03ca4eb484fd54cd1451f, type: 3}
+      propertyPath: characterSO
+      value: 
+      objectReference: {fileID: 11400000, guid: 05aca833500944b4b869a1a381d6c9e9,
+        type: 2}
     - target: {fileID: 5951481344491963395, guid: 1711fa5ec2f03ca4eb484fd54cd1451f,
         type: 3}
       propertyPath: m_Name
@@ -12233,6 +12250,12 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 439805151}
     m_Modifications:
+    - target: {fileID: 7044852390212137937, guid: 439046f5e1f5fcb448848a8896eb50ab,
+        type: 3}
+      propertyPath: characterSO
+      value: 
+      objectReference: {fileID: 11400000, guid: ca4a3d45968bf5e44aab67cb945b1e90,
+        type: 2}
     - target: {fileID: 7044852390212137937, guid: 439046f5e1f5fcb448848a8896eb50ab,
         type: 3}
       propertyPath: cards.Array.size
