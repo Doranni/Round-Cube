@@ -15,6 +15,11 @@ MonoBehaviour:
   id: 201
   characterName: Enemy 1
   characterDescription: 
-  baseHealthValue: 90
+  baseHealthValue: 30
   armorValue: 0
   damageValue: 0
+  cards:
+  - cardId: 102
+    storage: 0
+  - cardId: 201
+    storage: 1

@@ -358,7 +358,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3d9932ea0374ff24bb1301a0716c0f2b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  statsValues: {fileID: 11400000, guid: 880f3132c8d8ed042a87b119e63684a0, type: 2}
+  characterSO: {fileID: 11400000, guid: 05aca833500944b4b869a1a381d6c9e9, type: 2}
   outline: {fileID: 3954024075999557924}
 --- !u!114 &5967098299412083735
 MonoBehaviour:

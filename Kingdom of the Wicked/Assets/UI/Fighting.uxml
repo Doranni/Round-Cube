@@ -19,4 +19,9 @@
             <BattleCardsHolderVE name="EnemieCards" class="character_equipment" style="justify-content: flex-end; height: 100px;" />
         </ui:VisualElement>
     </ui:VisualElement>
+    <ui:VisualElement name="Debug" picking-mode="Ignore">
+        <ui:VisualElement name="PlStats">
+            <ui:Label text="Player stats:" display-tooltip-when-elided="true" name="lbl_stats" style="color: rgb(202, 202, 202); font-size: 18px;" />
+        </ui:VisualElement>
+    </ui:VisualElement>
 </ui:UXML>

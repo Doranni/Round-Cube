@@ -29,15 +29,19 @@ public class MapNode : MonoBehaviour
     public void SetIndex(int index)
     {
         Index = index;
+    }
+    public void SetIsStart(bool isStart)
+    {
+        this.isStart = isStart;
+    }
+
+    public void Load()
+    {
         var data = SavesManager.Instance.MapNodes.Find(x => x.index == Index);
         if (data != null)
         {
             IsVisited = data.isVisited;
         }
-    }
-    public void SetIsStart(bool isStart)
-    {
-        this.isStart = isStart;
     }
 
     public void AddLink(NodeLink link)
@@ -47,21 +51,20 @@ public class MapNode : MonoBehaviour
 
     public virtual void Visit()
     {
-        if (IsVisited)
+        if (!IsVisited)
         {
-            return;
+            foreach (Chest chest in chests)
+            {
+                chest.Unlock();
+            }
+            foreach (NPC npc in npcs)
+            {
+                npc.Unlock();
+            }
+            IsVisited = true;
+            SavesManager.Instance.UpdateMapNode(Index, true);
         }
-        foreach (Chest chest in chests)
-        {
-            chest.Unlock();
-        }
-        foreach (NPC npc in npcs)
-        {
-            npc.Unlock();
-        }
-        IsVisited = true;
-        SavesManager.Instance.UpdateMapNode(Index, true);
-        if (enemy != null)
+        if (enemy != null && !enemy.Stats.ChHealth.IsDead)
         {
             SavesManager.Instance.SetEnemieForFight(enemy.Id);
             GameManager.Instance.StartFight(Index);

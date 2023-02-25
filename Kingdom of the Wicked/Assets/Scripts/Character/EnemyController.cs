@@ -19,11 +19,6 @@ public class EnemyController : Character
         if (characterSO != null)
         {
             base.Start();
-            foreach (int cardId in cards)
-            {
-                var card = GameDatabase.Instance.GetCard(cardId);
-                Equipment.EquipCard(card);
-            }
         }
     }
 

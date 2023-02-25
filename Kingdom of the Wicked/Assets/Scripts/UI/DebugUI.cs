@@ -15,6 +15,7 @@ public class DebugUI : MonoBehaviour
     const string k_plStatsLbl = "lbl_stats";
 
     const string str_stats = "Player Stats:";
+    const string str_effects = "Player Effects:";
 
     private void Awake()
     {
@@ -31,6 +32,11 @@ public class DebugUI : MonoBehaviour
         {
             res += "\n" + GameDatabase.Instance.StatsDescription[stat.Key].name + ": " 
                 + stat.Value.BaseValue + " => " + stat.Value.TotalValue;
+        }
+        res += "\n" + str_effects;
+        foreach (Effect effect in player.Stats.Effects)
+        {
+            res += "\n" + effect.EffectType + ": " + effect.Value + " for " + effect.Duration + " moves.";
         }
         plStatsLbl.text = res;
     }

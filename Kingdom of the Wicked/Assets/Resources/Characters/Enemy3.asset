@@ -15,6 +15,11 @@ MonoBehaviour:
   id: 203
   characterName: Enemy 3
   characterDescription: 
-  baseHealthValue: 80
+  baseHealthValue: 15
   armorValue: 0
   damageValue: 0
+  cards:
+  - cardId: 101
+    storage: 0
+  - cardId: 401
+    storage: 3

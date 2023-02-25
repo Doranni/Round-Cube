@@ -18,3 +18,16 @@ MonoBehaviour:
   baseHealthValue: 100
   armorValue: 0
   damageValue: 0
+  cards:
+  - cardId: 101
+    storage: 0
+  - cardId: 201
+    storage: 1
+  - cardId: 301
+    storage: 2
+  - cardId: 401
+    storage: 3
+  - cardId: 202
+    storage: 6
+  - cardId: 402
+    storage: 6

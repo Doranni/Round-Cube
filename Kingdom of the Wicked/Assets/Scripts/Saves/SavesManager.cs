@@ -33,12 +33,12 @@ public class SavesManager : Singleton<SavesManager>
         var characterData = Characters.Find(x => x.id == character.Id);
         if (characterData == null)
         {
-            characterData = new CharacterData(character.Id, character.Stats.ChHealth.CurrentHealth);
+            characterData = new CharacterData(character);
             Characters.Add(characterData);
         }
         else
         {
-            characterData.health = character.Stats.ChHealth.CurrentHealth;
+            characterData.Update(character);
         }
     }
 

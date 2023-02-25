@@ -34,8 +34,6 @@ public class FightingManager : Singleton<FightingManager>
 
     private void EndFight()
     {
-        Player.Save();
-        Enemy.Save();
         GameManager.Instance.EndFight();
     }
 
