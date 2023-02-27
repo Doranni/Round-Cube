@@ -5,7 +5,7 @@ using UnityEngine;
 public class Character : MonoBehaviour
 {
     [SerializeField] protected CharacterSO characterSO;
-    [SerializeField] protected Outline outline;
+    //[SerializeField] protected Outline outline;
 
 
     public int Id { get; private set; }
@@ -69,6 +69,6 @@ public class Character : MonoBehaviour
 
     public void Outline(Color color)
     {
-        outline.OutlineColor = color;
+        //outline.OutlineColor = color;
     }
 }

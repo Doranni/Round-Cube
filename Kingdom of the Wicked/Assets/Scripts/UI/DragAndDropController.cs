@@ -87,8 +87,6 @@ public class DragAndDropController : Singleton<DragAndDropController>
             cardToDrag.transform.position = new Vector2(
             Mathf.Clamp(targetStartPos.x + pointerDelta.x, 0, dragRange.x),
             Mathf.Clamp(targetStartPos.y + pointerDelta.y, 0, dragRange.y));
-
-            Debug.Log(cardToDrag.transform.position);
         }
     }
 }

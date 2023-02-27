@@ -16,11 +16,9 @@ public class SavesManager : Singleton<SavesManager>
     {
         base.Awake();
         fullPath = Path.Combine(Application.persistentDataPath, dataFileName);
-        PlayerNodeIndex = 0;
         Characters = new();
         MapNodes = new();
         Debug.Log(Application.persistentDataPath);
-        LoadGame();
     }
 
     public void UpdatePlayerPos(int playerNodeIndex)
@@ -108,7 +106,9 @@ public class SavesManager : Singleton<SavesManager>
 
     public void NewGame()
     {
-
+        PlayerNodeIndex = 0;
+        Characters.Clear();
+        MapNodes.Clear();
     }
 
     private void OnDestroy()

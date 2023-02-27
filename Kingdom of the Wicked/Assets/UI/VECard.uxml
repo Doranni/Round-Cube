@@ -1,0 +1,8 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="False">
+    <Style src="project://database/Assets/UI/Cards.uss?fileID=7433441132597879392&amp;guid=cad0837409d707b47baf5333ead1fdce&amp;type=3#Cards" />
+    <ui:VisualElement name="CardBackground" picking-mode="Ignore" class="card" style="position: absolute; left: 0; top: 0; right: 0; bottom: 0;">
+        <ui:Label text="Card" display-tooltip-when-elided="true" name="CardName" picking-mode="Ignore" style="font-size: 16px; -unity-font-style: bold;" />
+        <ui:Label text="Description" display-tooltip-when-elided="true" name="CardDescription" picking-mode="Ignore" style="font-size: 14px; -unity-font-style: bold;" />
+        <ui:Label display-tooltip-when-elided="true" name="CardStatBonuses" picking-mode="Ignore" style="font-size: 12px; -unity-font-style: bold;" />
+    </ui:VisualElement>
+</ui:UXML>

@@ -27,8 +27,6 @@ public class BoardPlayerUI : Singleton<BoardPlayerUI>
 
     const string k_dragCardPanel = "DragCardPanel";  
 
-    public event Action<bool> OpenInvemtoryToggled;
-
     protected override void Awake()
     {
         base.Awake();
@@ -118,10 +116,12 @@ public class BoardPlayerUI : Singleton<BoardPlayerUI>
         if (inventory.IsActive)
         {
             inventoryScreen.style.display = DisplayStyle.Flex;
+            GameManager.Instance.GameIsActive = false;
         }
         else
         {
             inventoryScreen.style.display = DisplayStyle.None;
+            GameManager.Instance.GameIsActive = true;
         }
     }
 
@@ -129,7 +129,6 @@ public class BoardPlayerUI : Singleton<BoardPlayerUI>
     {
         inventory.SetIsActive(!inventory.IsActive);
         DisplayInventory();
-        OpenInvemtoryToggled?.Invoke(inventory.IsActive);
     }
 
     public void OpenSlotsHolders(Card card, bool value)

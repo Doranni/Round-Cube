@@ -15,7 +15,7 @@ MonoBehaviour:
   id: 202
   characterName: Enemy 2
   characterDescription: 
-  baseHealthValue: 10
+  baseHealthValue: 30
   armorValue: 0
   damageValue: 0
   cards:
