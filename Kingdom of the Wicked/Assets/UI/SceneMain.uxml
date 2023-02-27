@@ -1,0 +1,11 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="False">
+    <Style src="project://database/Assets/UI/SSMenu.uss?fileID=7433441132597879392&amp;guid=a4c4cc5f7f00d39449b0b84f529b70ab&amp;type=3#SSMenu" />
+    <ui:VisualElement name="LoadScene" style="position: absolute; left: 0; top: 0; right: 0; bottom: 0; background-color: rgb(75, 94, 53); align-items: center; justify-content: center;">
+        <ui:Label text="Loading..." display-tooltip-when-elided="true" style="align-items: center; justify-content: center; -unity-text-align: upper-center; color: rgb(217, 217, 217); font-size: 24px; -unity-font-style: bold;" />
+        <ui:ProgressBar value="0" title=" " name="ProgressBar_LoadingScene" high-value="1" style="bottom: 0; position: absolute; left: 0; right: 0; margin-left: 17px; margin-right: 17px; margin-top: 17px; margin-bottom: 17px;" />
+    </ui:VisualElement>
+    <ui:VisualElement name="Menu" style="position: absolute; left: 0; top: 0; right: 0; bottom: 0; justify-content: center; align-items: center; background-color: rgb(75, 94, 53); display: none;">
+        <ui:Button text="Continue" display-tooltip-when-elided="true" name="ButtonContinue" class="MenuButton" />
+        <ui:Button text="Quit Game" display-tooltip-when-elided="true" name="ButtonQuit" class="MenuButton" />
+    </ui:VisualElement>
+</ui:UXML>

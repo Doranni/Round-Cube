@@ -18,12 +18,13 @@ public class BoardCameraController : MonoBehaviour
 
         InputManager.Instance.CameraZoom_performed += CameraZoom_performed;
 
-        destDistFollowCam = followFrTransposer.m_CameraDistance;
+        followFrTransposer.m_CameraDistance = 20;
+        destDistFollowCam = 20;
     }
 
     private void CameraZoom_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj)
     {
-        if (GameManager.Instance.State == GameManager.GameState.BoardActive)
+        if (GameManager.Instance.GameIsActive)
         {
             cameraZoomInput = Mathf.Clamp(obj.ReadValue<float>(), -1, 1);
             destDistFollowCam = Mathf.Clamp(destDistFollowCam + cameraZoomInput * zoomStrength * Time.deltaTime,

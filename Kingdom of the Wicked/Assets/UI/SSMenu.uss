@@ -1,0 +1,29 @@
+.MenuButton {
+    width: 600px;
+    height: 100px;
+    margin-left: 50px;
+    margin-right: 50px;
+    margin-top: 50px;
+    margin-bottom: 50px;
+    border-top-left-radius: 20px;
+    border-bottom-left-radius: 20px;
+    border-top-right-radius: 20px;
+    border-bottom-right-radius: 20px;
+    color: rgba(0, 0, 0, 255);
+    font-size: 40px;
+    background-color: rgba(219, 211, 162, 255);
+    -unity-font-style: bold;
+}
+
+.MenuButton:hover {
+    width: 630px;
+    height: 110px;
+    margin-left: 50px;
+    margin-right: 50px;
+    margin-top: 50px;
+    margin-bottom: 50px;
+    color: rgb(0, 0, 0);
+    font-size: 40px;
+    background-color: rgb(231, 220, 158);
+    -unity-font-style: bold;
+}

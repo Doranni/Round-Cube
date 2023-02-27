@@ -1,0 +1,40 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="False">
+    <Style src="project://database/Assets/UI/GameUI.uss?fileID=7433441132597879392&amp;guid=eef1d654d6413574fa2156a1d1b237bc&amp;type=3#GameUI" />
+    <Style src="project://database/Assets/UI/Character.uss?fileID=7433441132597879392&amp;guid=4b2075c905032144d86c1fa86fa1db30&amp;type=3#Character" />
+    <Style src="project://database/Assets/UI/Cards.uss?fileID=7433441132597879392&amp;guid=cad0837409d707b47baf5333ead1fdce&amp;type=3#Cards" />
+    <ui:VisualElement name="Inventory" picking-mode="Ignore" class="inventory">
+        <ui:ScrollView name="InventoryScroll" style="align-items: center; justify-content: center; width: 100%; height: 100%;">
+            <InventoryVE name="InventoryContent" style="align-items: center; justify-content: center; flex-direction: row; flex-wrap: wrap;" />
+        </ui:ScrollView>
+    </ui:VisualElement>
+    <ui:VisualElement name="Player" class="character_panel">
+        <ui:VisualElement name="PlayerIcon" class="icon">
+            <ui:Label text="Player&#10;Icon" display-tooltip-when-elided="true" />
+        </ui:VisualElement>
+        <ui:VisualElement style="align-items: flex-start; justify-content: space-between;">
+            <HealthBarVE name="PlayerHP" />
+            <ui:VisualElement name="PlayerSlots" style="flex-direction: row; flex-grow: 1; align-items: center; display: flex; height: 100px;">
+                <ui:VisualElement name="PlayerSlots" class="character_equipment" style="flex-direction: row; flex-wrap: nowrap; align-items: center;">
+                    <ui:VisualElement name="Weapon" style="position: relative; border-left-color: rgba(255, 255, 255, 0); border-right-color: rgba(255, 255, 255, 0); border-top-color: rgba(255, 255, 255, 0); border-bottom-color: rgba(255, 255, 255, 0); border-left-width: 0; border-right-width: 0; border-top-width: 0; border-bottom-width: 0; border-top-left-radius: 0; border-bottom-left-radius: 0; border-top-right-radius: 0; border-bottom-right-radius: 0; background-color: rgba(255, 255, 255, 0); margin-left: 5px; margin-right: 5px; margin-top: 5px; margin-bottom: 5px;">
+                        <SlotVE name="PlSlot_Weapon" class="cardSlot background" style="margin-left: 0; margin-right: 0; margin-top: 0; margin-bottom: 0;" />
+                    </ui:VisualElement>
+                    <ui:VisualElement name="Armor" picking-mode="Ignore" style="align-items: flex-start; justify-content: center; flex-direction: column-reverse; position: relative; margin-left: 5px; margin-right: 5px; margin-top: 5px; margin-bottom: 5px;">
+                        <SlotsHolderVE name="PlSlotsHolder_Armor" />
+                    </ui:VisualElement>
+                    <ui:VisualElement name="Other" picking-mode="Ignore" style="align-items: flex-start; justify-content: center; flex-direction: column-reverse; margin-left: 5px; margin-right: 5px; margin-top: 5px; margin-bottom: 5px;">
+                        <SlotsHolderVE name="PlSlotsHolder_Other" />
+                    </ui:VisualElement>
+                </ui:VisualElement>
+                <ui:VisualElement name="InventoryButton" class="inventory_button" style="margin-left: 0; margin-right: 0; margin-top: 0; margin-bottom: 0;">
+                    <ui:Label text="C&#10;A&#10;R&#10;D&#10;S" display-tooltip-when-elided="true" />
+                </ui:VisualElement>
+            </ui:VisualElement>
+        </ui:VisualElement>
+    </ui:VisualElement>
+    <ui:VisualElement name="Debug" picking-mode="Ignore">
+        <ui:VisualElement name="PlStats">
+            <ui:Label text="Player stats:" display-tooltip-when-elided="true" name="lbl_stats" style="color: rgb(202, 202, 202); font-size: 18px;" />
+        </ui:VisualElement>
+    </ui:VisualElement>
+    <ui:VisualElement name="DragCardPanel" picking-mode="Ignore" style="position: absolute; left: 0; top: 0; right: 0; bottom: 0;" />
+</ui:UXML>
