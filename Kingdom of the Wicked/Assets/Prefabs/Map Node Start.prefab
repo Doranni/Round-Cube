@@ -13,7 +13,6 @@ GameObject:
   - component: {fileID: 1695508317754846877}
   - component: {fileID: 2457607671232403796}
   - component: {fileID: 6000778205705939824}
-  - component: {fileID: 4228233662437147027}
   - component: {fileID: 445274682021535009}
   - component: {fileID: 5763197677989554511}
   m_Layer: 0
@@ -117,25 +116,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   stayPoint: {fileID: 5453039607016338370}
   isStart: 1
-  nEvent: {fileID: 4228233662437147027}
---- !u!114 &4228233662437147027
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 167102328144122223}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 107a824c5586b694a9d27c18a7fcde33, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  outline: {fileID: 5763197677989554511}
-  chests:
-  - {fileID: 0}
+  chests: []
   npcs: []
   enemy: {fileID: 0}
-  cameraPoint: {fileID: 0}
+  outline: {fileID: 5763197677989554511}
 --- !u!114 &445274682021535009
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -43,7 +43,8 @@ public class PlayerMovement : MonoBehaviour
                         {
                             destPoints.Clear();
                             MStatus = MoveStatus.onNode;
-                            Map.Instance.MapNodes[NodeIndex].NEvent.Visit();
+                            SavesManager.Instance.UpdatePlayerPos(NodeIndex);
+                            Map.Instance.MapNodes[NodeIndex].Visit();
                             return;
                         }
                         movePosition = destPoints[passedDestPoints] + Vector3.up * yOffset;
@@ -57,11 +58,11 @@ public class PlayerMovement : MonoBehaviour
 
     private void MoveToStart()
     {
-        NodeIndex = Map.Instance.Index_start;
+        NodeIndex = SavesManager.Instance.PlayerNodeIndex;
         transform.position = Map.Instance.MapNodes[NodeIndex].StayPoint
             + Vector3.up * yOffset;
         MStatus = MoveStatus.onNode;
-        Map.Instance.MapNodes[NodeIndex].NEvent.Visit();
+        Map.Instance.MapNodes[NodeIndex].Visit();
     }
 
     public bool TrySetMoveNode(MapNode node)
@@ -77,7 +78,7 @@ public class PlayerMovement : MonoBehaviour
 
     public bool IsNodeReachable(MapNode node)
     {
-        return Map.Instance.IsNodeReachable(NodeIndex, node.Index);
+        return (MStatus == MoveStatus.onNode && Map.Instance.IsNodeReachable(NodeIndex, node.Index));
     }
 
     private void SetDestination(NodeLink link)

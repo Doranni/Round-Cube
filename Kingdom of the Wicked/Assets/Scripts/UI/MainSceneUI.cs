@@ -4,42 +4,85 @@ using UnityEngine;
 using UnityEngine.UIElements;
 
 [RequireComponent(typeof(UIDocument))]
+
 public class MainSceneUI : MonoBehaviour
 {
-    //Player
-    [SerializeField] private Character player;
+    // Load Scene
+    private VisualElement loadSceneScreen;
+    private ProgressBar loadSceneProgressBar;
 
-    private VisualElement playerScreen;
-    private Label plHealthLbl;
+    const string k_loadScene = "LoadScene";
+    const string k_loadSceneProgressBar = "ProgressBar_LoadingScene";
 
-    const string k_playerScreen = "Player";
-    const string k_plHealthLbl = "Lbl_PlHealth";
+    // Menu
+    private VisualElement menuScreen;
+    private Button continueButton, quitButton;
+
+    const string k_menuScreen = "Menu";
+    const string k_continueButton = "ButtonContinue";
+    const string k_quitButton = "ButtonQuit";
 
     private void Awake()
     {
         VisualElement rootElement = GetComponent<UIDocument>().rootVisualElement;
 
-        //Player
-        playerScreen = rootElement.Q(k_playerScreen);
-        plHealthLbl = rootElement.Q<Label>(k_plHealthLbl);
+        // Load Scene
+        loadSceneScreen = rootElement.Q(k_loadScene);
+        loadSceneProgressBar = rootElement.Q<ProgressBar>(k_loadSceneProgressBar);
+
+        LoadSceneManager.Instance.LoadingStarted += StartLoad;
+        LoadSceneManager.Instance.LoadingFinished += FinishLoad;
+        LoadSceneManager.Instance.Loading += UpdateLoadingProgressBar;
+
+        // Menu
+        menuScreen = rootElement.Q(k_menuScreen);
+        continueButton = rootElement.Q<Button>(k_continueButton);
+        quitButton = rootElement.Q<Button>(k_quitButton);
+
+        menuScreen.style.display = DisplayStyle.None;
+        InputManager.Instance.UIEscape_performed += _ => OpenMenuScreen();
+        continueButton.RegisterCallback<ClickEvent>(_ => CloseMenuScreen());
+        quitButton.RegisterCallback<ClickEvent>(_ => QuitGame());
     }
 
-    void Start()
+    // Load Scene
+    private void StartLoad()
     {
-        //Player
-        player.Stats.ChHealth.HealthChanged += DisplayPlHealth;
-
-        DisplayPlHealth((player.Stats.ChHealth.CurrentHealth, player.Stats.ChHealth.MaxHealth));
+        loadSceneScreen.style.display = DisplayStyle.Flex;
     }
 
-    private void DisplayPlHealth((float currentHealth, float maxHealth) obj)
+    private void FinishLoad()
     {
-        plHealthLbl.text = "HP: " + obj.currentHealth + "/" + obj.maxHealth;
+        loadSceneScreen.style.display = DisplayStyle.None;
     }
 
-
-    private void OnDestroy()
+    private void UpdateLoadingProgressBar(float value)
     {
-
+        loadSceneProgressBar.value = value;
     }
+
+    // Menu
+    private void OpenMenuScreen()
+    {
+        if (GameManager.Instance.GameIsActive)
+        {
+            menuScreen.style.display = DisplayStyle.Flex;
+            GameManager.Instance.GameIsActive = false;
+        }
+    }
+
+    private void CloseMenuScreen()
+    {
+        menuScreen.style.display = DisplayStyle.None;
+        GameManager.Instance.GameIsActive = true;
+    }
+
+    private void QuitGame()
+    {
+        SavesManager.Instance.SaveGame();
+        LoadSceneManager.Instance.LoadScene(LoadSceneManager.Scenes.Menu);
+        menuScreen.style.display = DisplayStyle.None;
+    }
+
+    
 }

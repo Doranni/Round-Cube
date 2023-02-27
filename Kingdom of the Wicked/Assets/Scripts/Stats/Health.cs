@@ -3,6 +3,7 @@ using UnityEngine;
 
 public class Health
 {
+    private readonly Character character;
     public float CurrentHealth { get; private set; }
     public float MaxHealth { get; private set; }
     public bool IsDead { get; private set; }
@@ -10,13 +11,24 @@ public class Health
     public event Action<(float currentHealth, float maxHealth)> HealthChanged, GotDamage;
     public event Action Died;
 
-    public Health(float maxValue) : this(maxValue, maxValue) { }
+    public Health(Character character, float maxValue) : this(character, maxValue, maxValue) { }
 
-    public Health(float maxValue, float currentValue)
+    public Health(Character character, float maxValue, float currentValue)
     {
+        this.character = character;
         CurrentHealth = currentValue;
         MaxHealth = maxValue;
         IsDead = false;
+    }
+
+    public void SetCurrentHealth(float health)
+    {
+        CurrentHealth = health;
+    }
+
+    public void SetIsDead(bool value)
+    {
+        IsDead = value;
     }
 
     public void ChangeHealth(float value, bool effectDead = false)
@@ -30,6 +42,7 @@ public class Health
         {
             GotDamage?.Invoke((CurrentHealth, MaxHealth));
         }
+        SavesManager.Instance.UpdateCharacter(character);
         HealthChanged?.Invoke((CurrentHealth, MaxHealth));
         if (CurrentHealth == 0)
         {

@@ -6,13 +6,6 @@ using UnityEngine.UIElements;
 
 public class GameManager : Singleton<GameManager>
 {
-    public enum GameState
-    {
-        inMenu,
-        active,
-        fighting
-    }
-
     [SerializeField] private float plMovementHeight = 4;
     public float PlMovementHeight => plMovementHeight;
 
@@ -34,52 +27,30 @@ public class GameManager : Singleton<GameManager>
     public VisualTreeAsset CardAsset => cardAsset;
     public VisualTreeAsset SlotsHolderAsset => slotsHolderAsset;
 
-    public GameState State { get; private set; }
+    public bool GameIsActive { get; set; }
 
     private int id = 0;
 
-    public override void Awake()
+    protected override void Awake()
     {
         base.Awake();
-        cardAsset = EditorGUIUtility.Load("Assets/UI/CardUI.uxml") as VisualTreeAsset;
-        slotsHolderAsset = EditorGUIUtility.Load("Assets/UI/SlotHolderUI.uxml") as VisualTreeAsset;
+        cardAsset = EditorGUIUtility.Load("Assets/UI/VECard.uxml") as VisualTreeAsset;
+        slotsHolderAsset = EditorGUIUtility.Load("Assets/UI/VESlotHolder.uxml") as VisualTreeAsset;
     }
 
     private void Start()
     {
-        EquipmentUI.Instance.OpenInvemtoryToggled += ToggleOpenInvemtory;
-        FightingManager.Instance.FightStarted += () => ToggleFightState(true);
-        FightingManager.Instance.FightEnded += () => ToggleFightState(false);
-        State = GameState.active;
+        GameIsActive = true;
     }
 
-    private void ToggleFightState(bool value)
+    public void StartFight(int mapNode_index)
     {
-        if (value)
-        {
-            State = GameState.fighting;
-        }
-        else
-        {
-            State = GameState.active;
-        }
+        LoadSceneManager.Instance.LoadScene(LoadSceneManager.Scenes.Fighting);
     }
 
-    private void ToggleOpenInvemtory(bool isInventoryOpen)
+    public void EndFight()
     {
-        if (isInventoryOpen)
-        {
-            SetState(GameState.inMenu);
-        }
-        else if (State != GameState.fighting)
-        {
-            SetState(GameState.active);
-        }
-    }
-
-    private void SetState(GameState state)
-    {
-        State = state;
+        LoadSceneManager.Instance.LoadScene(LoadSceneManager.Scenes.Board);
     }
 
     public int GetID()

@@ -4,19 +4,21 @@ using UnityEngine;
 
 public class CharacterStats
 {
+    private readonly Character character;
     public Health ChHealth { get; private set; }
     public Dictionary<Stat.StatId, Stat> ChStats { get; private set; }
     public List<Effect> Effects { get; private set; }
 
-    public CharacterStats(StatsValuesSO chStatsValues)
+    public CharacterStats(Character character, CharacterSO characterSO)
     {
+        this.character = character;
         ChStats = new(GameDatabase.Instance.StatsDescription.Count)
         {
-            { Stat.StatId.health, new(chStatsValues.baseHealthValue) },
-            { Stat.StatId.armor, new(chStatsValues.armorValue) },
-            { Stat.StatId.damage, new(chStatsValues.damageValue) }
+            { Stat.StatId.health, new(characterSO.baseHealthValue) },
+            { Stat.StatId.armor, new(characterSO.armorValue) },
+            { Stat.StatId.damage, new(characterSO.damageValue) }
         };
-        ChHealth = new Health(ChStats[Stat.StatId.health].BaseValue);
+        ChHealth = new Health(character, ChStats[Stat.StatId.health].BaseValue);
         Effects = new();
 
         ChStats[Stat.StatId.health].BonusAdded += x => ChHealth.AddHealthBonus(x);

@@ -3,13 +3,13 @@ using UnityEngine;
 
 public class CharacterEquipment
 {
-    private readonly CharacterStats characterStats;
+    private readonly Character character;
     public Dictionary<IStorage.StorageNames, IStorage> Storages { get; private set; }
     public Dictionary<SlotsHolder.SlotsHolderNames, SlotsHolder> SlotsHolders { get; private set; }
 
-    public CharacterEquipment(CharacterStats characterStats)
+    public CharacterEquipment(Character character)
     {
-        this.characterStats = characterStats;
+        this.character = character;
         Storages = new();
         SlotsHolders = new();
         Storages.Add(IStorage.StorageNames.WeaponSlot, 
@@ -41,7 +41,8 @@ public class CharacterEquipment
         Storages.Add(IStorage.StorageNames.Inventory, new Inventory());
     }
 
-    public bool AddCard(Card card, IStorage.StorageNames storageName, bool compareCardTypesFlags = true)
+    public bool AddCard(Card card, IStorage.StorageNames storageName, bool compareCardTypesFlags = true, 
+        bool needToSave = true)
     {
         var addRes = Storages[storageName].AddCard(card, compareCardTypesFlags);
         if (!addRes.success)
@@ -56,28 +57,36 @@ public class CharacterEquipment
         {
             foreach (StatBonus bonus in ((IAddStatBonuses)card).StatBonuses)
             {
-                characterStats.AddBonus(bonus);
+                character.Stats.AddBonus(bonus);
             }
             if (addRes.releasedCard != null && addRes.releasedCard is IAddStatBonuses)
             {
                 foreach (StatBonus bonus in ((IAddStatBonuses)addRes.releasedCard).StatBonuses)
                 {
-                    characterStats.RemoveBonus(bonus);
+                    character.Stats.RemoveBonus(bonus);
                 }
             }
         }
         card.SetInstanceId();
+        if (needToSave)
+        {
+            Save();
+        }
         return true;
     }
 
     public void RemoveCard(Card card, IStorage.StorageNames storageName)
     {
         var success = Storages[storageName].RemoveCard(card);
-        if (success && Storages[storageName].AffectsStats && card is IAddStatBonuses)
+        if (success)
         {
-            foreach (StatBonus bonus in ((IAddStatBonuses)card).StatBonuses)
+            Save();
+            if (Storages[storageName].AffectsStats && card is IAddStatBonuses)
             {
-                characterStats.RemoveBonus(bonus);
+                foreach (StatBonus bonus in ((IAddStatBonuses)card).StatBonuses)
+                {
+                    character.Stats.RemoveBonus(bonus);
+                }
             }
         }
     }
@@ -94,6 +103,7 @@ public class CharacterEquipment
                 if (!returnRes.success)
                 {
                     Storages[IStorage.StorageNames.Inventory].AddCard(card);
+                    Save();
                 }
                 return false;
             }
@@ -107,14 +117,14 @@ public class CharacterEquipment
                 {
                     foreach (StatBonus bonus in ((IAddStatBonuses)addRes.releasedCard).StatBonuses)
                     {
-                        characterStats.AddBonus(bonus);
+                        character.Stats.AddBonus(bonus);
                     }
                 }
                 if (card is IAddStatBonuses)
                 {
                     foreach (StatBonus bonus in ((IAddStatBonuses)card).StatBonuses)
                     {
-                        characterStats.RemoveBonus(bonus);
+                        character.Stats.RemoveBonus(bonus);
                     }
                 }
             }
@@ -124,18 +134,19 @@ public class CharacterEquipment
                 {
                     foreach (StatBonus bonus in ((IAddStatBonuses)card).StatBonuses)
                     {
-                        characterStats.AddBonus(bonus);
+                        character.Stats.AddBonus(bonus);
                     }
                 }
                 if (addRes.releasedCard != null && addRes.releasedCard is IAddStatBonuses)
                 {
                     foreach (StatBonus bonus in ((IAddStatBonuses)addRes.releasedCard).StatBonuses)
                     {
-                        characterStats.RemoveBonus(bonus);
+                        character.Stats.RemoveBonus(bonus);
                     }
                 }
             }
             Debug.Log($"Card {card.CardName} was moved from {prevSlot} to {newSlot}");
+            Save();
             return true;
         }
         if (Storages[prevSlot] is Slot && Storages[newSlot] is Slot && Storages[newSlot].Cards.Count == 1)
@@ -149,11 +160,13 @@ public class CharacterEquipment
             {
                 if (!Storages[newSlot].AddCard(addRes.releasedCard, compareCardTypesFlags).success)
                 {
+                    Save();
                     Storages[IStorage.StorageNames.Inventory].AddCard(addRes.releasedCard);
                 }
                 return false;
             }
             Debug.Log($"Card {card.CardName} was moved from {prevSlot} to {newSlot}");
+            Save();
             return true;
         }
         return false;
@@ -165,35 +178,40 @@ public class CharacterEquipment
         {
             case Card.CardsType.Weapon:
                 {
-                    AddCard(card, IStorage.StorageNames.WeaponSlot, false);
+                    AddCard(card, IStorage.StorageNames.WeaponSlot, false, true);
                     break;
                 }
             case Card.CardsType.Armor:
                 {
-                    AddCard(card, IStorage.StorageNames.ArmorSlot, false);
+                    AddCard(card, IStorage.StorageNames.ArmorSlot, false, true);
                     break;
                 }
             case Card.CardsType.Shield:
                 {
-                    AddCard(card, IStorage.StorageNames.ShieldSlot, false);
+                    AddCard(card, IStorage.StorageNames.ShieldSlot, false, true);
                     break;
                 }
             default:
                 {
                     if (Storages[IStorage.StorageNames.OtherSlot1].Cards.Count == 0)
                     {
-                        AddCard(card, IStorage.StorageNames.OtherSlot1, false);
+                        AddCard(card, IStorage.StorageNames.OtherSlot1, false, true);
                     }
                     else if (Storages[IStorage.StorageNames.OtherSlot2].Cards.Count == 0)
                     {
-                        AddCard(card, IStorage.StorageNames.OtherSlot2, false);
+                        AddCard(card, IStorage.StorageNames.OtherSlot2, false, true);
                     }
                     else
                     {
-                        AddCard(card, IStorage.StorageNames.OtherSlot3, false);
+                        AddCard(card, IStorage.StorageNames.OtherSlot3, false, true);
                     }
                     break;
                 }
         }
+    }
+
+    private void Save()
+    {
+        SavesManager.Instance.UpdateCharacter(character);
     }
 }
