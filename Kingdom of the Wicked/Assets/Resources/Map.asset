@@ -1,0 +1,124 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6f9df585c6929be4da54b43642990d14, type: 3}
+  m_Name: Map
+  m_EditorClassIdentifier: 
+  mapNodes:
+  - mapNodeId: 1
+    links:
+    - nextMapNodeId: 2
+      isWayOpen: 1
+      betweenPathPoints: []
+    - nextMapNodeId: 10
+      isWayOpen: 1
+      betweenPathPoints:
+      - {x: 16.38, y: 2.04, z: -1.5099993}
+  - mapNodeId: 2
+    links:
+    - nextMapNodeId: 1
+      isWayOpen: 1
+      betweenPathPoints: []
+    - nextMapNodeId: 3
+      isWayOpen: 1
+      betweenPathPoints:
+      - {x: 4.9202805, y: 1.3927257, z: -20.963486}
+    - nextMapNodeId: 10
+      isWayOpen: 1
+      betweenPathPoints: []
+  - mapNodeId: 3
+    links:
+    - nextMapNodeId: 2
+      isWayOpen: 1
+      betweenPathPoints:
+      - {x: 4.9202805, y: 1.3927257, z: -20.963486}
+    - nextMapNodeId: 4
+      isWayOpen: 1
+      betweenPathPoints: []
+    - nextMapNodeId: 5
+      isWayOpen: 1
+      betweenPathPoints: []
+  - mapNodeId: 4
+    links:
+    - nextMapNodeId: 3
+      isWayOpen: 1
+      betweenPathPoints: []
+    - nextMapNodeId: 5
+      isWayOpen: 1
+      betweenPathPoints: []
+  - mapNodeId: 5
+    links:
+    - nextMapNodeId: 3
+      isWayOpen: 1
+      betweenPathPoints: []
+    - nextMapNodeId: 4
+      isWayOpen: 1
+      betweenPathPoints: []
+    - nextMapNodeId: 6
+      isWayOpen: 1
+      betweenPathPoints: []
+    - nextMapNodeId: 7
+      isWayOpen: 1
+      betweenPathPoints: []
+  - mapNodeId: 6
+    links:
+    - nextMapNodeId: 5
+      isWayOpen: 1
+      betweenPathPoints: []
+    - nextMapNodeId: 7
+      isWayOpen: 1
+      betweenPathPoints: []
+  - mapNodeId: 7
+    links:
+    - nextMapNodeId: 5
+      isWayOpen: 1
+      betweenPathPoints: []
+    - nextMapNodeId: 6
+      isWayOpen: 1
+      betweenPathPoints: []
+    - nextMapNodeId: 8
+      isWayOpen: 1
+      betweenPathPoints: []
+  - mapNodeId: 8
+    links:
+    - nextMapNodeId: 7
+      isWayOpen: 1
+      betweenPathPoints: []
+    - nextMapNodeId: 9
+      isWayOpen: 1
+      betweenPathPoints: []
+    - nextMapNodeId: 10
+      isWayOpen: 1
+      betweenPathPoints: []
+  - mapNodeId: 9
+    links:
+    - nextMapNodeId: 8
+      isWayOpen: 1
+      betweenPathPoints: []
+    - nextMapNodeId: 10
+      isWayOpen: 1
+      betweenPathPoints: []
+  - mapNodeId: 10
+    links:
+    - nextMapNodeId: 1
+      isWayOpen: 1
+      betweenPathPoints:
+      - {x: 16.38, y: 2.04, z: -1.5099993}
+    - nextMapNodeId: 2
+      isWayOpen: 1
+      betweenPathPoints: []
+    - nextMapNodeId: 8
+      isWayOpen: 1
+      betweenPathPoints: []
+    - nextMapNodeId: 9
+      isWayOpen: 1
+      betweenPathPoints: []
+  startMapNodeId: 1

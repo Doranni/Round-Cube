@@ -5,8 +5,10 @@ using UnityEngine.UIElements;
 
 [RequireComponent(typeof(UIDocument))]
 
-public class MainSceneUI : MonoBehaviour
+public class MainSceneUI : Singleton<MainSceneUI>
 {
+    public bool MenuScreenIsOpen { get; private set; }
+
     // Load Scene
     private VisualElement loadSceneScreen;
     private ProgressBar loadSceneProgressBar;
@@ -22,8 +24,10 @@ public class MainSceneUI : MonoBehaviour
     const string k_continueButton = "ButtonContinue";
     const string k_quitButton = "ButtonQuit";
 
-    private void Awake()
+    protected override void Awake()
     {
+        base.Awake();
+
         VisualElement rootElement = GetComponent<UIDocument>().rootVisualElement;
 
         // Load Scene
@@ -39,9 +43,9 @@ public class MainSceneUI : MonoBehaviour
         continueButton = rootElement.Q<Button>(k_continueButton);
         quitButton = rootElement.Q<Button>(k_quitButton);
 
+        MenuScreenIsOpen = false;
         menuScreen.style.display = DisplayStyle.None;
-        InputManager.Instance.UIEscape_performed += _ => OpenMenuScreen();
-        continueButton.RegisterCallback<ClickEvent>(_ => CloseMenuScreen());
+        continueButton.RegisterCallback<ClickEvent>(_ => OpenMenuScreen(false));
         quitButton.RegisterCallback<ClickEvent>(_ => QuitGame());
     }
 
@@ -62,19 +66,18 @@ public class MainSceneUI : MonoBehaviour
     }
 
     // Menu
-    private void OpenMenuScreen()
+    public void OpenMenuScreen(bool value)
     {
-        if (GameManager.Instance.GameIsActive)
+        MenuScreenIsOpen = value;
+        if (value)
         {
             menuScreen.style.display = DisplayStyle.Flex;
-            GameManager.Instance.GameIsActive = false;
         }
-    }
-
-    private void CloseMenuScreen()
-    {
-        menuScreen.style.display = DisplayStyle.None;
-        GameManager.Instance.GameIsActive = true;
+        else
+        {
+            menuScreen.style.display = DisplayStyle.None;
+        }
+        GameManager.Instance.UpdateState();
     }
 
     private void QuitGame()
@@ -82,6 +85,7 @@ public class MainSceneUI : MonoBehaviour
         SavesManager.Instance.SaveGame();
         LoadSceneManager.Instance.LoadScene(LoadSceneManager.Scenes.Menu);
         menuScreen.style.display = DisplayStyle.None;
+        MenuScreenIsOpen = false;
     }
 
     

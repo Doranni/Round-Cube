@@ -14,7 +14,17 @@ public class LoadSceneManager : Singleton<LoadSceneManager>
         Fighting
     }
 
+    public enum LoadState
+    {
+        Loading,
+        Menu,
+        Board,
+        Fighting
+    }
+
     [SerializeField] private Camera mainCamera;
+
+    public LoadState State { get; private set; }
 
     private AsyncOperation loadingOperation;
     private Scenes currentScene;
@@ -39,6 +49,8 @@ public class LoadSceneManager : Singleton<LoadSceneManager>
         {
             return;
         }
+        State = LoadState.Loading;
+        GameManager.Instance.UpdateState();
         if (currentScene != Scenes.Main)
         {
             SceneManager.UnloadSceneAsync((int)currentScene);
@@ -56,6 +68,8 @@ public class LoadSceneManager : Singleton<LoadSceneManager>
             Loading?.Invoke(loadingOperation.progress);
             yield return null;
         }
+        State = (LoadState)(int)currentScene;
+        GameManager.Instance.UpdateState();
         LoadingFinished?.Invoke();
     }
 }
