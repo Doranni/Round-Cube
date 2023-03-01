@@ -39,14 +39,14 @@ public class DragAndDropController : Singleton<DragAndDropController>
         cardToDrag.RegisterCallback<PointerUpEvent>(PointerUpEventHandler);
         cardToDrag.RegisterCallback<PointerMoveEvent>(PointerMoveHandler);
 
-        BoardPlayerUI.Instance.OpenSlotsHolders(target.CardData, true);
+        BoardSceneUI.Instance.OpenSlotsHolders(target.CardData, true);
         dragRange = new Vector2(cardToDrag.panel.visualTree.worldBound.width - 80,
             cardToDrag.panel.visualTree.worldBound.height - 120);
     }
 
     private void PointerUpEventHandler(PointerUpEvent evt)
     {
-        var storages = BoardPlayerUI.Instance.GetAvailableStorages(target.CardData.CardType);
+        var storages = BoardSceneUI.Instance.GetAvailableStorages(target.CardData.CardType);
         List<IStorage.StorageNames> overlapStorages = new();
         for (int i = 0; i < storages.Count; i++)
         {
@@ -55,7 +55,7 @@ public class DragAndDropController : Singleton<DragAndDropController>
                 overlapStorages.Add(storages[i].Storage.StorageName);
             }
         }
-        BoardPlayerUI.Instance.CardWasMoved(target.CardData, target.Storage, overlapStorages);
+        BoardSceneUI.Instance.CardWasMoved(target.CardData, target.Storage, overlapStorages);
         ResetTarget(evt.pointerId);
     }
 

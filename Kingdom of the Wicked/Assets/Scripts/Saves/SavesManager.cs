@@ -42,7 +42,7 @@ public class SavesManager : Singleton<SavesManager>
 
     public void UpdateMapNode(int index, bool isVisited)
     {
-        var mapNode = MapNodes.Find(x => x.index == index);
+        var mapNode = MapNodes.Find(x => x.nodeId == index);
         if (mapNode == null)
         {
             mapNode = new MapNodeData(index, isVisited);
@@ -106,7 +106,7 @@ public class SavesManager : Singleton<SavesManager>
 
     public void NewGame()
     {
-        PlayerNodeIndex = 0;
+        PlayerNodeIndex = 1;
         Characters.Clear();
         MapNodes.Clear();
     }

@@ -67,9 +67,9 @@ public class PlayerMovement : MonoBehaviour
 
     public bool TrySetMoveNode(MapNode node)
     {
-        if (MStatus == MoveStatus.onNode && Map.Instance.IsNodeReachable(NodeIndex, node.Index))
+        if (MStatus == MoveStatus.onNode && Map.Instance.IsNodeReachable(NodeIndex, node.MapNodeId))
         {
-            var link = Map.Instance.MapNodes[NodeIndex].Links[node.Index];
+            var link = Map.Instance.MapNodes[NodeIndex].Links[node.MapNodeId];
             SetDestination(link);
             return true;
         }
@@ -78,12 +78,12 @@ public class PlayerMovement : MonoBehaviour
 
     public bool IsNodeReachable(MapNode node)
     {
-        return (MStatus == MoveStatus.onNode && Map.Instance.IsNodeReachable(NodeIndex, node.Index));
+        return (MStatus == MoveStatus.onNode && Map.Instance.IsNodeReachable(NodeIndex, node.MapNodeId));
     }
 
     private void SetDestination(NodeLink link)
     {
-        NodeIndex = link.NodeTo.Index;
+        NodeIndex = link.NextMapNodeId;
         for (int i = 0; i < link.PathPoints.Count; i++)
         {
             destPoints.Add(link.PathPoints[i]);

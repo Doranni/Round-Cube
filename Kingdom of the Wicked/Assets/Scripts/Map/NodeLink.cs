@@ -2,55 +2,40 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class NodeLink : MonoBehaviour
+public class NodeLink
 {
-    [SerializeField] private MapNode nodeFrom;
-    [SerializeField] private MapNode nodeTo;
-    [SerializeField] private bool isWayOpen;
-    [SerializeField] private List<Transform> pathPoints;
-
     public event Action WayWasOpened, WayWasClosed;
 
-    public MapNode NodeTo => nodeTo;
-    public MapNode NodeFrom => nodeFrom;
-    public bool IsWayOpen => isWayOpen;
+    public int NextMapNodeId { get; private set; }
+    public bool IsWayOpen { get; private set; }
     public List<Vector3> PathPoints { get; private set; }
-    public bool IsAvailable { get; private set; }
 
-    private void Awake()
+    public NodeLink(int prevMapNodeId, int nextMapNodeId, bool isWayOpen, Vector3[] betweenPathPoints)
     {
-        IsAvailable = true;
-        InitPathPoints();
-    }
+        NextMapNodeId = nextMapNodeId;
+        IsWayOpen = isWayOpen;
 
-    private void InitPathPoints()
-    {
-        PathPoints = new(pathPoints.Count + 2);
-        PathPoints.Add(nodeFrom.AbowePoint);
-        for (int i = 0; i < pathPoints.Count; i++)
+        PathPoints = new(betweenPathPoints.Length + 3);
+        PathPoints.Add(Map.Instance.MapNodes[prevMapNodeId].AbowePoint);
+        for (int i = 0; i < betweenPathPoints.Length; i++)
         {
-            PathPoints.Add(pathPoints[i].position);
+            PathPoints.Add(betweenPathPoints[i]);
         }
-        PathPoints.Add(nodeTo.AbowePoint);
-        PathPoints.Add(nodeTo.StayPoint);
+        PathPoints.Add(Map.Instance.MapNodes[nextMapNodeId].AbowePoint);
+        PathPoints.Add(Map.Instance.MapNodes[nextMapNodeId].StayPoint);
     }
 
     public void SetWayIsOpen(bool isOpen)
     {
-        var prevVal = isWayOpen;
-        isWayOpen = isOpen;
-        if (!prevVal && isWayOpen)
+        var prevVal = IsWayOpen;
+        IsWayOpen = isOpen;
+        if (!prevVal && IsWayOpen)
         {
             WayWasOpened?.Invoke();
         }
-        else if (prevVal && !isWayOpen)
+        else if (prevVal && !IsWayOpen)
         {
             WayWasClosed?.Invoke();
         }
-    }
-
-    public void SetIsAvailable(bool isAvailable)
-    {
-        IsAvailable = isAvailable;
     }
 }

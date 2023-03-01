@@ -6,6 +6,20 @@ using UnityEngine.UIElements;
 
 public class GameManager : Singleton<GameManager>
 {
+    public enum GameState
+    {
+        Loading,
+        Menu,
+        BoardActive,
+        BoardInventory,
+        BoardChest,
+        BoardMenu,
+        FightingActive,
+        FightingMenu
+    }
+
+    public GameState State { get; private set; }
+
     [SerializeField] private float plMovementHeight = 4;
     public float PlMovementHeight => plMovementHeight;
 
@@ -27,8 +41,6 @@ public class GameManager : Singleton<GameManager>
     public VisualTreeAsset CardAsset => cardAsset;
     public VisualTreeAsset SlotsHolderAsset => slotsHolderAsset;
 
-    public bool GameIsActive { get; set; }
-
     private int id = 0;
 
     protected override void Awake()
@@ -40,10 +52,39 @@ public class GameManager : Singleton<GameManager>
 
     private void Start()
     {
-        GameIsActive = true;
+        InputManager.Instance.UIEscape_performed += _ => GameUIEscape_performed();
     }
 
-    public void StartFight(int mapNode_index)
+    private void GameUIEscape_performed()
+    {
+        switch (State)
+        {
+            case GameState.BoardInventory:
+                {
+                    BoardSceneUI.Instance.OpenInventory(false);
+                    break;
+                }
+            case GameState.BoardChest:
+                {
+                    // Close the chest
+                    break;
+                }
+            case GameState.BoardActive:
+            case GameState.FightingActive:
+                {
+                    MainSceneUI.Instance.OpenMenuScreen(true);
+                    break;
+                }
+            case GameState.BoardMenu:
+            case GameState.FightingMenu:
+                {
+                    MainSceneUI.Instance.OpenMenuScreen(false);
+                    break;
+                }
+        }
+    }
+
+    public void StartFight()
     {
         LoadSceneManager.Instance.LoadScene(LoadSceneManager.Scenes.Fighting);
     }
@@ -70,6 +111,64 @@ public class GameManager : Singleton<GameManager>
             default:
                 {
                     return cardSize_slot;
+                }
+        }
+    }
+
+    public void UpdateState()
+    {
+        switch (LoadSceneManager.Instance.State)
+        {
+            case LoadSceneManager.LoadState.Loading:
+                {
+                    State = GameState.Loading;
+                    break;
+                }
+            case LoadSceneManager.LoadState.Menu:
+                {
+                    State = GameState.Menu;
+                    break;
+                }
+            case LoadSceneManager.LoadState.Board:
+                {
+                    if (MainSceneUI.Instance.MenuScreenIsOpen)
+                    {
+                        State = GameState.BoardMenu;
+                    }
+                    else
+                    {
+                        switch (BoardSceneUI.Instance.State)
+                        {
+                            case BoardSceneUI.BoardUIState.Closed:
+                                {
+                                    State = GameState.BoardActive;
+                                    break;
+                                }
+                            case BoardSceneUI.BoardUIState.Inventory:
+                                {
+                                    State = GameState.BoardInventory;
+                                    break;
+                                }
+                            case BoardSceneUI.BoardUIState.Chest:
+                                {
+                                    State = GameState.BoardChest;
+                                    break;
+                                }
+                        }
+                    }
+                    break;
+                }
+            case LoadSceneManager.LoadState.Fighting:
+                {
+                    if (MainSceneUI.Instance.MenuScreenIsOpen)
+                    {
+                        State = GameState.FightingMenu;
+                    }
+                    else
+                    {
+                        State = GameState.FightingActive;
+                    }
+                    break;
                 }
         }
     }
