@@ -71,12 +71,12 @@ public class EquippedCard
 [Serializable]
 public class MapNodeData
 {
-    public int index;
+    public int nodeId;
     public bool isVisited;
 
-    public MapNodeData(int index, bool isVisited)
+    public MapNodeData(int nodeId, bool isVisited)
     {
-        this.index = index;
+        this.nodeId = nodeId;
         this.isVisited = isVisited;
     }
 }

@@ -3,17 +3,16 @@ using UnityEngine;
 
 public class MapNode : MonoBehaviour
 {
+    [SerializeField] private int mapNodeId;
     [SerializeField] private Transform stayPoint;
-    [SerializeField] private bool isStart = false;
     [SerializeField] private List<Chest> chests;
     [SerializeField] private List<NPC> npcs;
     [SerializeField] private EnemyController enemy;
     [SerializeField] private Outline outline;
 
-    public Vector3 StayPoint => stayPoint.transform.position;
-    public Vector3 AbowePoint => StayPoint + (Vector3.up * GameManager.Instance.PlMovementHeight);
-    public bool IsStart => isStart;
-    public int Index { get; private set; }
+    public int MapNodeId => mapNodeId;
+    public Vector3 StayPoint { get; private set; }
+    public Vector3 AbowePoint { get; private set; }
     public Dictionary<int, NodeLink> Links { get; private set; }
     public List<Chest> Chests => chests;
     public List<NPC> Npcs => npcs;
@@ -24,29 +23,23 @@ public class MapNode : MonoBehaviour
     {
         Links = new();
         IsVisited = false;
-    }
-
-    public void SetIndex(int index)
-    {
-        Index = index;
-    }
-    public void SetIsStart(bool isStart)
-    {
-        this.isStart = isStart;
+        StayPoint = stayPoint.transform.position;
+        AbowePoint = StayPoint + (Vector3.up * GameManager.Instance.PlMovementHeight);
     }
 
     public void Load()
     {
-        var data = SavesManager.Instance.MapNodes.Find(x => x.index == Index);
+        var data = SavesManager.Instance.MapNodes.Find(x => x.nodeId == MapNodeId);
         if (data != null)
         {
             IsVisited = data.isVisited;
         }
     }
 
-    public void AddLink(NodeLink link)
+    public void AddLink(MapLinkSO link)
     {
-        Links.Add(link.NodeTo.Index, link);
+        Links.Add(link.nextMapNodeId, new NodeLink(mapNodeId, link.nextMapNodeId, link.isWayOpen, 
+            link.betweenPathPoints));
     }
 
     public virtual void Visit()
@@ -62,12 +55,12 @@ public class MapNode : MonoBehaviour
                 npc.Unlock();
             }
             IsVisited = true;
-            SavesManager.Instance.UpdateMapNode(Index, true);
+            SavesManager.Instance.UpdateMapNode(MapNodeId, true);
         }
         if (enemy != null && !enemy.Stats.ChHealth.IsDead)
         {
             SavesManager.Instance.SetEnemieForFight(enemy.Id);
-            GameManager.Instance.StartFight(Index);
+            GameManager.Instance.StartFight();
         }
     }
 

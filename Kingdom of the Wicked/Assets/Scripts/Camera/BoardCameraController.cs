@@ -24,7 +24,7 @@ public class BoardCameraController : MonoBehaviour
 
     private void CameraZoom_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj)
     {
-        if (GameManager.Instance.GameIsActive)
+        if (GameManager.Instance.State == GameManager.GameState.BoardActive)
         {
             cameraZoomInput = Mathf.Clamp(obj.ReadValue<float>(), -1, 1);
             destDistFollowCam = Mathf.Clamp(destDistFollowCam + cameraZoomInput * zoomStrength * Time.deltaTime,

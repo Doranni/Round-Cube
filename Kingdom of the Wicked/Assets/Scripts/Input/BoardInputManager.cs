@@ -24,7 +24,7 @@ public class BoardInputManager : Singleton<BoardInputManager>
         {
             node.Outline(outline_mapNodeAvailable);
         }
-        else if (node.Index != pMovement.NodeIndex)
+        else if (node.MapNodeId != pMovement.NodeIndex)
         {
             node.Outline(outline_unavailable);
         }

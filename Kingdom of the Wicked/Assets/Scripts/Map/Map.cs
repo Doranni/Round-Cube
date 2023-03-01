@@ -3,11 +3,10 @@ using UnityEngine;
 
 public class Map : Singleton<Map>
 {
+    [SerializeField] private MapSO map;
     [SerializeField] private MapNode[] mapNodes;
-    [SerializeField] private NodeLink[] links;
 
-    public List<MapNode> MapNodes { get; private set; }
-    public List<NodeLink> Links { get; private set; }
+    public Dictionary<int, MapNode> MapNodes { get; private set; }
     public int Index_start { get; private set; }
 
     private void Start()
@@ -18,72 +17,28 @@ public class Map : Singleton<Map>
 
     private void InitMap()
     {
-        MapNodes = new(mapNodes);
-        Links = new(links);
-        for (int i = 0; i < MapNodes.Count; i++)
+        MapNodes = new(mapNodes.Length);
+        for (int i = 0; i < mapNodes.Length; i++)
         {
-            MapNodes[i].SetIndex(i);
-            MapNodes[i].Load();
+            MapNodes.Add(mapNodes[i].MapNodeId, mapNodes[i]);
+            MapNodes[mapNodes[i].MapNodeId].Load();
         }
-        Index_start = GetStartIndex();
-        SetLinks();
-    }
 
-    private int GetStartIndex()
-    {
-        int res = -1;
-        for (int i = 0; i < MapNodes.Count; i++)
+        Index_start = map.startMapNodeId;
+
+        for (int i = 0; i < map.mapNodes.Length; i++)
         {
-            if (MapNodes[i].IsStart)
+            for (int j = 0; j < map.mapNodes[i].links.Length; j++)
             {
-                if (res == -1)
-                {
-                    res = i;
-                }
-                else
-                {
-                    MapNodes[i].SetIsStart(false);
-                }
+                MapNodes[map.mapNodes[i].mapNodeId].AddLink(map.mapNodes[i].links[j]);
             }
         }
-        if (res == -1)
-        {
-            MapNodes[0].SetIsStart(true);
-            return 0;
-        }
-        else
-        {
-            return res;
-        }
     }
 
-    private void SetLinks()
+    public bool IsNodeReachable(int currentNodeId, int nextNodeId)
     {
-        for (int i = 0; i < Links.Count; i++)
-        {
-            MapNodes[Links[i].NodeFrom.Index].AddLink(Links[i]);
-        }
-    }
-
-    public List<NodeLink> GetAvailableLinks(int index)
-    {
-        List<NodeLink> links = new();
-        foreach(KeyValuePair<int, NodeLink> link in MapNodes[index].Links)
-        {
-            if (link.Value.IsWayOpen
-                && link.Value.IsAvailable)
-            {
-                links.Add(link.Value);
-            }
-        }
-        return links;
-    }
-
-    public bool IsNodeReachable(int currentIndex, int nextNodeIndex)
-    {
-        if (MapNodes[currentIndex].Links.ContainsKey(nextNodeIndex)
-            && MapNodes[currentIndex].Links[nextNodeIndex].IsWayOpen
-            && MapNodes[currentIndex].Links[nextNodeIndex].IsAvailable)
+        if (MapNodes[currentNodeId].Links.ContainsKey(nextNodeId)
+            && MapNodes[currentNodeId].Links[nextNodeId].IsWayOpen)
         {
             return true;
         }
