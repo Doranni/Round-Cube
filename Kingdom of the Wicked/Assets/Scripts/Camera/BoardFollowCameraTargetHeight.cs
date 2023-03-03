@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class BoardCameraTargetHeight : MonoBehaviour
+public class BoardFollowCameraTargetHeight : MonoBehaviour
 {
     [SerializeField] private float height;
 

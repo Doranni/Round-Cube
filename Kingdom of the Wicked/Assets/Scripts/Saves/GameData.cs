@@ -1,18 +1,20 @@
 using System;
 using System.Collections.Generic;
-using UnityEngine;
 
 [Serializable]
 public class GameData
 {
     public int playerNodeIndex;
     public List<CharacterData> characters;
+    public List<ChestData> chests;
     public List<MapNodeData> mapNodes;
 
-    public GameData(int playerNodeIndex, List<CharacterData> characters, List<MapNodeData> mapNodes)
+    public GameData(int playerNodeIndex, List<CharacterData> characters, List<ChestData> chests,
+        List<MapNodeData> mapNodes)
     {
         this.playerNodeIndex = playerNodeIndex;
         this.characters = characters;
+        this.chests = chests;
         this.mapNodes = mapNodes;
     }
 }
@@ -27,7 +29,7 @@ public class CharacterData
 
     public CharacterData(Character character)
     {
-        id = character.Id;
+        id = character.CharacterId;
         isDead = character.Stats.ChHealth.IsDead;
         health = character.Stats.ChHealth.CurrentHealth;
         cards = new();
@@ -72,12 +74,25 @@ public class EquippedCard
 public class MapNodeData
 {
     public int nodeId;
-    public bool isVisited;
 
-    public MapNodeData(int nodeId, bool isVisited)
+    public MapNodeData(int nodeId)
     {
         this.nodeId = nodeId;
-        this.isVisited = isVisited;
+    }
+}
+
+[Serializable]
+public class ChestData
+{
+    public int chestId;
+    public bool isLocked;
+    public bool isEmpty;
+
+    public ChestData(int chestId, bool isLocked, bool isEmpty)
+    {
+        this.chestId = chestId;
+        this.isLocked = isLocked;
+        this.isEmpty = isEmpty;
     }
 }
 

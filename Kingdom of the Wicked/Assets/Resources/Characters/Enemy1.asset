@@ -23,3 +23,5 @@ MonoBehaviour:
     storage: 0
   - cardId: 201
     storage: 1
+  boardSprite: {fileID: 531093429, guid: 16c6f66a70805224591bd63001257b39, type: 3}
+  fightSprite: {fileID: 531093429, guid: 16c6f66a70805224591bd63001257b39, type: 3}

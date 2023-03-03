@@ -117,7 +117,7 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: 1_0
+      name: player_fight_boy
       rect:
         serializedVersion: 2
         x: 51
@@ -138,7 +138,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: 1_1
+      name: player_board_boy
       rect:
         serializedVersion: 2
         x: 808
@@ -159,7 +159,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: 1_2
+      name: player_board_girl
       rect:
         serializedVersion: 2
         x: 1291
@@ -180,7 +180,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: 1_3
+      name: pirate_1
       rect:
         serializedVersion: 2
         x: 1666
@@ -201,7 +201,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: 1_4
+      name: player_fight_girl
       rect:
         serializedVersion: 2
         x: 51
@@ -222,7 +222,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: 1_5
+      name: pirate_2
       rect:
         serializedVersion: 2
         x: 1008
@@ -243,7 +243,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: 1_6
+      name: pirate_3
       rect:
         serializedVersion: 2
         x: 1926
@@ -274,13 +274,13 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
-      1_6: 77422305
-      1_1: -1451315400
-      1_0: -1293003793
-      1_2: 1848358945
-      1_5: -1936122501
-      1_4: 281882599
-      1_3: 531093429
+      pirate_3: 77422305
+      player_board_boy: -1451315400
+      player_board_girl: 1848358945
+      player_fight_girl: 281882599
+      player_fight_boy: -1293003793
+      pirate_2: -1936122501
+      pirate_1: 531093429
   spritePackingTag: 
   pSDRemoveMatte: 0
   pSDShowRemoveMatteOption: 0

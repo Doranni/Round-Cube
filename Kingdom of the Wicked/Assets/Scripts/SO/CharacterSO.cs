@@ -8,6 +8,7 @@ public class CharacterSO : ScriptableObject
     public string characterName, characterDescription;
     public int baseHealthValue, armorValue, damageValue;
     public EquippedCardsSO[] cards;
+    public Sprite boardSprite, fightSprite;
 }
 
 [Serializable]

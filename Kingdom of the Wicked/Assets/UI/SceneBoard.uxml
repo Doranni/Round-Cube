@@ -1,10 +1,20 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="False">
-    <Style src="project://database/Assets/UI/GameUI.uss?fileID=7433441132597879392&amp;guid=eef1d654d6413574fa2156a1d1b237bc&amp;type=3#GameUI" />
-    <Style src="project://database/Assets/UI/Character.uss?fileID=7433441132597879392&amp;guid=4b2075c905032144d86c1fa86fa1db30&amp;type=3#Character" />
-    <Style src="project://database/Assets/UI/Cards.uss?fileID=7433441132597879392&amp;guid=cad0837409d707b47baf5333ead1fdce&amp;type=3#Cards" />
-    <ui:VisualElement name="Inventory" picking-mode="Ignore" class="inventory">
-        <ui:ScrollView name="InventoryScroll" style="align-items: center; justify-content: center; width: 100%; height: 100%;">
-            <InventoryVE name="InventoryContent" style="align-items: center; justify-content: center; flex-direction: row; flex-wrap: wrap;" />
+    <Style src="project://database/Assets/UI/SSGame.uss?fileID=7433441132597879392&amp;guid=eef1d654d6413574fa2156a1d1b237bc&amp;type=3#SSGame" />
+    <Style src="project://database/Assets/UI/SSCharacter.uss?fileID=7433441132597879392&amp;guid=4b2075c905032144d86c1fa86fa1db30&amp;type=3#SSCharacter" />
+    <Style src="project://database/Assets/UI/SSCards.uss?fileID=7433441132597879392&amp;guid=cad0837409d707b47baf5333ead1fdce&amp;type=3#SSCards" />
+    <ui:VisualElement name="Chest" picking-mode="Ignore" class="storage" style="display: none;">
+        <ui:ScrollView name="ChestScroll" picking-mode="Ignore" style="align-items: center; justify-content: center;">
+            <ui:VisualElement style="flex-wrap: wrap; justify-content: center; align-items: center;">
+                <ui:VisualElement style="align-items: center; justify-content: center;">
+                    <ChestVE name="ChestContent" style="align-items: center; justify-content: center; flex-direction: row; flex-wrap: wrap; max-width: 800px;" />
+                    <ui:Button text="Take All" display-tooltip-when-elided="true" name="ButtonChestTakeAll" class="button" style="width: 100%; margin-left: 20px; margin-right: 20px; margin-top: 20px; margin-bottom: 20px;" />
+                </ui:VisualElement>
+            </ui:VisualElement>
+        </ui:ScrollView>
+    </ui:VisualElement>
+    <ui:VisualElement name="Inventory" picking-mode="Ignore" class="storage">
+        <ui:ScrollView name="InventoryScroll" style="align-items: center; justify-content: center;">
+            <InventoryVE name="InventoryContent" style="flex-direction: row; flex-wrap: wrap; align-items: center; justify-content: center;" />
         </ui:ScrollView>
     </ui:VisualElement>
     <ui:VisualElement name="Player" class="character_panel">
