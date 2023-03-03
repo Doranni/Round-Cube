@@ -6,7 +6,7 @@ using UnityEngine.EventSystems;
 public class BoardInputManager : Singleton<BoardInputManager>
 {
     [SerializeField] private PlayerMovement pMovement;
-    [SerializeField] private Color outline_mapNodeAvailable, outline_fightTargetAvailable, 
+    [SerializeField] private Color outline_objectAvailable, outline_fightTargetAvailable, 
         outline_unavailable;
     private Color outline_default = new Color(0, 0, 0, 0);
 
@@ -22,9 +22,9 @@ public class BoardInputManager : Singleton<BoardInputManager>
     {
         if (pMovement.IsNodeReachable(node))
         {
-            node.Outline(outline_mapNodeAvailable);
+            node.Outline(outline_objectAvailable);
         }
-        else if (node.MapNodeId != pMovement.NodeIndex)
+        else if (node.MapNodeId != pMovement.CurrentNodeId)
         {
             node.Outline(outline_unavailable);
         }
@@ -48,6 +48,31 @@ public class BoardInputManager : Singleton<BoardInputManager>
     public void Character_PointerExit(Character character)
     {
 
+    }
+
+    public void Chest_Clicked(ChestController chest)
+    {
+        if (pMovement.CurrentNodeId == chest.MapNodeId)
+        {
+            chest.Interact();
+        }
+    }
+
+    public void Chest_PointerEnter(ChestController chest)
+    {
+        if (chest.CanBeOpen() && pMovement.CurrentNodeId == chest.MapNodeId)
+        {
+            chest.Outline(outline_objectAvailable);
+        }
+        else 
+        {
+            chest.Outline(outline_unavailable);
+        }
+    }
+
+    public void Chest_PointerExit(ChestController chest)
+    {
+        chest.Outline(outline_default);
     }
 }
 

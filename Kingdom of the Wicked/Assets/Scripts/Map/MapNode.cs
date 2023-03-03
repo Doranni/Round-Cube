@@ -5,7 +5,7 @@ public class MapNode : MonoBehaviour
 {
     [SerializeField] private int mapNodeId;
     [SerializeField] private Transform stayPoint;
-    [SerializeField] private List<Chest> chests;
+    [SerializeField] private List<ChestController> chests;
     [SerializeField] private List<NPC> npcs;
     [SerializeField] private EnemyController enemy;
     [SerializeField] private Outline outline;
@@ -14,7 +14,7 @@ public class MapNode : MonoBehaviour
     public Vector3 StayPoint { get; private set; }
     public Vector3 AbowePoint { get; private set; }
     public Dictionary<int, NodeLink> Links { get; private set; }
-    public List<Chest> Chests => chests;
+    public List<ChestController> Chests => chests;
     public List<NPC> Npcs => npcs;
     public EnemyController Enemy => enemy;
     public bool IsVisited { get; protected set; }
@@ -32,7 +32,7 @@ public class MapNode : MonoBehaviour
         var data = SavesManager.Instance.MapNodes.Find(x => x.nodeId == MapNodeId);
         if (data != null)
         {
-            IsVisited = data.isVisited;
+            
         }
     }
 
@@ -46,7 +46,7 @@ public class MapNode : MonoBehaviour
     {
         if (!IsVisited)
         {
-            foreach (Chest chest in chests)
+            foreach (ChestController chest in chests)
             {
                 chest.Unlock();
             }
@@ -55,11 +55,11 @@ public class MapNode : MonoBehaviour
                 npc.Unlock();
             }
             IsVisited = true;
-            SavesManager.Instance.UpdateMapNode(MapNodeId, true);
+            //SavesManager.Instance.UpdateMapNode(MapNodeId, true);
         }
         if (enemy != null && !enemy.Stats.ChHealth.IsDead)
         {
-            SavesManager.Instance.SetEnemieForFight(enemy.Id);
+            SavesManager.Instance.SetEnemieForFight(enemy.CharacterId);
             GameManager.Instance.StartFight();
         }
     }

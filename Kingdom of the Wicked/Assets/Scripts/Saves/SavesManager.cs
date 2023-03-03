@@ -9,6 +9,7 @@ public class SavesManager : Singleton<SavesManager>
 
     public int PlayerNodeIndex { get; private set; }
     public List<CharacterData> Characters { get; private set; }
+    public List<ChestData> Chests { get; private set; }
     public List<MapNodeData> MapNodes { get; private set; }
     public int EnemyForFightId { get; private set; }
 
@@ -17,6 +18,7 @@ public class SavesManager : Singleton<SavesManager>
         base.Awake();
         fullPath = Path.Combine(Application.persistentDataPath, dataFileName);
         Characters = new();
+        Chests = new();
         MapNodes = new();
         Debug.Log(Application.persistentDataPath);
     }
@@ -28,7 +30,7 @@ public class SavesManager : Singleton<SavesManager>
 
     public void UpdateCharacter(Character character)
     {
-        var characterData = Characters.Find(x => x.id == character.Id);
+        var characterData = Characters.Find(x => x.id == character.CharacterId);
         if (characterData == null)
         {
             characterData = new CharacterData(character);
@@ -40,17 +42,32 @@ public class SavesManager : Singleton<SavesManager>
         }
     }
 
-    public void UpdateMapNode(int index, bool isVisited)
+    public void UpdateChest(ChestController chest)
     {
-        var mapNode = MapNodes.Find(x => x.nodeId == index);
+        var chestData = Chests.Find(x => x.chestId == chest.ChestId);
+        if (chestData == null)
+        {
+            chestData = new ChestData(chest.ChestId, chest.IsLocked, chest.IsEmpty);
+            Chests.Add(chestData);
+        }
+        else
+        {
+            chestData.isLocked = chest.IsLocked;
+            chestData.isEmpty = chest.IsEmpty;
+        }
+    }
+
+    public void UpdateMapNode(int nodeId)
+    {
+        var mapNode = MapNodes.Find(x => x.nodeId == nodeId);
         if (mapNode == null)
         {
-            mapNode = new MapNodeData(index, isVisited);
+            mapNode = new MapNodeData(nodeId);
             MapNodes.Add(mapNode);
         }
         else
         {
-            mapNode.isVisited = isVisited;
+            
         }
     }
 
@@ -62,7 +79,7 @@ public class SavesManager : Singleton<SavesManager>
     public void SaveGame()
     {
         Directory.CreateDirectory(Path.GetDirectoryName(fullPath));
-        var data = new GameData(PlayerNodeIndex, Characters, MapNodes);
+        var data = new GameData(PlayerNodeIndex, Characters, Chests, MapNodes);
         string dataToStore = JsonUtility.ToJson(data, true);
         using (FileStream stream = new FileStream(fullPath, FileMode.Create))
         {
@@ -100,6 +117,7 @@ public class SavesManager : Singleton<SavesManager>
         {
             PlayerNodeIndex = data.playerNodeIndex;
             Characters = data.characters;
+            Chests = data.chests;
             MapNodes = data.mapNodes;
         }
     }
@@ -108,6 +126,7 @@ public class SavesManager : Singleton<SavesManager>
     {
         PlayerNodeIndex = 1;
         Characters.Clear();
+        Chests.Clear();
         MapNodes.Clear();
     }
 

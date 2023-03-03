@@ -4,41 +4,57 @@ using UnityEngine;
 
 public class Character : MonoBehaviour
 {
-    [SerializeField] protected CharacterSO characterSO;
+    [SerializeField] protected int characterId = 0;
+    [SerializeField] protected SpriteRenderer bodySpriteRenderer;
+    [SerializeField] protected bool modelForFight = false;
     //[SerializeField] protected Outline outline;
 
 
-    public int Id { get; private set; }
-    public string CharacterName { get; private set; }
-    public string CharacterDescription { get; private set; }
-    public CharacterStats Stats { get; private set; }
-    public CharacterEquipment Equipment { get; private set; }
-    public CharacterDeck Deck { get; private set; }
-
-    protected virtual void Awake()
-    {
-        Id = characterSO.id;
-        CharacterName = characterSO.characterName;
-        CharacterDescription = characterSO.characterDescription;
-        Stats = new CharacterStats(this, characterSO);
-        Equipment = new CharacterEquipment(this);
-        Deck = new CharacterDeck(this);
-
-    }
+    public int CharacterId => characterId;
+    public string CharacterName { get; protected set; }
+    public string CharacterDescription { get; protected set; }
+    public CharacterStats Stats { get; protected set; }
+    public CharacterEquipment Equipment { get; protected set; }
+    public CharacterDeck Deck { get; protected set; }
 
     protected virtual void Start()
     {
-        Stats.ChHealth.Died += Death;
-        var data = SavesManager.Instance.Characters.Find(x => x.id == Id);
-        if (data != null)
+        if (characterId != 0)
         {
-            if (data.isDead)
+            InitCharacter(characterId);
+        }
+    }
+
+    public void InitCharacter(int characterId)
+    {
+        this.characterId = characterId;
+
+        var data = GameDatabase.Instance.Characters[CharacterId];
+        CharacterName = data.characterName;
+        CharacterDescription = data.characterDescription;
+        Stats = new CharacterStats(this, data);
+        Equipment = new CharacterEquipment(this);
+        Deck = new CharacterDeck(this);
+        Stats.ChHealth.Died += Death;
+        if (modelForFight)
+        {
+            bodySpriteRenderer.sprite = data.fightSprite;
+        }
+        else
+        {
+            bodySpriteRenderer.sprite = data.boardSprite;
+        }
+
+        var saveData = SavesManager.Instance.Characters.Find(x => x.id == CharacterId);
+        if (saveData != null)
+        {
+            if (saveData.isDead)
             {
                 Stats.ChHealth.SetIsDead(true);
                 Stats.ChHealth.SetCurrentHealth(0);
                 Destroy(gameObject);
             }
-            foreach (EquippedCard card in data.cards)
+            foreach (EquippedCard card in saveData.cards)
             {
                 var cardToEquip = GameDatabase.Instance.GetCard(card.id);
                 if (cardToEquip != null)
@@ -46,11 +62,11 @@ public class Character : MonoBehaviour
                     Equipment.AddCard(cardToEquip, card.storage, needToSave: false);
                 }
             }
-            Stats.ChHealth.SetCurrentHealth(data.health);
+            Stats.ChHealth.SetCurrentHealth(saveData.health);
         }
         else
         {
-            foreach (EquippedCardsSO card in characterSO.cards)
+            foreach (EquippedCardsSO card in data.cards)
             {
                 var cardToEquip = GameDatabase.Instance.GetCard(card.cardId);
                 if (cardToEquip != null)
@@ -61,11 +77,7 @@ public class Character : MonoBehaviour
         }
     }
 
-    protected virtual void Death()
-    {
-        SavesManager.Instance.UpdateCharacter(this);
-        Destroy(gameObject);
-    }
+    protected virtual void Death() { }
 
     public void Outline(Color color)
     {

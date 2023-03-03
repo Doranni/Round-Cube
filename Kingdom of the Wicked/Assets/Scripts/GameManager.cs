@@ -84,6 +84,28 @@ public class GameManager : Singleton<GameManager>
         }
     }
 
+    public void OpenChest(ChestController chest)
+    {
+        if (State == GameState.BoardInventory)
+        {
+            BoardSceneUI.Instance.OpenInventory(false);
+            State = GameState.BoardChest;
+            StartCoroutine(OpenChestRoutine(chest));
+        }
+        else if (State == GameState.BoardActive)
+        {
+            State = GameState.BoardChest;
+            StartCoroutine(OpenChestRoutine(chest));
+        }
+    }
+
+    private IEnumerator OpenChestRoutine(ChestController chest)
+    {
+        BoardCameraController.Instance.SetFocusTarget(chest.transform);
+        yield return new WaitForSeconds(0.8f);
+        chest.StartOpenAnimation();
+    }
+
     public void StartFight()
     {
         LoadSceneManager.Instance.LoadScene(LoadSceneManager.Scenes.Fighting);
@@ -104,7 +126,7 @@ public class GameManager : Singleton<GameManager>
         switch (storageName)
         {
             case IStorage.StorageNames.Inventory:
-            case IStorage.StorageNames.Storage:
+            case IStorage.StorageNames.Chest:
                 {
                     return cardSize_inventory;
                 }

@@ -1,9 +1,9 @@
 using UnityEngine;
 using Cinemachine;
 
-public class BoardCameraController : MonoBehaviour
+public class BoardCameraController : Singleton<BoardCameraController>
 {
-    [SerializeField] private CinemachineVirtualCamera followCamera;
+    [SerializeField] private CinemachineVirtualCamera followCamera, focusCamera;
     [SerializeField] private float zoomSpeed = 50, zoomStrength = 400;
     [SerializeField] private float followCamDistMin = 10, followCamDistMax = 60;
 
@@ -20,6 +20,7 @@ public class BoardCameraController : MonoBehaviour
 
         followFrTransposer.m_CameraDistance = 20;
         destDistFollowCam = 20;
+        UnsetFocusTarget();
     }
 
     private void CameraZoom_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj)
@@ -39,6 +40,20 @@ public class BoardCameraController : MonoBehaviour
             followFrTransposer.m_CameraDistance = Mathf.MoveTowards(followFrTransposer.m_CameraDistance,
                 destDistFollowCam, zoomSpeed * Time.deltaTime);
         }
+    }
+
+    public void SetFocusTarget(Transform target)
+    {
+        focusCamera.Follow = target;
+        focusCamera.LookAt = target;
+        focusCamera.Priority = 11;
+        followCamera.Priority = 10;
+    }
+
+    public void UnsetFocusTarget()
+    {
+        focusCamera.Priority = 10;
+        followCamera.Priority = 11;
     }
 
     private void OnDestroy()

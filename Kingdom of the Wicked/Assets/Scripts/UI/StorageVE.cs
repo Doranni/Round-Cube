@@ -15,6 +15,15 @@ public abstract class StorageVE : VisualElement
         IsActive = true;
         Cards = new(storage.Cards.Capacity);
         storage.CardsChanged += Update;
+        Update();
+    }
+
+    public virtual void Reset()
+    {
+        Storage.CardsChanged -= Update;
+        Storage = null;
+        IsActive = false;
+        Cards.Clear();
     }
 
     public virtual void Update()
@@ -75,6 +84,13 @@ public class InventoryVE : StorageVE
     public new class UxmlFactory : UxmlFactory<InventoryVE> { }
 
     public InventoryVE() { }
+}
+
+public class ChestVE : StorageVE
+{
+    public new class UxmlFactory : UxmlFactory<ChestVE> { }
+
+    public ChestVE() { }
 }
 
 public class SlotsHolderVE : VisualElement
