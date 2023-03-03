@@ -15,7 +15,7 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private Collider plCollider;
     [SerializeField] private float speed = 10;
 
-    public int NodeIndex { get; private set; }
+    public int CurrentNodeId { get; private set; }
     public MoveStatus MStatus { get; private set; }
 
     private float yOffset;
@@ -43,8 +43,8 @@ public class PlayerMovement : MonoBehaviour
                         {
                             destPoints.Clear();
                             MStatus = MoveStatus.onNode;
-                            SavesManager.Instance.UpdatePlayerPos(NodeIndex);
-                            Map.Instance.MapNodes[NodeIndex].Visit();
+                            SavesManager.Instance.UpdatePlayerPos(CurrentNodeId);
+                            Map.Instance.MapNodes[CurrentNodeId].Visit();
                             return;
                         }
                         movePosition = destPoints[passedDestPoints] + Vector3.up * yOffset;
@@ -58,18 +58,18 @@ public class PlayerMovement : MonoBehaviour
 
     private void MoveToStart()
     {
-        NodeIndex = SavesManager.Instance.PlayerNodeIndex;
-        transform.position = Map.Instance.MapNodes[NodeIndex].StayPoint
+        CurrentNodeId = SavesManager.Instance.PlayerNodeIndex;
+        transform.position = Map.Instance.MapNodes[CurrentNodeId].StayPoint
             + Vector3.up * yOffset;
         MStatus = MoveStatus.onNode;
-        Map.Instance.MapNodes[NodeIndex].Visit();
+        Map.Instance.MapNodes[CurrentNodeId].Visit();
     }
 
     public bool TrySetMoveNode(MapNode node)
     {
-        if (MStatus == MoveStatus.onNode && Map.Instance.IsNodeReachable(NodeIndex, node.MapNodeId))
+        if (MStatus == MoveStatus.onNode && Map.Instance.IsNodeReachable(CurrentNodeId, node.MapNodeId))
         {
-            var link = Map.Instance.MapNodes[NodeIndex].Links[node.MapNodeId];
+            var link = Map.Instance.MapNodes[CurrentNodeId].Links[node.MapNodeId];
             SetDestination(link);
             return true;
         }
@@ -78,12 +78,12 @@ public class PlayerMovement : MonoBehaviour
 
     public bool IsNodeReachable(MapNode node)
     {
-        return (MStatus == MoveStatus.onNode && Map.Instance.IsNodeReachable(NodeIndex, node.MapNodeId));
+        return (MStatus == MoveStatus.onNode && Map.Instance.IsNodeReachable(CurrentNodeId, node.MapNodeId));
     }
 
     private void SetDestination(NodeLink link)
     {
-        NodeIndex = link.NextMapNodeId;
+        CurrentNodeId = link.NextMapNodeId;
         for (int i = 0; i < link.PathPoints.Count; i++)
         {
             destPoints.Add(link.PathPoints[i]);

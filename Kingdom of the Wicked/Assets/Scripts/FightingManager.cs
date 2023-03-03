@@ -18,7 +18,7 @@ public class FightingManager : Singleton<FightingManager>
         base.Awake();
         if (GameDatabase.Instance.Characters.ContainsKey(SavesManager.Instance.EnemyForFightId))
         {
-            Enemy.InitEnemie(GameDatabase.Instance.Characters[SavesManager.Instance.EnemyForFightId]);
+            Enemy.InitCharacter(SavesManager.Instance.EnemyForFightId);
             StartFight();
         }
         else

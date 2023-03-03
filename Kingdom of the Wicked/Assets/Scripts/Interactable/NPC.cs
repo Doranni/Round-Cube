@@ -4,11 +4,11 @@ using UnityEngine;
 
 public class NPC : MonoBehaviour, IInteractable
 {
-    public bool isLocked { get; private set; }
+    public bool IsLocked { get; private set; }
 
     private void Awake()
     {
-        isLocked = true;
+        IsLocked = true;
     }
 
     public void Interact()
@@ -18,7 +18,7 @@ public class NPC : MonoBehaviour, IInteractable
 
     public void Unlock()
     {
-        isLocked = false;
+        IsLocked = false;
         Debug.Log($"NPC {name} was unlocked");
     }
 }

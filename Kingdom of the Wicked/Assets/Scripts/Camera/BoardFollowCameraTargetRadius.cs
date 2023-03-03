@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class BoardCameraTargetRadius : MonoBehaviour
+public class BoardFollowCameraTargetRadius : MonoBehaviour
 {
     [SerializeField] private float speed = 30, radius = 10;
 

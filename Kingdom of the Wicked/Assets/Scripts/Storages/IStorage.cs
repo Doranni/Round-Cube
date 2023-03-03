@@ -12,7 +12,7 @@ public interface IStorage
         OtherSlot2,
         OtherSlot3,
         Inventory,
-        Storage
+        Chest
     }
     public StorageNames StorageName { get; }
     public Card.CardsType CardTypes { get; }

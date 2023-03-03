@@ -8,6 +8,7 @@ public class GameDatabase : Singleton<GameDatabase>
     public Dictionary<int, CardSO> Cards { get; private set; }
     public Dictionary<Stat.StatId, (string name, string description)> StatsDescription { get; private set; }
     public Dictionary<int, CharacterSO> Characters { get; private set; }
+    public Dictionary<int, ChestSO> Chests { get; private set; }
 
     protected override void Awake()
     {
@@ -32,6 +33,13 @@ public class GameDatabase : Singleton<GameDatabase>
         for (int i = 0; i < characters.Length; i++)
         {
             Characters.Add(characters[i].id, characters[i]);
+        }
+
+        ChestSO[] chests = Resources.LoadAll<ChestSO>("Chests");
+        Chests = new(chests.Length);
+        for (int i = 0; i < chests.Length; i++)
+        {
+            Chests.Add(chests[i].id, chests[i]);
         }
     }
 

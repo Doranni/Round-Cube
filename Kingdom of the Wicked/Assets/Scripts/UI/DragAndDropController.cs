@@ -46,7 +46,7 @@ public class DragAndDropController : Singleton<DragAndDropController>
 
     private void PointerUpEventHandler(PointerUpEvent evt)
     {
-        var storages = BoardSceneUI.Instance.GetAvailableStorages(target.CardData.CardType);
+        var storages = BoardSceneUI.Instance.GetAvailableStorages();
         List<IStorage.StorageNames> overlapStorages = new();
         for (int i = 0; i < storages.Count; i++)
         {

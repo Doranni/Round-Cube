@@ -4,7 +4,7 @@ using UnityEngine;
 
 public interface IInteractable
 {
-    public bool isLocked { get; }
+    public bool IsLocked { get; }
     public void Interact();
     public void Unlock();
 }

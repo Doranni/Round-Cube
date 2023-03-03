@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -21,8 +22,14 @@ public class BoardSceneUI : Singleton<BoardSceneUI>
     private Dictionary<SlotsHolder.SlotsHolderNames, SlotsHolderVE> slotsHolders;
 
     private HealthBarVE plHealthBar;
+
     private StorageVE weaponSlot, inventory;
     private VisualElement inventoryButton, inventoryScreen;
+
+    private VisualElement chestScreen;
+    private ChestVE chest;
+    private Button chestTakeAllButton;
+
     private VisualElement dragCardPanel;
 
     const string k_plHealthBar = "PlayerHP";
@@ -34,6 +41,10 @@ public class BoardSceneUI : Singleton<BoardSceneUI>
     const string k_inventoryScreen = "Inventory";
     const string k_inventoryContent = "InventoryContent";
 
+    const string k_chestScreen = "Chest";
+    const string k_chest = "ChestContent";
+    const string k_chestTakeAllButton = "ButtonChestTakeAll";
+
     const string k_dragCardPanel = "DragCardPanel";
 
     protected override void Awake()
@@ -41,13 +52,21 @@ public class BoardSceneUI : Singleton<BoardSceneUI>
         base.Awake();
 
         State = BoardUIState.Closed;
+
         VisualElement rootElement = GetComponent<UIDocument>().rootVisualElement;
+
         plHealthBar = rootElement.Q<HealthBarVE>(k_plHealthBar);
+
+        weaponSlot = rootElement.Q<SlotVE>(k_slot_weapon);
         inventoryButton = rootElement.Q(k_inventoryButton);
         inventoryScreen = rootElement.Q(k_inventoryScreen);
-        dragCardPanel = rootElement.Q(k_dragCardPanel);
-        weaponSlot = rootElement.Q<SlotVE>(k_slot_weapon);
         inventory = rootElement.Q<InventoryVE>(k_inventoryContent);
+
+        chestScreen = rootElement.Q(k_chestScreen);
+        chest = rootElement.Q<ChestVE>(k_chest);
+        chestTakeAllButton = rootElement.Q<Button>(k_chestTakeAllButton);
+
+        dragCardPanel = rootElement.Q(k_dragCardPanel);
 
         storages = new()
         {
@@ -64,6 +83,8 @@ public class BoardSceneUI : Singleton<BoardSceneUI>
         var size = GameManager.Instance.CardSize_slot;
         inventoryButton.style.width = size.x;
         inventoryButton.style.height = size.y;
+
+        chestScreen.style.display = DisplayStyle.None;
     }
 
     private void Start()
@@ -85,15 +106,41 @@ public class BoardSceneUI : Singleton<BoardSceneUI>
 
         DragAndDropController.Instance.Init(dragCardPanel);
 
-        inventoryButton.RegisterCallback<ClickEvent>(_ => ToggleOpenInvemtory()) ;
+        inventoryButton.RegisterCallback<ClickEvent>(_ => InventoryButtonClicked()) ;
         player.Equipment.Storages[IStorage.StorageNames.Inventory].CardsChanged += DisplayInventoryButton;
 
-        foreach (StorageVE storage in storages)
-        {
-            storage.Update();
-        }
         DisplayInventoryButton();
         DisplayInventory();
+
+        chestTakeAllButton.RegisterCallback<ClickEvent>(_ => CloseChest());
+    }
+
+    public void OpenChest(Chest chest)
+    {
+        this.chest.Init(chest);
+        chestScreen.style.display = DisplayStyle.Flex;
+        State = BoardUIState.Chest;
+    }
+
+    public void CloseChest()
+    {
+        StartCoroutine(CloseChestRoutine());
+    }
+
+    private IEnumerator CloseChestRoutine()
+    {
+        for (int i = 0; i < chest.Storage.Cards.Count; i++)
+        {
+            inventory.Storage.AddCard(chest.Storage.Cards[i], false);
+            chest.Storage.RemoveCard(chest.Storage.Cards[i]);
+            --i;
+        }
+        chestScreen.style.display = DisplayStyle.None;
+        yield return new WaitForSeconds(0.2f);
+        BoardCameraController.Instance.UnsetFocusTarget();
+        chest.Reset();
+        State = BoardUIState.Closed;
+        GameManager.Instance.UpdateState();
     }
 
     private void DisplayInventoryButton()
@@ -121,6 +168,14 @@ public class BoardSceneUI : Singleton<BoardSceneUI>
         else
         {
             inventoryScreen.style.display = DisplayStyle.None;
+        }
+    }
+
+    private void InventoryButtonClicked()
+    {
+        if (State != BoardUIState.Chest)
+        {
+            ToggleOpenInvemtory();
         }
     }
 
@@ -173,7 +228,7 @@ public class BoardSceneUI : Singleton<BoardSceneUI>
         }
     }
 
-    public List<StorageVE> GetAvailableStorages(Card.CardsType type)
+    public List<StorageVE> GetAvailableStorages()
     {
         List<StorageVE> res = new();
         foreach (StorageVE storage in storages)
@@ -190,7 +245,7 @@ public class BoardSceneUI : Singleton<BoardSceneUI>
         List<IStorage.StorageNames> newStorages)
     {
         if (newStorages.Count == 0 &&
-            (prevStorage != IStorage.StorageNames.Inventory && prevStorage != IStorage.StorageNames.Storage))
+            (prevStorage != IStorage.StorageNames.Inventory && prevStorage != IStorage.StorageNames.Chest))
         {
             player.Equipment.MoveCard(card, prevStorage, IStorage.StorageNames.Inventory);
             OpenSlotsHolders(card, false);
