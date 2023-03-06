@@ -27,7 +27,7 @@ public class BoardSceneUI : Singleton<BoardSceneUI>
     private VisualElement inventoryButton, inventoryScreen;
 
     private VisualElement chestScreen;
-    private ChestVE chest;
+    private RewardVE chest;
     private Button chestTakeAllButton;
 
     private VisualElement dragCardPanel;
@@ -63,7 +63,7 @@ public class BoardSceneUI : Singleton<BoardSceneUI>
         inventory = rootElement.Q<InventoryVE>(k_inventoryContent);
 
         chestScreen = rootElement.Q(k_chestScreen);
-        chest = rootElement.Q<ChestVE>(k_chest);
+        chest = rootElement.Q<RewardVE>(k_chest);
         chestTakeAllButton = rootElement.Q<Button>(k_chestTakeAllButton);
 
         dragCardPanel = rootElement.Q(k_dragCardPanel);
@@ -115,7 +115,7 @@ public class BoardSceneUI : Singleton<BoardSceneUI>
         chestTakeAllButton.RegisterCallback<ClickEvent>(_ => CloseChest());
     }
 
-    public void OpenChest(Chest chest)
+    public void OpenChest(Reward chest)
     {
         this.chest.Init(chest);
         chestScreen.style.display = DisplayStyle.Flex;
@@ -131,9 +131,7 @@ public class BoardSceneUI : Singleton<BoardSceneUI>
     {
         for (int i = 0; i < chest.Storage.Cards.Count; i++)
         {
-            inventory.Storage.AddCard(chest.Storage.Cards[i], false);
-            chest.Storage.RemoveCard(chest.Storage.Cards[i]);
-            --i;
+            player.Equipment.AddCard(chest.Storage.Cards[i], IStorage.StorageNames.Inventory, false, true);
         }
         chestScreen.style.display = DisplayStyle.None;
         yield return new WaitForSeconds(0.2f);
@@ -245,7 +243,7 @@ public class BoardSceneUI : Singleton<BoardSceneUI>
         List<IStorage.StorageNames> newStorages)
     {
         if (newStorages.Count == 0 &&
-            (prevStorage != IStorage.StorageNames.Inventory && prevStorage != IStorage.StorageNames.Chest))
+            (prevStorage != IStorage.StorageNames.Inventory && prevStorage != IStorage.StorageNames.Reward))
         {
             player.Equipment.MoveCard(card, prevStorage, IStorage.StorageNames.Inventory);
             OpenSlotsHolders(card, false);

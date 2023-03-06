@@ -10,18 +10,16 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d9e16204c21960347b9de559a64c9779, type: 3}
-  m_Name: Enemy1
+  m_Name: 202 Forest goblin_2
   m_EditorClassIdentifier: 
-  id: 201
-  characterName: Enemy 1
+  id: 202
+  characterName: Forest\ngoblin_2
   characterDescription: 
-  baseHealthValue: 50
+  baseHealthValue: 70
   armorValue: 0
   damageValue: 0
   cards:
   - cardId: 102
     storage: 0
-  - cardId: 201
-    storage: 1
-  boardSprite: {fileID: 531093429, guid: 16c6f66a70805224591bd63001257b39, type: 3}
-  fightSprite: {fileID: 531093429, guid: 16c6f66a70805224591bd63001257b39, type: 3}
+  boardSprite: {fileID: -1936122501, guid: 16c6f66a70805224591bd63001257b39, type: 3}
+  fightSprite: {fileID: -1936122501, guid: 16c6f66a70805224591bd63001257b39, type: 3}

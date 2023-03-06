@@ -10,26 +10,20 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d9e16204c21960347b9de559a64c9779, type: 3}
-  m_Name: Player
+  m_Name: 203 Goblin-pirate
   m_EditorClassIdentifier: 
-  id: 101
-  characterName: 
+  id: 203
+  characterName: Goblin\npirate
   characterDescription: 
-  baseHealthValue: 100
+  baseHealthValue: 80
   armorValue: 0
   damageValue: 0
   cards:
-  - cardId: 101
+  - cardId: 102
     storage: 0
-  - cardId: 201
-    storage: 1
-  - cardId: 301
+  - cardId: 302
     storage: 2
   - cardId: 401
     storage: 3
-  - cardId: 202
-    storage: 6
-  - cardId: 402
-    storage: 6
-  boardSprite: {fileID: 1848358945, guid: 16c6f66a70805224591bd63001257b39, type: 3}
-  fightSprite: {fileID: 281882599, guid: 16c6f66a70805224591bd63001257b39, type: 3}
+  boardSprite: {fileID: 77422305, guid: 16c6f66a70805224591bd63001257b39, type: 3}
+  fightSprite: {fileID: 77422305, guid: 16c6f66a70805224591bd63001257b39, type: 3}

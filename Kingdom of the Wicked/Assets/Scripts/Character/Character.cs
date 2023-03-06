@@ -7,8 +7,10 @@ public class Character : MonoBehaviour
     [SerializeField] protected int characterId = 0;
     [SerializeField] protected SpriteRenderer bodySpriteRenderer;
     [SerializeField] protected bool modelForFight = false;
+    [SerializeField] protected Animator animator;
     //[SerializeField] protected Outline outline;
 
+    protected int anim_death_trigger;
 
     public int CharacterId => characterId;
     public string CharacterName { get; protected set; }
@@ -16,6 +18,11 @@ public class Character : MonoBehaviour
     public CharacterStats Stats { get; protected set; }
     public CharacterEquipment Equipment { get; protected set; }
     public CharacterDeck Deck { get; protected set; }
+
+    protected void Awake()
+    {
+        anim_death_trigger = Animator.StringToHash("Death");
+    }
 
     protected virtual void Start()
     {
@@ -50,9 +57,7 @@ public class Character : MonoBehaviour
         {
             if (saveData.isDead)
             {
-                Stats.ChHealth.SetIsDead(true);
-                Stats.ChHealth.SetCurrentHealth(0);
-                Destroy(gameObject);
+                LoadingWhenDead();
             }
             foreach (EquippedCard card in saveData.cards)
             {
@@ -71,10 +76,17 @@ public class Character : MonoBehaviour
                 var cardToEquip = GameDatabase.Instance.GetCard(card.cardId);
                 if (cardToEquip != null)
                 {
-                    Equipment.AddCard(cardToEquip, card.storage);
+                    Equipment.AddCard(cardToEquip, card.storage, needToSave: false);
                 }
             }
         }
+    }
+
+    protected virtual void LoadingWhenDead() 
+    {
+        Stats.ChHealth.SetIsDead(true);
+        Stats.ChHealth.SetCurrentHealth(0);
+        Destroy(gameObject);
     }
 
     protected virtual void Death() { }

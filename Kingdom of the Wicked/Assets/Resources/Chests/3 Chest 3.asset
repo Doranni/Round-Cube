@@ -9,16 +9,8 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 90a3ad9abd8c7a44b8a01a44acb11e00, type: 3}
-  m_Name: Armor card 1
+  m_Script: {fileID: 11500000, guid: 7a47f21d3a9649c48aa562315a6abbc7, type: 3}
+  m_Name: 3 Chest 3
   m_EditorClassIdentifier: 
-  id: 201
-  cardName: Armor 1
-  description: Simple\nArmor 1
-  statBonuses:
-  - statTypeId: 1
-    value: 20
-  - statTypeId: 0
-    value: 10
-  duration: 0
-  image: {fileID: 0}
+  id: 3
+  cardsId: 2d010000

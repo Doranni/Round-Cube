@@ -376,7 +376,7 @@ PrefabInstance:
     - target: {fileID: 6527514638932836269, guid: cb9b464b00f87f549ade0fb760010032,
         type: 3}
       propertyPath: m_Name
-      value: Enemie 2
+      value: 202 Forest goblin_2
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: cb9b464b00f87f549ade0fb760010032, type: 3}
@@ -1294,6 +1294,11 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8923163274145408232, guid: 206ed91cd31be814ca89c43f13236438,
+        type: 3}
+      propertyPath: radius
+      value: 27
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 206ed91cd31be814ca89c43f13236438, type: 3}
 --- !u!114 &606135782 stripped
@@ -1490,22 +1495,22 @@ PrefabInstance:
     - target: {fileID: 6527514638932836268, guid: cb9b464b00f87f549ade0fb760010032,
         type: 3}
       propertyPath: m_RootOrder
-      value: 10
+      value: 13
       objectReference: {fileID: 0}
     - target: {fileID: 6527514638932836268, guid: cb9b464b00f87f549ade0fb760010032,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: -1.081
+      value: 12.43
       objectReference: {fileID: 0}
     - target: {fileID: 6527514638932836268, guid: cb9b464b00f87f549ade0fb760010032,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 1.287
+      value: -2.686
       objectReference: {fileID: 0}
     - target: {fileID: 6527514638932836268, guid: cb9b464b00f87f549ade0fb760010032,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 13.639
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 6527514638932836268, guid: cb9b464b00f87f549ade0fb760010032,
         type: 3}
@@ -1545,7 +1550,7 @@ PrefabInstance:
     - target: {fileID: 6527514638932836269, guid: cb9b464b00f87f549ade0fb760010032,
         type: 3}
       propertyPath: m_Name
-      value: Enemie 3
+      value: 203 Goblin-pirate
       objectReference: {fileID: 0}
     - target: {fileID: 6527514638932836269, guid: cb9b464b00f87f549ade0fb760010032,
         type: 3}
@@ -1682,13 +1687,18 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 3224315474962608726, guid: 39f3fb8514684cc4d8c0164fc5b2d84e,
         type: 3}
+      propertyPath: enemy
+      value: 
+      objectReference: {fileID: 746751000}
+    - target: {fileID: 3224315474962608726, guid: 39f3fb8514684cc4d8c0164fc5b2d84e,
+        type: 3}
       propertyPath: mapNodeId
       value: 9
       objectReference: {fileID: 0}
     - target: {fileID: 3224315474962608729, guid: 39f3fb8514684cc4d8c0164fc5b2d84e,
         type: 3}
       propertyPath: m_RootOrder
-      value: 14
+      value: 12
       objectReference: {fileID: 0}
     - target: {fileID: 3224315474962608729, guid: 39f3fb8514684cc4d8c0164fc5b2d84e,
         type: 3}
@@ -1850,7 +1860,7 @@ PrefabInstance:
     - target: {fileID: 6527514638932836269, guid: cb9b464b00f87f549ade0fb760010032,
         type: 3}
       propertyPath: m_Name
-      value: Enemie 1
+      value: 201 Forest goblin_1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: cb9b464b00f87f549ade0fb760010032, type: 3}
@@ -2014,7 +2024,7 @@ PrefabInstance:
     - target: {fileID: 3224315474962608729, guid: 39f3fb8514684cc4d8c0164fc5b2d84e,
         type: 3}
       propertyPath: m_RootOrder
-      value: 15
+      value: 14
       objectReference: {fileID: 0}
     - target: {fileID: 3224315474962608729, guid: 39f3fb8514684cc4d8c0164fc5b2d84e,
         type: 3}
@@ -2126,7 +2136,7 @@ PrefabInstance:
     - target: {fileID: 1475411828755995077, guid: 4d4469b9f09ea6348b0788150167e908,
         type: 3}
       propertyPath: m_RootOrder
-      value: 12
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 1475411828755995077, guid: 4d4469b9f09ea6348b0788150167e908,
         type: 3}
@@ -2296,10 +2306,10 @@ Transform:
   - {fileID: 138404534}
   - {fileID: 308400091}
   - {fileID: 1234571657}
-  - {fileID: 746750999}
   - {fileID: 1189839913}
   - {fileID: 1965449815}
   - {fileID: 1041598045}
+  - {fileID: 746750999}
   - {fileID: 1179019689}
   - {fileID: 1444794012}
   m_Father: {fileID: 1358235815}
@@ -2316,7 +2326,7 @@ PrefabInstance:
         type: 3}
       propertyPath: enemy
       value: 
-      objectReference: {fileID: 746751000}
+      objectReference: {fileID: 0}
     - target: {fileID: 3224315474962608726, guid: 39f3fb8514684cc4d8c0164fc5b2d84e,
         type: 3}
       propertyPath: mapNodeId
@@ -2451,7 +2461,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1241662596}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 16.38, y: 2.04, z: -1.5099993}
+  m_LocalPosition: {x: 12.7, y: 2.04, z: -4.38}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -2537,7 +2547,7 @@ PrefabInstance:
     - target: {fileID: 1475411828755995077, guid: 4d4469b9f09ea6348b0788150167e908,
         type: 3}
       propertyPath: m_RootOrder
-      value: 16
+      value: 15
       objectReference: {fileID: 0}
     - target: {fileID: 1475411828755995077, guid: 4d4469b9f09ea6348b0788150167e908,
         type: 3}
@@ -3011,7 +3021,7 @@ PrefabInstance:
     - target: {fileID: 3224315474962608729, guid: 39f3fb8514684cc4d8c0164fc5b2d84e,
         type: 3}
       propertyPath: m_RootOrder
-      value: 13
+      value: 11
       objectReference: {fileID: 0}
     - target: {fileID: 3224315474962608729, guid: 39f3fb8514684cc4d8c0164fc5b2d84e,
         type: 3}
@@ -3444,7 +3454,6 @@ GameObject:
   - component: {fileID: 2140604883}
   - component: {fileID: 2140604889}
   - component: {fileID: 2140604890}
-  - component: {fileID: 2140604888}
   m_Layer: 5
   m_Name: UIDocument
   m_TagString: Untagged
@@ -3484,19 +3493,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &2140604888
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2140604882}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8a1b97a182001ab41a64a63fc42cdfd3, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  player: {fileID: 606135782}
 --- !u!114 &2140604889
 MonoBehaviour:
   m_ObjectHideFlags: 0

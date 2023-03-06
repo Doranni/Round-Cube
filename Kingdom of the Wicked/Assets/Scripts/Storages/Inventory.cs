@@ -25,7 +25,7 @@ public class Inventory : IStorage
         return (true, null);
     }
 
-    public bool RemoveCard(Card card)
+    public bool RemoveCard(Card card, bool forceRemove = false)
     {
         var cardToRemove = Cards.Find(x => x.NameId == card.NameId);
         if (cardToRemove == null)

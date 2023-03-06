@@ -10,11 +10,25 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 5c3b6e399fda1d346966bb38f90545fe, type: 3}
-  m_Name: Magic card 1
+  m_Name: 401 Fireball
   m_EditorClassIdentifier: 
   id: 401
-  cardName: Magic 1
-  description: Simple\nMagic 1
-  statBonuses: []
+  cardName: Fireball
+  description: 
   duration: 0
   image: {fileID: 0}
+  effects:
+  - effectType: 2
+    name: 
+    description: 
+    duration: 1
+    valueType: 0
+    value: 26
+    chance: 1
+  - effectType: 2
+    name: 
+    description: 
+    duration: 3
+    valueType: 0
+    value: 4
+    chance: 1
