@@ -12,6 +12,13 @@ public class EnemyController : Character
     protected override void Death()
     {
         SavesManager.Instance.UpdateCharacter(this);
-        Destroy(gameObject);
+        if (LoadSceneManager.Instance.State == LoadSceneManager.LoadState.Fighting)
+        {
+            animator.SetTrigger(anim_death_trigger);
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
     }
 }

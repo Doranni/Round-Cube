@@ -9,12 +9,14 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6bb6dd02538b2b5488e84eb7830a65b6, type: 3}
-  m_Name: Potion card 1
+  m_Script: {fileID: 11500000, guid: 90a3ad9abd8c7a44b8a01a44acb11e00, type: 3}
+  m_Name: 201 Leather vest
   m_EditorClassIdentifier: 
-  id: 501
-  cardName: Potion 1
-  description: Simple\nPotion 1
-  statBonuses: []
+  id: 201
+  cardName: Leather\nvest
+  description: 
   duration: 0
   image: {fileID: 0}
+  statBonuses:
+  - statTypeId: 1
+    value: 10

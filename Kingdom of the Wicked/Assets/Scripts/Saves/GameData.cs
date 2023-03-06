@@ -4,15 +4,17 @@ using System.Collections.Generic;
 [Serializable]
 public class GameData
 {
-    public int playerNodeIndex;
+    public int playerCurrentNodeIndex;
+    public int playerPrevNodeIndex;
     public List<CharacterData> characters;
     public List<ChestData> chests;
     public List<MapNodeData> mapNodes;
 
-    public GameData(int playerNodeIndex, List<CharacterData> characters, List<ChestData> chests,
+    public GameData(int playerCurrentNodeIndex, int playerPrevNodeIndex, List<CharacterData> characters, List<ChestData> chests,
         List<MapNodeData> mapNodes)
     {
-        this.playerNodeIndex = playerNodeIndex;
+        this.playerCurrentNodeIndex = playerCurrentNodeIndex;
+        this.playerPrevNodeIndex = playerPrevNodeIndex;
         this.characters = characters;
         this.chests = chests;
         this.mapNodes = mapNodes;

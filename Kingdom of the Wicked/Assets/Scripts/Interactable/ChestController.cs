@@ -6,12 +6,12 @@ public class ChestController : MonoBehaviour, IInteractable
 {
     [SerializeField] private int chestId;
     [SerializeField] private int mapNodeId;
-    [SerializeField] Animator animator;
+    [SerializeField] private Animator animator;
     [SerializeField] private Outline outline;
 
     public int ChestId => chestId;
     public int MapNodeId => mapNodeId;
-    public Chest ChestStorage { get; private set; }
+    public Reward ChestStorage { get; private set; }
     public bool IsLocked { get; private set; }
     public bool IsEmpty { get; private set; }
 
@@ -25,7 +25,7 @@ public class ChestController : MonoBehaviour, IInteractable
 
     private void Start()
     {
-        ChestStorage = new Chest();
+        ChestStorage = new Reward();
         var data = GameDatabase.Instance.Chests[chestId];
         var saveData = SavesManager.Instance.Chests.Find(x => x.chestId == chestId);
         if (saveData != null)
@@ -46,7 +46,7 @@ public class ChestController : MonoBehaviour, IInteractable
         {
             foreach (int cardId in data.cardsId)
             {
-                ChestStorage.AddCard(GameDatabase.Instance.GetCard(cardId), false);
+                ChestStorage.AddCard(GameDatabase.Instance.GetCard(cardId));
             }
         }
     }

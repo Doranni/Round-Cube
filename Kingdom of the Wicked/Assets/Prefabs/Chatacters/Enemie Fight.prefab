@@ -83,10 +83,47 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 531093429, guid: 16c6f66a70805224591bd63001257b39,
         type: 3}
+    - target: {fileID: 8714637438610215870, guid: b3a9e2c080f04ee49a564d56da15fd63,
+        type: 3}
+      propertyPath: m_Controller
+      value: 
+      objectReference: {fileID: 9100000, guid: 9b83cdc97c3c5ca41a44ff6624f784cc, type: 2}
+    - target: {fileID: 8811553112081131016, guid: b3a9e2c080f04ee49a564d56da15fd63,
+        type: 3}
+      propertyPath: character
+      value: 
+      objectReference: {fileID: 5156958603539049969}
+    - target: {fileID: 8811553112081131016, guid: b3a9e2c080f04ee49a564d56da15fd63,
+        type: 3}
+      propertyPath: outline_targetAvailable.a
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8811553112081131016, guid: b3a9e2c080f04ee49a564d56da15fd63,
+        type: 3}
+      propertyPath: outline_targetAvailable.b
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8811553112081131016, guid: b3a9e2c080f04ee49a564d56da15fd63,
+        type: 3}
+      propertyPath: outline_targetAvailable.g
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8811553112081131016, guid: b3a9e2c080f04ee49a564d56da15fd63,
+        type: 3}
+      propertyPath: outline_targetAvailable.r
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 8920787486085111194, guid: b3a9e2c080f04ee49a564d56da15fd63, type: 3}
     - {fileID: 2099486521291211625, guid: b3a9e2c080f04ee49a564d56da15fd63, type: 3}
+    - {fileID: 2594689698401522564, guid: b3a9e2c080f04ee49a564d56da15fd63, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: b3a9e2c080f04ee49a564d56da15fd63, type: 3}
+--- !u!95 &1016653762510325550 stripped
+Animator:
+  m_CorrespondingSourceObject: {fileID: 8714637438610215870, guid: b3a9e2c080f04ee49a564d56da15fd63,
+    type: 3}
+  m_PrefabInstance: {fileID: 8569080850460742800}
+  m_PrefabAsset: {fileID: 0}
 --- !u!212 &6595311326998770328 stripped
 SpriteRenderer:
   m_CorrespondingSourceObject: {fileID: 3273058188312684040, guid: b3a9e2c080f04ee49a564d56da15fd63,
@@ -114,17 +151,4 @@ MonoBehaviour:
   characterId: 0
   bodySpriteRenderer: {fileID: 6595311326998770328}
   modelForFight: 1
---- !u!114 &6376394002113133316
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8437713742256271770}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3f41e7f26927f0449b090807228347bb, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  character: {fileID: 5156958603539049969}
-  outline_targetAvailable: {r: 1, g: 0, b: 0, a: 1}
+  animator: {fileID: 1016653762510325550}

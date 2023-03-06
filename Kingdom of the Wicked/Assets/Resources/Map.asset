@@ -21,7 +21,7 @@ MonoBehaviour:
     - nextMapNodeId: 10
       isWayOpen: 1
       betweenPathPoints:
-      - {x: 16.38, y: 2.04, z: -1.5099993}
+      - {x: 12.7, y: 2.04, z: -4.38}
   - mapNodeId: 2
     links:
     - nextMapNodeId: 1
@@ -111,7 +111,7 @@ MonoBehaviour:
     - nextMapNodeId: 1
       isWayOpen: 1
       betweenPathPoints:
-      - {x: 16.38, y: 2.04, z: -1.5099993}
+      - {x: 12.7, y: 2.04, z: -4.38}
     - nextMapNodeId: 2
       isWayOpen: 1
       betweenPathPoints: []

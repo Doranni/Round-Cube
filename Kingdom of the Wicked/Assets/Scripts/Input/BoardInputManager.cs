@@ -37,7 +37,7 @@ public class BoardInputManager : Singleton<BoardInputManager>
 
     public void Character_Clicked(Character character)
     {
-        FightingManager.Instance.TrySetTarget(character);
+        //FightingManager.Instance.TrySetTarget(character);
     }
 
     public void Character_PointerEnter(Character character)

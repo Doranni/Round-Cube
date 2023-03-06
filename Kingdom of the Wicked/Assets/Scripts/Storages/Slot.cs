@@ -44,9 +44,9 @@ public class Slot : IStorage
         return (true, releasedCard);
     }
 
-    public bool RemoveCard(Card card)
+    public bool RemoveCard(Card card, bool forceRemove = false)
     {
-        if (CanBeEmpty)
+        if (CanBeEmpty || forceRemove)
         {
             if (Cards[0].InstanceId == card.InstanceId)
             {
