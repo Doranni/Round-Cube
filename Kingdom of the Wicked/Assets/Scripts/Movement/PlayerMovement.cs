@@ -58,7 +58,7 @@ public class PlayerMovement : MonoBehaviour
 
     private void MoveToStart()
     {
-        CurrentNodeId = SavesManager.Instance.PlayerNodeIndex;
+        CurrentNodeId = SavesManager.Instance.PlayerCurrentNodeIndex;
         transform.position = Map.Instance.MapNodes[CurrentNodeId].StayPoint
             + Vector3.up * yOffset;
         MStatus = MoveStatus.onNode;

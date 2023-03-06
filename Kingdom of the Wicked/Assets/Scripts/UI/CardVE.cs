@@ -64,7 +64,7 @@ public class CardVE : VisualElement
         switch (Storage)
         {
             case IStorage.StorageNames.Inventory:
-            case IStorage.StorageNames.Chest:
+            case IStorage.StorageNames.Reward:
                 {
                     style.marginBottom = GameManager.Instance.InventoryCardMargin;
                     style.marginTop = GameManager.Instance.InventoryCardMargin;

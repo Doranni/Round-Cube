@@ -463,12 +463,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 72beb9ba1ddd6d94a84b24f418deeba3, type: 3}
---- !u!212 &6675019739160430723 stripped
-SpriteRenderer:
-  m_CorrespondingSourceObject: {fileID: 4424286332069977787, guid: 72beb9ba1ddd6d94a84b24f418deeba3,
-    type: 3}
-  m_PrefabInstance: {fileID: 7044852388821554744}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &8231991135105584001 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 1439392381520010681, guid: 72beb9ba1ddd6d94a84b24f418deeba3,
@@ -487,19 +481,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d0384db8e55f63940a55e06556aa0173, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  character: {fileID: 7159589125277109366}
---- !u!114 &7159589125277109366
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8231991135105584001}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f04d7f187a03e264dab7224df4baef96, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  characterId: 0
-  bodySpriteRenderer: {fileID: 6675019739160430723}
-  modelForFight: 0
+  character: {fileID: 0}

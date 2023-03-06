@@ -126,7 +126,7 @@ public class GameManager : Singleton<GameManager>
         switch (storageName)
         {
             case IStorage.StorageNames.Inventory:
-            case IStorage.StorageNames.Chest:
+            case IStorage.StorageNames.Reward:
                 {
                     return cardSize_inventory;
                 }

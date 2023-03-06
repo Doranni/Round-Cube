@@ -9,12 +9,19 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 82a9998bae5ef8640848420b460b6412, type: 3}
-  m_Name: Artifact card 2
+  m_Script: {fileID: 11500000, guid: 6bb6dd02538b2b5488e84eb7830a65b6, type: 3}
+  m_Name: 501 Carrot juice
   m_EditorClassIdentifier: 
-  id: 602
-  cardName: Artifact 2
-  description: Simple\nArtifact 2
-  statBonuses: []
-  duration: 0
+  id: 501
+  cardName: ' Carrot\njuice'
+  description: 
+  duration: 3
   image: {fileID: 0}
+  effects:
+  - effectType: 1
+    name: 
+    description: Restores HP by 25%.
+    duration: 0
+    valueType: 1
+    value: 0.25
+    chance: 1

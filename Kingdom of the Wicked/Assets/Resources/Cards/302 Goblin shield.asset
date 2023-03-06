@@ -10,13 +10,11 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: c4ff4b94831fb8d4fba2dce295af778a, type: 3}
-  m_Name: Shield card 2
+  m_Name: 302 Goblin shield
   m_EditorClassIdentifier: 
   id: 302
-  cardName: Shield 2
-  description: Simple\nShield 2
+  cardName: Goblin\nshield
+  description: 
   duration: 0
   image: {fileID: 0}
-  statBonuses:
-  - statTypeId: 1
-    value: 50
+  statBonuses: []

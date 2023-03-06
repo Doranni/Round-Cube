@@ -7,7 +7,8 @@ public class SavesManager : Singleton<SavesManager>
 {
     private string dataFileName = "data", fullPath;
 
-    public int PlayerNodeIndex { get; private set; }
+    public int PlayerCurrentNodeIndex { get; private set; }
+    public int PlayerPrevNodeIndex { get; private set; }
     public List<CharacterData> Characters { get; private set; }
     public List<ChestData> Chests { get; private set; }
     public List<MapNodeData> MapNodes { get; private set; }
@@ -25,7 +26,8 @@ public class SavesManager : Singleton<SavesManager>
 
     public void UpdatePlayerPos(int playerNodeIndex)
     {
-        PlayerNodeIndex = playerNodeIndex;
+        PlayerPrevNodeIndex = PlayerCurrentNodeIndex;
+        PlayerCurrentNodeIndex = playerNodeIndex;
     }
 
     public void UpdateCharacter(Character character)
@@ -79,7 +81,7 @@ public class SavesManager : Singleton<SavesManager>
     public void SaveGame()
     {
         Directory.CreateDirectory(Path.GetDirectoryName(fullPath));
-        var data = new GameData(PlayerNodeIndex, Characters, Chests, MapNodes);
+        var data = new GameData(PlayerCurrentNodeIndex, PlayerPrevNodeIndex, Characters, Chests, MapNodes);
         string dataToStore = JsonUtility.ToJson(data, true);
         using (FileStream stream = new FileStream(fullPath, FileMode.Create))
         {
@@ -115,7 +117,8 @@ public class SavesManager : Singleton<SavesManager>
         }
         if (data != null)
         {
-            PlayerNodeIndex = data.playerNodeIndex;
+            PlayerCurrentNodeIndex = data.playerCurrentNodeIndex;
+            PlayerPrevNodeIndex = data.playerPrevNodeIndex;
             Characters = data.characters;
             Chests = data.chests;
             MapNodes = data.mapNodes;
@@ -124,7 +127,8 @@ public class SavesManager : Singleton<SavesManager>
 
     public void NewGame()
     {
-        PlayerNodeIndex = 1;
+        PlayerCurrentNodeIndex = 1;
+        PlayerPrevNodeIndex = 1;
         Characters.Clear();
         Chests.Clear();
         MapNodes.Clear();

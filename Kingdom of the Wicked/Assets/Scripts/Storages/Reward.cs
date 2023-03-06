@@ -1,9 +1,7 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
-using UnityEngine;
 
-public class Chest : IStorage
+public class Reward : IStorage
 {
     public IStorage.StorageNames StorageName { get; private set; }
     public Card.CardsType CardTypes { get; private set; }
@@ -12,22 +10,22 @@ public class Chest : IStorage
 
     public event Action CardsChanged;
 
-    public Chest()
+    public Reward()
     {
-        StorageName = IStorage.StorageNames.Chest;
+        StorageName = IStorage.StorageNames.Reward;
         CardTypes = Card.CardsType.Weapon | Card.CardsType.Armor | Card.CardsType.Shield | Card.CardsType.Magic
             | Card.CardsType.Potion | Card.CardsType.Artifact;
         Cards = new();
     }
 
-    public (bool success, Card releasedCard) AddCard(Card card, bool compareCardTypesFlags = true)
+    public (bool success, Card releasedCard) AddCard(Card card, bool compareCardTypesFlags = false)
     {
         Cards.Add(card);
         CardsChanged?.Invoke();
         return (true, null);
     }
 
-    public bool RemoveCard(Card card)
+    public bool RemoveCard(Card card, bool forceRemove = false)
     {
         var cardToRemove = Cards.Find(x => x.NameId == card.NameId);
         if (cardToRemove == null)

@@ -77,20 +77,20 @@
 
 .button {
     width: 100%;
-    margin-left: 10px;
-    margin-right: 10px;
-    margin-top: 10px;
-    margin-bottom: 10px;
     height: 60px;
     border-top-left-radius: 15px;
     border-bottom-left-radius: 15px;
     border-top-right-radius: 15px;
     border-bottom-right-radius: 15px;
-    background-color: rgba(207, 188, 140, 255);
-    font-size: 24px;
-    color: rgba(58, 58, 58, 255);
+    background-color: rgb(207, 188, 140);
+    font-size: 26px;
+    color: rgb(58, 58, 58);
     -unity-font-style: bold;
     min-width: 250px;
+    margin-left: 10px;
+    margin-right: 10px;
+    margin-top: 10px;
+    margin-bottom: 10px;
 }
 
 .button:hover {
@@ -105,7 +105,7 @@
     border-top-right-radius: 15px;
     border-bottom-right-radius: 15px;
     background-color: rgb(221, 199, 141);
-    font-size: 24px;
+    font-size: 26px;
     color: rgb(58, 58, 58);
     -unity-font-style: bold;
 }

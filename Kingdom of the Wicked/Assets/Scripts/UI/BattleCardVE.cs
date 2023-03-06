@@ -35,7 +35,7 @@ public class BattleCardVE : CardVE
 
     public void SelectCard()
     {
-        if (FightingManager.Instance.CurrentTurn == FightingManager.Instance.Player)
+        if (FightingManager.Instance.CurrentTurn == FightingManager.Turn.Player)
         {
             CardsHolder.CardsOwner.Deck.SelectBattleCard(CardData.InstanceId);
         }

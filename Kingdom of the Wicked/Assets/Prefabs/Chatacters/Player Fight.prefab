@@ -77,10 +77,27 @@ PrefabInstance:
       propertyPath: character
       value: 
       objectReference: {fileID: 8994883413818337185}
+    - target: {fileID: 8714637438610215870, guid: b3a9e2c080f04ee49a564d56da15fd63,
+        type: 3}
+      propertyPath: m_Controller
+      value: 
+      objectReference: {fileID: 9100000, guid: bd65184b7746da94f83e5be52e632fce, type: 2}
+    - target: {fileID: 8811553112081131016, guid: b3a9e2c080f04ee49a564d56da15fd63,
+        type: 3}
+      propertyPath: character
+      value: 
+      objectReference: {fileID: 8994883413818337185}
     m_RemovedComponents:
     - {fileID: 8920787486085111194, guid: b3a9e2c080f04ee49a564d56da15fd63, type: 3}
     - {fileID: 2099486521291211625, guid: b3a9e2c080f04ee49a564d56da15fd63, type: 3}
+    - {fileID: 2594689698401522564, guid: b3a9e2c080f04ee49a564d56da15fd63, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: b3a9e2c080f04ee49a564d56da15fd63, type: 3}
+--- !u!95 &4538208758534055912 stripped
+Animator:
+  m_CorrespondingSourceObject: {fileID: 8714637438610215870, guid: b3a9e2c080f04ee49a564d56da15fd63,
+    type: 3}
+  m_PrefabInstance: {fileID: 5046960983391843414}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &5042292250799690076 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 284776056308458762, guid: b3a9e2c080f04ee49a564d56da15fd63,
@@ -102,6 +119,7 @@ MonoBehaviour:
   characterId: 101
   bodySpriteRenderer: {fileID: 7738966824416186974}
   modelForFight: 1
+  animator: {fileID: 4538208758534055912}
 --- !u!212 &7738966824416186974 stripped
 SpriteRenderer:
   m_CorrespondingSourceObject: {fileID: 3273058188312684040, guid: b3a9e2c080f04ee49a564d56da15fd63,

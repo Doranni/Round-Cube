@@ -1,0 +1,127 @@
+.timer_label {
+    color: rgb(210, 210, 210);
+    font-size: 28px;
+    -unity-font-style: normal;
+    letter-spacing: 3px;
+    position: absolute;
+    border-left-color: rgba(210, 210, 210, 0.36);
+    border-right-color: rgba(210, 210, 210, 0.36);
+    border-top-color: rgba(210, 210, 210, 0.36);
+    border-bottom-color: rgba(210, 210, 210, 0.36);
+    border-left-width: 2px;
+    border-right-width: 2px;
+    border-top-width: 2px;
+    border-bottom-width: 2px;
+    border-top-left-radius: 10px;
+    border-bottom-left-radius: 10px;
+    border-top-right-radius: 10px;
+    border-bottom-right-radius: 10px;
+    width: 130px;
+    height: 55px;
+    -unity-text-align: middle-center;
+    justify-content: center;
+    align-items: center;
+}
+
+.turnPlayer_label {
+    opacity: 1;
+    color: rgb(135, 183, 101);
+    font-size: 60px;
+    margin-left: 120px;
+    margin-right: 120px;
+    margin-top: 120px;
+    margin-bottom: 120px;
+    position: absolute;
+    letter-spacing: 3px;
+    display: none;
+    transition-property: opacity, font-size, top;
+    transition-duration: 0.5s;
+    transition-timing-function: linear;
+    top: 260px;
+}
+
+.turnEnemy_label {
+    opacity: 1;
+    color: rgb(183, 102, 101);
+    font-size: 60px;
+    margin-left: 120px;
+    margin-right: 120px;
+    margin-top: 120px;
+    margin-bottom: 120px;
+    position: absolute;
+    letter-spacing: 3px;
+    display: none;
+    transition-property: opacity, font-size, top;
+    transition-duration: 0.5s;
+    transition-timing-function: linear;
+    top: 260px;
+}
+
+.turn_label_hiden {
+    opacity: 0;
+    font-size: 50px;
+    top: 200px;
+}
+
+.fightStarts_label {
+    opacity: 1;
+    font-size: 80px;
+    color: rgb(202, 75, 73);
+    position: absolute;
+    letter-spacing: 3px;
+    display: none;
+    top: 360px;
+    transition-property: opacity, font-size, top;
+    transition-duration: 0.5s;
+    transition-timing-function: linear;
+}
+
+.fightStarts_label_hiden {
+    opacity: 0;
+    font-size: 70px;
+    top: 320px;
+}
+
+.victory_label {
+    color: rgb(191, 204, 182);
+    font-size: 100px;
+    letter-spacing: 3px;
+    position: absolute;
+    top: 370px;
+}
+
+.defeat_label {
+    color: rgb(100, 113, 161);
+    font-size: 100px;
+    letter-spacing: 3px;
+    position: absolute;
+    top: 370px;
+}
+
+.defeat_button {
+    width: 250px;
+    height: 60px;
+    color: rgb(0, 0, 0);
+    font-size: 26px;
+    -unity-font-style: normal;
+    background-color: rgb(111, 119, 147);
+    border-top-left-radius: 15px;
+    border-bottom-left-radius: 15px;
+    border-top-right-radius: 15px;
+    border-bottom-right-radius: 15px;
+    letter-spacing: 3px;
+}
+
+.defeat_button:hover {
+    width: 260px;
+    height: 65px;
+    color: rgb(0, 0, 0);
+    font-size: 26px;
+    -unity-font-style: normal;
+    background-color: rgb(119, 129, 161);
+    border-top-left-radius: 15px;
+    border-bottom-left-radius: 15px;
+    border-top-right-radius: 15px;
+    border-bottom-right-radius: 15px;
+    letter-spacing: 3px;
+}

@@ -320,7 +320,7 @@ MonoBehaviour:
   otherSlotCapacity: 3
   inventoryCapacity: 50
   cardSize_slot: {x: 80, y: 120}
-  cardSize_inventory: {x: 120, y: 180}
+  cardSize_inventory: {x: 80, y: 120}
   cardSize_dragging: {x: 80, y: 120}
   inventoryCardMargin: 20
 --- !u!4 &569206833

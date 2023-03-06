@@ -86,11 +86,11 @@ public class InventoryVE : StorageVE
     public InventoryVE() { }
 }
 
-public class ChestVE : StorageVE
+public class RewardVE : StorageVE
 {
-    public new class UxmlFactory : UxmlFactory<ChestVE> { }
+    public new class UxmlFactory : UxmlFactory<RewardVE> { }
 
-    public ChestVE() { }
+    public RewardVE() { }
 }
 
 public class SlotsHolderVE : VisualElement

@@ -1,76 +1,127 @@
-using System;
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 public class FightingManager : Singleton<FightingManager>
 {
+    public enum Turn
+    {
+        None,
+        Player,
+        Enemy
+    }
+
+    [SerializeField] private int maxTimerValue;
     [SerializeField] private PlayerController player;
     [SerializeField] private EnemyController enemy;
 
     public PlayerController Player => player;
     public EnemyController Enemy => enemy;
-    public Character CurrentTurn { get; private set; }
+    public Turn CurrentTurn { get; private set; }
+    public int TimeLeft { get; private set; }
+    private Reward reward;
 
-    protected override void Awake()
+    private void Start()
     {
-        base.Awake();
-        if (GameDatabase.Instance.Characters.ContainsKey(SavesManager.Instance.EnemyForFightId))
+        CurrentTurn = Turn.None;
+        Enemy.InitCharacter(SavesManager.Instance.EnemyForFightId);
+        StartCoroutine(StartFight());
+        reward = new();
+    }
+
+    public IEnumerator StartFight()
+    {
+        yield return new WaitForSeconds(0.3f);
+        FightingSceneUI.Instance.StartFight();
+        yield return new WaitForSeconds(2);
+        FightingSceneUI.Instance.SetPlayerScreenVisible(true);
+        FightingSceneUI.Instance.SetEnemyScreenVisible(true);
+        TimeLeft = maxTimerValue;
+        FightingSceneUI.Instance.UpdateTimer();
+        FightingSceneUI.Instance.SetTimerVisible(true);
+        StartCoroutine(StartTurn(Turn.Player));
+    }
+
+    public void EndFight()
+    {
+        CurrentTurn = Turn.None;
+        FightingSceneUI.Instance.SetPlayerScreenVisible(false);
+        FightingSceneUI.Instance.SetEnemyScreenVisible(false);
+        FightingSceneUI.Instance.SetTimerVisible(false);
+    }
+
+    public IEnumerator StartTurn(Turn turn)
+    {
+        TimeLeft = maxTimerValue;
+        FightingSceneUI.Instance.UpdateTimer();
+        yield return new WaitForSeconds(0.5f);
+        CurrentTurn = turn;
+        if (CurrentTurn == Turn.Player)
         {
-            Enemy.InitCharacter(SavesManager.Instance.EnemyForFightId);
-            StartFight();
+            FightingSceneUI.Instance.StartPlayerTurn();
         }
         else
         {
-            EndFight();
+            FightingSceneUI.Instance.StartEnemiesTurn();
+        }
+        yield return new WaitForSeconds(0.7f);
+        InvokeRepeating(nameof(DecreaseTimer), 1f, 1);
+        if (CurrentTurn == Turn.Enemy)
+        {
+            StartCoroutine(EnemyFightRoutine());
         }
     }
 
-    public void StartFight()
-    {
-        CurrentTurn = Player;
-    }
-
-    private void EndFight()
-    {
-        GameManager.Instance.EndFight();
-    }
-
-    public void NextTurn()
+    private void EndTurn()
     {
         Player.Stats.ExecuteEffects();
         Enemy.Stats.ExecuteEffects();
-        CurrentTurn.Deck.UnselectCards();
+        if (CurrentTurn == Turn.Player)
+        {
+            Player.Deck.UnselectCards();
+        }
+        else
+        {
+            Enemy.Deck.UnselectCards();
+        }
+        CancelInvoke(nameof(DecreaseTimer));
         if (Player.Stats.ChHealth.IsDead)
         {
-            Debug.Log($"Player died");
             EndFight();
+            FightingSceneUI.Instance.Defeat();
             return;
         }
         if (Enemy.Stats.ChHealth.IsDead)
         {
-            Debug.Log($"Enemie died");
+            foreach(IStorage storage in Enemy.Equipment.Storages.Values)
+            {
+                for(int i = 0; i < storage.Cards.Count; i++)
+                {
+                    reward.AddCard(storage.Cards[i]);
+                    storage.RemoveCard(storage.Cards[i], true);
+                    --i;
+                }
+            }
             EndFight();
+            FightingSceneUI.Instance.Victory(reward);
             return;
         }
-        if (CurrentTurn.gameObject == Player.gameObject)
+        if (CurrentTurn == Turn.Player)
         {
-            CurrentTurn = Enemy;
-            StartCoroutine(EnemyFightRoutine());
+            StartCoroutine(StartTurn(Turn.Enemy));
         }
         else
         {
-            CurrentTurn = Player;
+            StartCoroutine(StartTurn(Turn.Player));
         }
+        CurrentTurn = Turn.None;
     }
 
     private IEnumerator EnemyFightRoutine()
     {
+        yield return new WaitForSeconds(0.6f);
         (Card card, bool useOnYourself) = Enemy.ChooseCard();
-        yield return new WaitForSeconds(0.5f);
         Enemy.Deck.SelectBattleCard(card.InstanceId);
-        yield return new WaitForSeconds(0.5f);
+        yield return new WaitForSeconds(0.6f);
         if (useOnYourself)
         {
             ((IUsable)card).Use(Enemy);
@@ -79,7 +130,7 @@ public class FightingManager : Singleton<FightingManager>
         {
             ((IUsable)card).Use(Player);
         }
-        NextTurn();
+        EndTurn();
     }
 
     public bool TrySetTarget(Character target)
@@ -87,7 +138,7 @@ public class FightingManager : Singleton<FightingManager>
         if (IsTarget(target))
         {
             ((IUsable)Player.Deck.SelectedBattleCard).Use(Enemy);
-            NextTurn();
+            EndTurn();
             return true;
         }
         return false;
@@ -95,10 +146,20 @@ public class FightingManager : Singleton<FightingManager>
 
     public bool IsTarget(Character target)
     {
-        if (CurrentTurn == Player && Player.Deck.SelectedBattleCard != null)
+        if (CurrentTurn == Turn.Player && Player.Deck.SelectedBattleCard != null)
         {
             return true;
         }
         return false;
+    }
+
+    private void DecreaseTimer()
+    {
+        TimeLeft--;
+        FightingSceneUI.Instance.UpdateTimer();
+        if (TimeLeft == 0)
+        {
+            EndTurn();
+        }
     }
 }

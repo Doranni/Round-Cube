@@ -79,7 +79,14 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 7159589125277109366, guid: 439046f5e1f5fcb448848a8896eb50ab, type: 3}
+    - {fileID: 6182424735355895055, guid: 439046f5e1f5fcb448848a8896eb50ab, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 439046f5e1f5fcb448848a8896eb50ab, type: 3}
+--- !u!95 &2419916510083615001 stripped
+Animator:
+  m_CorrespondingSourceObject: {fileID: 666196942770011445, guid: 439046f5e1f5fcb448848a8896eb50ab,
+    type: 3}
+  m_PrefabInstance: {fileID: 2930589537780560940}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &6527514638932836269 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 8231991135105584001, guid: 439046f5e1f5fcb448848a8896eb50ab,
@@ -101,6 +108,7 @@ MonoBehaviour:
   characterId: 0
   bodySpriteRenderer: {fileID: 8361465688296144047}
   modelForFight: 0
+  animator: {fileID: 2419916510083615001}
 --- !u!212 &8361465688296144047 stripped
 SpriteRenderer:
   m_CorrespondingSourceObject: {fileID: 6675019739160430723, guid: 439046f5e1f5fcb448848a8896eb50ab,

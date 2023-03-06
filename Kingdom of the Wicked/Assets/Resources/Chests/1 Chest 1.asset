@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 7a47f21d3a9649c48aa562315a6abbc7, type: 3}
-  m_Name: Chest 2
+  m_Name: 1 Chest 1
   m_EditorClassIdentifier: 
-  id: 2
-  cardsId: c90000002e010000f5010000
+  id: 1
+  cardsId: c9000000
