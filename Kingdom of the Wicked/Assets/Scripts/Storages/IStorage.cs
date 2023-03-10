@@ -16,10 +16,9 @@ public interface IStorage
     }
     public StorageNames StorageName { get; }
     public Card.CardsType CardTypes { get; }
-    public bool AffectsStats { get; }
     public List<Card> Cards { get; }
     public bool IsFull => !(Cards.Count < Cards.Capacity);
-    public (bool success, Card releasedCard) AddCard(Card card, bool compareCardTypesFlags = true);
+    public (bool success, Card releasedCard) AddCard(Card card);
     public bool RemoveCard(Card card, bool forceRemove = false);
     public event Action CardsChanged;
 }

@@ -5,7 +5,6 @@ public class Reward : IStorage
 {
     public IStorage.StorageNames StorageName { get; private set; }
     public Card.CardsType CardTypes { get; private set; }
-    public bool AffectsStats => false;
     public List<Card> Cards { get; private set; }
 
     public event Action CardsChanged;
@@ -18,7 +17,7 @@ public class Reward : IStorage
         Cards = new();
     }
 
-    public (bool success, Card releasedCard) AddCard(Card card, bool compareCardTypesFlags = false)
+    public (bool success, Card releasedCard) AddCard(Card card)
     {
         Cards.Add(card);
         CardsChanged?.Invoke();
@@ -27,7 +26,7 @@ public class Reward : IStorage
 
     public bool RemoveCard(Card card, bool forceRemove = false)
     {
-        var cardToRemove = Cards.Find(x => x.NameId == card.NameId);
+        var cardToRemove = Cards.Find(x => x.InstanceId == card.InstanceId);
         if (cardToRemove == null)
         {
             return false;

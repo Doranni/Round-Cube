@@ -9,7 +9,7 @@
         <ui:Label text="Your Turn!" display-tooltip-when-elided="true" name="labelPlayerTurn" class="turnPlayer_label turn_label_hiden" style="display: flex;" />
         <ui:Label text="Enemy Turn!" display-tooltip-when-elided="true" name="labelEnemyTurn" class="turnEnemy_label turn_label_hiden" style="display: flex;" />
     </ui:VisualElement>
-    <ui:VisualElement name="Victory" style="align-items: center; justify-content: center; position: absolute; left: 0; top: 0; right: 0; bottom: 0; display: flex;">
+    <ui:VisualElement name="Victory" style="align-items: center; justify-content: center; position: absolute; left: 0; top: 0; right: 0; bottom: 0; display: none;">
         <ui:Label text="Victory" display-tooltip-when-elided="true" name="labelVictory" class="victory_label" />
         <ui:VisualElement style="min-width: 250px; align-items: center; flex-wrap: wrap; justify-content: flex-start; position: absolute; top: 550px;">
             <RewardVE name="VictoryRewardContent" style="flex-direction: row; flex-wrap: wrap; align-items: center; justify-content: center;" />
@@ -20,27 +20,30 @@
         <ui:Label text="Defeat" display-tooltip-when-elided="true" name="labelDefeat" class="defeat_label" />
         <ui:Button text="Confirm" display-tooltip-when-elided="true" name="defeatConfirmButton" class="defeat_button" style="margin-top: 85px; position: absolute; bottom: 450px;" />
     </ui:VisualElement>
-    <ui:VisualElement name="Player" class="character_panel" style="display: none;">
+    <ui:VisualElement name="Player" class="character_panel" style="display: flex;">
         <ui:VisualElement name="PlayerIcon" class="icon">
-            <ui:Label text="Harper" display-tooltip-when-elided="true" />
+            <ui:Label text="Harper" display-tooltip-when-elided="true" name="PlayerIconLabel" />
         </ui:VisualElement>
         <ui:VisualElement style="align-items: flex-start; justify-content: space-between;">
             <HealthBarVE name="PlayerHP" />
-            <BattleCardsHolderVE name="PlayerCards" picking-mode="Ignore" class="character_equipment" style="height: 100px;" />
+            <ui:VisualElement name="PlayerSlots" class="character_equipment" style="flex-direction: row; flex-wrap: nowrap; align-items: center;">
+                <SlotVE name="PlSlot_Weapon" class="cardSlot background" style="width: auto; height: auto;" />
+                <SlotsHolderVE name="PlSlotsHolder_Defense" style="margin-left: 5px; margin-right: 5px; margin-top: 5px; margin-bottom: 5px;" />
+                <SlotsHolderVE name="PlSlotsHolder_Other" style="margin-left: 5px; margin-right: 5px; margin-top: 5px; margin-bottom: 5px;" />
+            </ui:VisualElement>
         </ui:VisualElement>
     </ui:VisualElement>
-    <ui:VisualElement name="Enemie" picking-mode="Ignore" class="character_panel" style="display: none; flex-direction: row-reverse; right: 0; left: auto;">
-        <ui:VisualElement name="EnemieIcon" class="icon">
-            <ui:Label text="Enemie&#10;Icon" display-tooltip-when-elided="true" name="Lbl_EnemieIcon" />
+    <ui:VisualElement name="Enemy" class="character_panel" style="display: flex; left: auto; right: 0; flex-direction: row-reverse;">
+        <ui:VisualElement name="EnemyIcon" class="icon">
+            <ui:Label text="Harper" display-tooltip-when-elided="true" name="EnemyIconLabel" />
         </ui:VisualElement>
         <ui:VisualElement style="align-items: flex-end; justify-content: space-between;">
-            <HealthBarVE name="EnemieHP" />
-            <BattleCardsHolderVE name="EnemieCards" class="character_equipment" style="justify-content: flex-end; height: 100px;" />
-        </ui:VisualElement>
-    </ui:VisualElement>
-    <ui:VisualElement name="Debug" picking-mode="Ignore" style="position: absolute; margin-left: 20px; margin-right: 20px; margin-top: 20px; margin-bottom: 20px; display: none;">
-        <ui:VisualElement name="PlStats">
-            <ui:Label text="Player stats:" display-tooltip-when-elided="true" name="lbl_stats" style="color: rgb(202, 202, 202); font-size: 18px;" />
+            <HealthBarVE name="EnemyHP" />
+            <ui:VisualElement name="EnemySlots" class="character_equipment" style="flex-direction: row; flex-wrap: nowrap; align-items: center;">
+                <SlotVE name="EnemySlot_Weapon" class="cardSlot background" style="width: auto; height: auto;" />
+                <SlotsHolderVE name="EnemySlotsHolder_Defense" style="margin-left: 5px; margin-right: 5px; margin-top: 5px; margin-bottom: 5px;" />
+                <SlotsHolderVE name="EnemySlotsHolder_Other" style="margin-left: 5px; margin-right: 5px; margin-top: 5px; margin-bottom: 5px;" />
+            </ui:VisualElement>
         </ui:VisualElement>
     </ui:VisualElement>
 </ui:UXML>

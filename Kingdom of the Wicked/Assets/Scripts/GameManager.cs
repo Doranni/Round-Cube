@@ -29,17 +29,17 @@ public class GameManager : Singleton<GameManager>
     public int Equipment_OtherSlotCapacity => otherSlotCapacity;
     public int Equipment_InventoryCapacity => inventoryCapacity;
 
-    [SerializeField] private Vector2 cardSize_slot = new(80, 120),
-        cardSize_inventory = new(120, 160), cardSize_dragging = new(120, 160);
+    [SerializeField] private Vector2 cardSize_regular = new(80, 120),
+        cardSize_selected = new(88, 132);
     [SerializeField] private float inventoryCardMargin = 20;
-    private VisualTreeAsset cardAsset, slotsHolderAsset;
+    private VisualTreeAsset cardAsset, slotsHolderAsset, characterPanelAsset;
 
-    public Vector2 CardSize_slot => cardSize_slot;
-    public Vector2 CardSize_inventory => cardSize_inventory;
-    public Vector2 CardSize_dragging => cardSize_dragging;
+    public Vector2 CardSize_regular => cardSize_regular;
+    public Vector2 CardSize_selected => cardSize_selected;
     public float InventoryCardMargin => inventoryCardMargin;
     public VisualTreeAsset CardAsset => cardAsset;
     public VisualTreeAsset SlotsHolderAsset => slotsHolderAsset;
+    public VisualTreeAsset CharacterPanelAsset => characterPanelAsset;
 
     private int id = 0;
 
@@ -48,6 +48,7 @@ public class GameManager : Singleton<GameManager>
         base.Awake();
         cardAsset = EditorGUIUtility.Load("Assets/UI/VECard.uxml") as VisualTreeAsset;
         slotsHolderAsset = EditorGUIUtility.Load("Assets/UI/VESlotHolder.uxml") as VisualTreeAsset;
+        characterPanelAsset = EditorGUIUtility.Load("Assets/UI/VECharacter.uxml") as VisualTreeAsset;
     }
 
     private void Start()
@@ -119,22 +120,6 @@ public class GameManager : Singleton<GameManager>
     public int GetID()
     {
         return id++;
-    }
-
-    public Vector2 GetRequiredCardSize(IStorage.StorageNames storageName)
-    {
-        switch (storageName)
-        {
-            case IStorage.StorageNames.Inventory:
-            case IStorage.StorageNames.Reward:
-                {
-                    return cardSize_inventory;
-                }
-            default:
-                {
-                    return cardSize_slot;
-                }
-        }
     }
 
     public void UpdateState()

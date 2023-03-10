@@ -1,5 +1,4 @@
 using System.Collections;
-using UnityEditor;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -17,7 +16,9 @@ public class FightingSceneUI : Singleton<FightingSceneUI>
     private VisualElement playerScreen, enemyScreen;
     private HealthBarVE playerHealthBar, enemyHealthBar;
     private Label enemyIconLabel;
-    private BattleCardsHolderVE playerCards, enemyCards;
+    private SlotVE playerWeaponSlot, enemyWeaponSlot;
+    private SlotsHolderVE playerDefenseSlotsHolder, playerOtherSlotsHolder,
+        enemyDefenseSlotsHolder, enemyOtherSlotsHolder;
 
     const string k_victoryScreen = "Victory";
     const string k_defeatScreen = "Defeat";
@@ -31,17 +32,19 @@ public class FightingSceneUI : Singleton<FightingSceneUI>
     const string k_enemyTurnLabel = "labelEnemyTurn";
 
     const string k_playerScreen = "Player";
-    const string k_enemyScreen = "Enemie";
+    const string k_enemyScreen = "Enemy";
     const string k_playerHealthBar = "PlayerHP";
-    const string k_enemyHealthBar = "EnemieHP";
-    const string k_enemyIconLabel = "Lbl_EnemieIcon";
-    const string k_playerCards = "PlayerCards";
-    const string k_enemieCards = "EnemieCards";
+    const string k_enemyHealthBar = "EnemyHP";
+    const string k_enemyIconLabel = "EnemyIconLabel";
+    const string k_playerWeaponSlot = "PlSlot_Weapon";
+    const string k_enemyWeaponSlot = "EnemySlot_Weapon";
+    const string k_playerDefenseSlotsHolder = "PlSlotsHolder_Defense";
+    const string k_playerOtherSlotsHolder = "PlSlotsHolder_Other";
+    const string k_enemyDefenseSlotsHolder = "EnemySlotsHolder_Defense";
+    const string k_enemyOtherSlotsHolder = "EnemySlotsHolder_Other";
 
     const string anim_fightStartsLabel_hiden = "fightStarts_label_hiden";
     const string anim_turnLabel_hiden = "turn_label_hiden";
-
-    private int frames;
 
     protected override void Awake()
     {
@@ -65,27 +68,18 @@ public class FightingSceneUI : Singleton<FightingSceneUI>
         playerHealthBar = rootElement.Q<HealthBarVE>(k_playerHealthBar);
         enemyHealthBar = rootElement.Q<HealthBarVE>(k_enemyHealthBar);
         enemyIconLabel = rootElement.Q<Label>(k_enemyIconLabel);
-        playerCards = rootElement.Q<BattleCardsHolderVE>(k_playerCards);
-        enemyCards = rootElement.Q<BattleCardsHolderVE>(k_enemieCards);
+        playerWeaponSlot = rootElement.Q<SlotVE>(k_playerWeaponSlot);
+        enemyWeaponSlot = rootElement.Q<SlotVE>(k_enemyWeaponSlot);
+        playerDefenseSlotsHolder = rootElement.Q<SlotsHolderVE>(k_playerDefenseSlotsHolder);
+        playerOtherSlotsHolder = rootElement.Q<SlotsHolderVE>(k_playerOtherSlotsHolder);
+        enemyDefenseSlotsHolder = rootElement.Q<SlotsHolderVE>(k_enemyDefenseSlotsHolder);
+        enemyOtherSlotsHolder = rootElement.Q<SlotsHolderVE>(k_enemyOtherSlotsHolder);
 
         victoryScreen.style.display = DisplayStyle.None;
         defeatScreen.style.display = DisplayStyle.None;
         timerLabel.style.display = DisplayStyle.None;
         playerScreen.style.display = DisplayStyle.None;
         enemyScreen.style.display = DisplayStyle.None;
-
-        rootElement.RegisterCallback<GeometryChangedEvent>(OnGeometryChangedEvent);
-        frames = 0;
-    }
-
-    private void Update()
-    {
-        frames++;
-    }
-
-    private void OnGeometryChangedEvent(GeometryChangedEvent evt)
-    {
-        Debug.Log("OnGeometryChangedEvent, frames = " + frames);
     }
 
     private void Start()
@@ -93,10 +87,12 @@ public class FightingSceneUI : Singleton<FightingSceneUI>
         enemyIconLabel.text = enemy.CharacterName;
         playerHealthBar.Init(player.Stats.ChHealth);
         enemyHealthBar.Init(enemy.Stats.ChHealth);
-        playerCards.Init(player);
-        playerCards.Update();
-        enemyCards.Init(enemy);
-        enemyCards.Update();
+        playerWeaponSlot.Init(player.Equipment.Storages[IStorage.StorageNames.WeaponSlot]);
+        enemyWeaponSlot.Init(enemy.Equipment.Storages[IStorage.StorageNames.WeaponSlot]);
+        playerDefenseSlotsHolder.Init(player.Equipment.SlotsHolders[SlotsHolder.SlotsHolderNames.Defense]);
+        playerOtherSlotsHolder.Init(player.Equipment.SlotsHolders[SlotsHolder.SlotsHolderNames.Other]);
+        enemyDefenseSlotsHolder.Init(enemy.Equipment.SlotsHolders[SlotsHolder.SlotsHolderNames.Defense]);
+        enemyOtherSlotsHolder.Init(enemy.Equipment.SlotsHolders[SlotsHolder.SlotsHolderNames.Other]);
 
         victoryConfirmButton.RegisterCallback<ClickEvent>(_ => OnVictoryButtonClick());
         defeatConfirmButton.RegisterCallback<ClickEvent>(_ => GameManager.Instance.EndFight());
@@ -106,7 +102,7 @@ public class FightingSceneUI : Singleton<FightingSceneUI>
     {
         for (int i = 0; i < victoryReward.Storage.Cards.Count; i++)
         {
-            player.Equipment.AddCard(victoryReward.Storage.Cards[i], IStorage.StorageNames.Inventory, false, true);
+            player.Equipment.AddCard(victoryReward.Storage.Cards[i], IStorage.StorageNames.Inventory);
         }
         victoryReward.Reset();
         GameManager.Instance.EndFight();

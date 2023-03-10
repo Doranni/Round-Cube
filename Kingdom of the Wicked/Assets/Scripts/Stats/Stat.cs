@@ -6,8 +6,6 @@ public class Stat
     public enum StatId
     {
         health,
-        armor,
-        damage
     }
     public StatId Id { get; private set; }
     public int BaseValue { get; private set; }

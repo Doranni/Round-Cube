@@ -13,8 +13,10 @@ MonoBehaviour:
   m_Name: 301 Wooden shield
   m_EditorClassIdentifier: 
   id: 301
-  cardName: Wooden\nshield
+  cardName: Wooden Shield
   description: 
-  duration: 0
+  effectType: 1
   image: {fileID: 0}
+  blockCharges: 1
+  blockChanse: 0.15
   statBonuses: []

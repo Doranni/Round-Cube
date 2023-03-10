@@ -5,6 +5,9 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "Chest ", menuName = "Chest")]
 public class ChestSO : ScriptableObject
 {
-    public int id;
-    public int[] cardsId;
+    [SerializeField] private int id;
+    [SerializeField] private int[] cardsId;
+
+    public int Id => id;
+    public int[] CardsId => cardsId;
 }

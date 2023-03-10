@@ -24,9 +24,9 @@ public class Effect
 {
     public enum EffectTypes
     {
-        damage,
-        heal,
-        fireDamage
+        Damage,
+        Heal,
+        FireDamage
     }
 
     public enum ValueTypes

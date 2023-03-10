@@ -38,8 +38,8 @@ public class MapNode : MonoBehaviour
 
     public void AddLink(MapLinkSO link)
     {
-        Links.Add(link.nextMapNodeId, new NodeLink(mapNodeId, link.nextMapNodeId, link.isWayOpen, 
-            link.betweenPathPoints));
+        Links.Add(link.NextMapNodeId, new NodeLink(mapNodeId, link.NextMapNodeId, link.IsWayOpen, 
+            link.BetweenPathPoints));
     }
 
     public virtual void Visit()

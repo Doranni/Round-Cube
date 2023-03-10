@@ -1,0 +1,8 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="False">
+    <ui:VisualElement name="PlStats" style="width: 40%; position: absolute;">
+        <ui:Label display-tooltip-when-elided="true" name="Lbl_PlStats" style="color: rgb(202, 202, 202); font-size: 18px;" />
+    </ui:VisualElement>
+    <ui:VisualElement name="EnemyStats" style="position: absolute; right: 0; width: 40%; -unity-text-align: upper-right;">
+        <ui:Label display-tooltip-when-elided="true" name="Lbl_EnemyStats" style="color: rgb(202, 202, 202); font-size: 18px;" />
+    </ui:VisualElement>
+</ui:UXML>

@@ -8,7 +8,7 @@ public class Character : MonoBehaviour
     [SerializeField] protected SpriteRenderer bodySpriteRenderer;
     [SerializeField] protected bool modelForFight = false;
     [SerializeField] protected Animator animator;
-    //[SerializeField] protected Outline outline;
+    [SerializeField] protected Outline outline;
 
     protected int anim_death_trigger;
 
@@ -17,7 +17,6 @@ public class Character : MonoBehaviour
     public string CharacterDescription { get; protected set; }
     public CharacterStats Stats { get; protected set; }
     public CharacterEquipment Equipment { get; protected set; }
-    public CharacterDeck Deck { get; protected set; }
 
     protected void Awake()
     {
@@ -37,19 +36,18 @@ public class Character : MonoBehaviour
         this.characterId = characterId;
 
         var data = GameDatabase.Instance.Characters[CharacterId];
-        CharacterName = data.characterName;
-        CharacterDescription = data.characterDescription;
+        CharacterName = data.CharacterName;
+        CharacterDescription = data.CharacterDescription;
         Stats = new CharacterStats(this, data);
         Equipment = new CharacterEquipment(this);
-        Deck = new CharacterDeck(this);
         Stats.ChHealth.Died += Death;
         if (modelForFight)
         {
-            bodySpriteRenderer.sprite = data.fightSprite;
+            bodySpriteRenderer.sprite = data.FightSprite;
         }
         else
         {
-            bodySpriteRenderer.sprite = data.boardSprite;
+            bodySpriteRenderer.sprite = data.BoardSprite;
         }
 
         var saveData = SavesManager.Instance.Characters.Find(x => x.id == CharacterId);
@@ -64,6 +62,25 @@ public class Character : MonoBehaviour
                 var cardToEquip = GameDatabase.Instance.GetCard(card.id);
                 if (cardToEquip != null)
                 {
+                    switch (cardToEquip.CardType)
+                    {
+                        case Card.CardsType.Armor:
+                            {
+                                ((ArmorCard)cardToEquip).SetProtection(card.armor_protection);
+                                break;
+                            }
+                        case Card.CardsType.Shield:
+                            {
+                                ((ShieldCard)cardToEquip).SetChargesLeft(card.charges);
+                                break;
+                            }
+                        case Card.CardsType.Magic:
+                        case Card.CardsType.Potion:
+                            {
+                                ((ICardBreakable)cardToEquip).SetChargesLeft(card.charges);
+                                break;
+                            }
+                    }
                     Equipment.AddCard(cardToEquip, card.storage, needToSave: false);
                 }
             }
@@ -71,12 +88,12 @@ public class Character : MonoBehaviour
         }
         else
         {
-            foreach (EquippedCardsSO card in data.cards)
+            foreach (EquippedCardsSO card in data.Cards)
             {
-                var cardToEquip = GameDatabase.Instance.GetCard(card.cardId);
+                var cardToEquip = GameDatabase.Instance.GetCard(card.CardId);
                 if (cardToEquip != null)
                 {
-                    Equipment.AddCard(cardToEquip, card.storage, needToSave: false);
+                    Equipment.AddCard(cardToEquip, card.Storage, needToSave: false);
                 }
             }
         }
@@ -93,6 +110,6 @@ public class Character : MonoBehaviour
 
     public void Outline(Color color)
     {
-        //outline.OutlineColor = color;
+        outline.OutlineColor = color;
     }
 }

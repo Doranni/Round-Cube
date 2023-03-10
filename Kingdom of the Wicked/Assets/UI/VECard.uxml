@@ -1,8 +1,7 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="False">
     <Style src="project://database/Assets/UI/SSCards.uss?fileID=7433441132597879392&amp;guid=cad0837409d707b47baf5333ead1fdce&amp;type=3#SSCards" />
     <ui:VisualElement name="CardBackground" picking-mode="Ignore" class="card" style="position: absolute; left: 0; top: 0; right: 0; bottom: 0;">
-        <ui:Label text="Card" display-tooltip-when-elided="true" name="CardName" picking-mode="Ignore" style="font-size: 16px; -unity-font-style: bold; align-items: center; -unity-text-align: middle-center;" />
-        <ui:Label text="Description" display-tooltip-when-elided="true" name="CardDescription" picking-mode="Ignore" style="font-size: 14px; -unity-font-style: bold; -unity-text-align: middle-center; justify-content: center; align-items: center;" />
-        <ui:Label display-tooltip-when-elided="true" name="CardStatBonuses" picking-mode="Ignore" style="font-size: 12px; -unity-font-style: bold; justify-content: center; align-items: center; -unity-text-align: middle-center;" />
+        <ui:Label text="Card" display-tooltip-when-elided="true" name="CardName" picking-mode="Ignore" style="font-size: 16px; -unity-font-style: bold; align-items: center; -unity-text-align: middle-center; white-space: normal; margin-top: 0; margin-bottom: 0; padding-left: 0; padding-right: 0; padding-top: 0; padding-bottom: 0; margin-left: 0; margin-right: 0;" />
+        <ui:Label display-tooltip-when-elided="true" name="Description" picking-mode="Ignore" style="font-size: 14px; -unity-font-style: bold; -unity-text-align: middle-center; justify-content: center; align-items: center; white-space: normal; margin-left: 0; margin-right: 0; margin-top: 0; margin-bottom: 0; padding-left: 0; padding-right: 0; padding-top: 0; padding-bottom: 0;" />
     </ui:VisualElement>
 </ui:UXML>

@@ -13,8 +13,10 @@ MonoBehaviour:
   m_Name: 302 Goblin shield
   m_EditorClassIdentifier: 
   id: 302
-  cardName: Goblin\nshield
+  cardName: Goblin Shield
   description: 
-  duration: 0
+  effectType: 1
   image: {fileID: 0}
+  blockCharges: 2
+  blockChanse: 0.2
   statBonuses: []

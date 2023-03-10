@@ -76,11 +76,11 @@ public class BoardSceneUI : Singleton<BoardSceneUI>
 
         slotsHolders = new()
         {
-            { SlotsHolder.SlotsHolderNames.Armor, rootElement.Q<SlotsHolderVE>(k_slotsHolder_armor) },
+            { SlotsHolder.SlotsHolderNames.Defense, rootElement.Q<SlotsHolderVE>(k_slotsHolder_armor) },
             { SlotsHolder.SlotsHolderNames.Other, rootElement.Q<SlotsHolderVE>(k_slotsHolder_other) }
         };
 
-        var size = GameManager.Instance.CardSize_slot;
+        var size = GameManager.Instance.CardSize_regular;
         inventoryButton.style.width = size.x;
         inventoryButton.style.height = size.y;
 
@@ -103,8 +103,6 @@ public class BoardSceneUI : Singleton<BoardSceneUI>
                 storages.Add(openSlot);
             }
         }
-
-        DragAndDropController.Instance.Init(dragCardPanel);
 
         inventoryButton.RegisterCallback<ClickEvent>(_ => InventoryButtonClicked()) ;
         player.Equipment.Storages[IStorage.StorageNames.Inventory].CardsChanged += DisplayInventoryButton;
@@ -131,7 +129,7 @@ public class BoardSceneUI : Singleton<BoardSceneUI>
     {
         for (int i = 0; i < chest.Storage.Cards.Count; i++)
         {
-            player.Equipment.AddCard(chest.Storage.Cards[i], IStorage.StorageNames.Inventory, false, true);
+            player.Equipment.AddCard(chest.Storage.Cards[i], IStorage.StorageNames.Inventory);
         }
         chestScreen.style.display = DisplayStyle.None;
         yield return new WaitForSeconds(0.2f);
@@ -207,9 +205,9 @@ public class BoardSceneUI : Singleton<BoardSceneUI>
             case Card.CardsType.Armor:
             case Card.CardsType.Shield:
                 {
-                    if (slotsHolders[SlotsHolder.SlotsHolderNames.Armor].IsOpen != value)
+                    if (slotsHolders[SlotsHolder.SlotsHolderNames.Defense].IsOpen != value)
                     {
-                        slotsHolders[SlotsHolder.SlotsHolderNames.Armor].ToggleSlotPanel(value);
+                        slotsHolders[SlotsHolder.SlotsHolderNames.Defense].ToggleSlotPanel(value);
                     }
                     break;
                 }
@@ -261,13 +259,13 @@ public class BoardSceneUI : Singleton<BoardSceneUI>
                     continue;
                 }
                 lastEquippedSlot = -1;
-                player.Equipment.MoveCard(card, prevStorage, newStorages[i], false);
+                player.Equipment.MoveCard(card, prevStorage, newStorages[i]);
                 return;
             }
         }
         if (lastEquippedSlot != -1)
         {
-            player.Equipment.MoveCard(card, prevStorage, newStorages[lastEquippedSlot], false);
+            player.Equipment.MoveCard(card, prevStorage, newStorages[lastEquippedSlot]);
         }
         else
         {

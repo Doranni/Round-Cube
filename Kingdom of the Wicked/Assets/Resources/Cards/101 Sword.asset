@@ -14,12 +14,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   id: 101
   cardName: Sword
-  description: Deals 12\ndamage
-  duration: 0
+  description: 
+  effectType: 0
   image: {fileID: 0}
   effects:
   - effectType: 0
-    name: 
+    name: 12 damage
     description: 
     duration: 1
     valueType: 0

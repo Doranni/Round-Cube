@@ -39,7 +39,7 @@ public class CharacterData
         {
             foreach (Card card in storage.Value.Cards)
             {
-                cards.Add(new EquippedCard(card.NameId, storage.Key));
+                cards.Add(new EquippedCard(card));
             }
         }
     }
@@ -53,7 +53,7 @@ public class CharacterData
         {
             foreach (Card card in storage.Value.Cards)
             {
-                cards.Add(new EquippedCard(card.NameId, storage.Key));
+                cards.Add(new EquippedCard(card));
             }
         }
     }
@@ -64,11 +64,32 @@ public class EquippedCard
 {
     public int id;
     public IStorage.StorageNames storage;
+    public int charges;
+    public int armor_protection;
 
-    public EquippedCard(int id, IStorage.StorageNames storage)
+    public EquippedCard(Card card)
     {
-        this.id = id;
-        this.storage = storage;
+        id = card.NameId;
+        storage = card.Storage;
+        switch (card.CardType)
+        {
+            case Card.CardsType.Armor:
+                {
+                    armor_protection = ((ArmorCard)card).Protection;
+                    break;
+                }
+            case Card.CardsType.Shield:
+                {
+                    charges = ((ShieldCard)card).BlockChargesLeft;
+                    break;
+                }
+            case Card.CardsType.Magic:
+            case Card.CardsType.Potion:
+                {
+                    charges = ((ICardBreakable)card).ChargesLeft;
+                    break;
+                }
+        }
     }
 }
 

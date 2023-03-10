@@ -53,7 +53,6 @@ public class Health
     public void AddHealthBonus(float value)
     {
         MaxHealth += value;
-        CurrentHealth += value;
         HealthChanged?.Invoke((CurrentHealth, MaxHealth));
     }
 

@@ -44,7 +44,7 @@ public class ChestController : MonoBehaviour, IInteractable
         }
         else
         {
-            foreach (int cardId in data.cardsId)
+            foreach (int cardId in data.CardsId)
             {
                 ChestStorage.AddCard(GameDatabase.Instance.GetCard(cardId));
             }

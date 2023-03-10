@@ -13,10 +13,9 @@ MonoBehaviour:
   m_Name: 201 Leather vest
   m_EditorClassIdentifier: 
   id: 201
-  cardName: Leather\nvest
+  cardName: Leather Vest
   description: 
-  duration: 0
+  effectType: 1
   image: {fileID: 0}
-  statBonuses:
-  - statTypeId: 1
-    value: 10
+  protection: 10
+  statBonuses: []

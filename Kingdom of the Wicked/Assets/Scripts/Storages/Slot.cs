@@ -3,16 +3,17 @@ using System.Collections.Generic;
 
 public class Slot : IStorage
 {
+    private Character character;
     public IStorage.StorageNames StorageName { get; private set; }
     public Card.CardsType CardTypes { get; private set; }
-    public bool AffectsStats => true;
     public List<Card> Cards { get; private set; }
     public bool CanBeEmpty { get; private set; }
 
     public event Action CardsChanged;
 
-    public Slot(IStorage.StorageNames name, Card.CardsType cardsType)
+    public Slot(IStorage.StorageNames name, Card.CardsType cardsType, Character character)
     {
+        this.character = character;
         StorageName = name;
         CardTypes = cardsType;
         Cards = new(1);
@@ -26,20 +27,52 @@ public class Slot : IStorage
         }
     }
 
-    public (bool, Card) AddCard(Card card, bool compareCardTypesFlags = true)
+    public (bool, Card) AddCard(Card card)
     {
-        if (compareCardTypesFlags && !Card.ComperaCardTypesFlags(card.CardType, CardTypes))
+        if (!Card.ComperaCardTypesFlags(card.CardType, CardTypes))
         {
             return (false, null);
         }
         if (Cards.Count == 0)
         {
             Cards.Add(card);
+            card.SetCardOwner(character, StorageName);
+            if (StorageName == IStorage.StorageNames.ArmorSlot)
+            {
+                character.Stats.SetArmor((ArmorCard)card);
+            }
+            else if (StorageName == IStorage.StorageNames.ShieldSlot)
+            {
+                character.Stats.SetShield((ShieldCard)card);
+            }
+            if (card is ICardAddStatBonuses)
+            {
+                foreach (StatBonus bonus in ((ICardAddStatBonuses)card).StatBonuses)
+                {
+                    character.Stats.AddBonus(bonus);
+                }
+            }
             CardsChanged?.Invoke();
             return (true, null);
         }
         var releasedCard = Cards[0];
         Cards[0] = card;
+        card.SetCardOwner(character, StorageName);
+        if (StorageName == IStorage.StorageNames.ArmorSlot)
+        {
+            character.Stats.SetArmor((ArmorCard)card);
+        }
+        else if (StorageName == IStorage.StorageNames.ShieldSlot)
+        {
+            character.Stats.SetShield((ShieldCard)card);
+        }
+        if (card is ICardAddStatBonuses)
+        {
+            foreach (StatBonus bonus in ((ICardAddStatBonuses)card).StatBonuses)
+            {
+                character.Stats.AddBonus(bonus);
+            }
+        }
         CardsChanged?.Invoke();
         return (true, releasedCard);
     }
@@ -48,8 +81,23 @@ public class Slot : IStorage
     {
         if (CanBeEmpty || forceRemove)
         {
-            if (Cards[0].InstanceId == card.InstanceId)
+            if (Cards.Count == 1 || Cards[0].InstanceId == card.InstanceId)
             {
+                if (StorageName == IStorage.StorageNames.ArmorSlot)
+                {
+                    character.Stats.SetArmor(null);
+                }
+                else if (StorageName == IStorage.StorageNames.ShieldSlot)
+                {
+                    character.Stats.SetShield(null);
+                }
+                if (card is ICardAddStatBonuses)
+                {
+                    foreach (StatBonus bonus in ((ICardAddStatBonuses)card).StatBonuses)
+                    {
+                        character.Stats.RemoveBonus(bonus);
+                    }
+                }
                 Cards.Clear();
                 CardsChanged?.Invoke();
                 return true;
@@ -63,7 +111,7 @@ public class SlotsHolder
 {
     public enum SlotsHolderNames
     { 
-        Armor,
+        Defense,
         Other
     }
 

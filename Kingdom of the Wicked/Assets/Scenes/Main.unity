@@ -505,6 +505,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4f9a9b078cbf31f458e1b555fbe716fd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  playerHeroId: 101
   statsDescriptionData: {fileID: 11400000, guid: 29cffc487c021e946a591596d17b6032,
     type: 2}
 --- !u!4 &1534657142

@@ -13,15 +13,16 @@ MonoBehaviour:
   m_Name: 501 Carrot juice
   m_EditorClassIdentifier: 
   id: 501
-  cardName: ' Carrot\njuice'
+  cardName: ' Carrot Juice'
   description: 
-  duration: 3
+  effectType: 1
   image: {fileID: 0}
   effects:
   - effectType: 1
-    name: 
+    name: Heal 25%
     description: Restores HP by 25%.
-    duration: 0
+    duration: 1
     valueType: 1
     value: 0.25
     chance: 1
+  charges: 3

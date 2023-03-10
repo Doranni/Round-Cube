@@ -4,10 +4,16 @@ using UnityEngine;
 
 public abstract class CardSO : ScriptableObject
 {
-    public int id;
-    public string cardName;
-    public string description;
-    public int duration;
-    public Texture image;
+    [SerializeField] protected int id;
+    [SerializeField] protected string cardName;
+    [SerializeField] protected string description;
+    [SerializeField] protected Card.CardEffectType effectType;
+    [SerializeField] protected Texture image;
+
+    public int Id => id;
+    public string CardName => cardName;
+    public string Description => description;
+    public Card.CardEffectType EffectType => effectType;
+    public Texture Image => image;
 }
 

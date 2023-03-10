@@ -49,12 +49,14 @@ public class SlotVE : StorageVE
     public new class UxmlFactory : UxmlFactory<SlotVE> { }
 
     public SlotsHolderVE SlotHolder { get; private set; }
+    public bool IsSelected { get; private set; }
 
     public override void Init(IStorage slot)
     {
         base.Init(slot);
         SetSize();
         pickingMode = PickingMode.Ignore;
+        IsSelected = false;
     }
 
     public void SetSlotHolder(SlotsHolderVE slotsHolder)
@@ -64,14 +66,35 @@ public class SlotVE : StorageVE
 
     private void SetSize()
     {
-        var size = GameManager.Instance.CardSize_slot;
+        var size = GameManager.Instance.CardSize_regular;
         style.width = size.x;
         style.height = size.y;
     }
 
     public override void Update()
     {
-        base.Update();
+        if (Cards.Count == 1)
+        {
+            Cards[0].CardData.WasSelected -= SelectCard;
+        }
+        Clear();
+        Cards.Clear();
+        if (Storage.Cards.Count == 1)
+        {
+            var card = new CardVE(Storage.Cards[0], Storage.StorageName);
+            Cards.Add(card);
+            Add(card);
+            card.CardData.WasSelected += SelectCard;
+        }
+        if (SlotHolder != null)
+        {
+            SlotHolder.Update();
+        }
+    }
+
+    private void SelectCard(bool value)
+    {
+        IsSelected = value;
         if (SlotHolder != null)
         {
             SlotHolder.Update();
@@ -126,6 +149,7 @@ public class SlotsHolderVE : VisualElement
 
             closed.Init(slotHolder.Slots[i]);
             open.Init(slotHolder.Slots[i]);
+            closed.SetSlotHolder(this);
 
             closed.AddToClassList(k_slotClosed_class);
             open.AddToClassList(k_background_class);
@@ -136,7 +160,7 @@ public class SlotsHolderVE : VisualElement
 
             Slots.Add((closed, open));
         }
-
+        Update();
         slotsOpen.style.left = -(slotHolder.Slots.Count - 1) * 45 - 45;
         ToggleSlotPanel(false);
     }
@@ -151,11 +175,15 @@ public class SlotsHolderVE : VisualElement
                 if (firstCardIndex == -1)
                 {
                     firstCardIndex = i;
-                    Slots[i].closedSlot.Cards[0].style.display = DisplayStyle.Flex;
+                    Slots[i].closedSlot.style.display = DisplayStyle.Flex;
+                }
+                else if (Slots[i].closedSlot.IsSelected)
+                {
+                    Slots[i].closedSlot.style.display = DisplayStyle.Flex;
                 }
                 else
                 {
-                    Slots[i].closedSlot.Cards[0].style.display = DisplayStyle.None;
+                    Slots[i].closedSlot.style.display = DisplayStyle.None;
                 }
             }
         }
@@ -180,14 +208,14 @@ public class SlotsHolderVE : VisualElement
 
         if(evt.eventTypeId == PointerEnterEvent.TypeId())
         {
-            if (!DragAndDropController.Instance.IsDragging)
+            if (!DragCardManager.Instance.IsDragging)
             {
                 ToggleSlotPanel(true);
             }
         }
         if (evt.eventTypeId == PointerLeaveEvent.TypeId())
         {
-            if (!DragAndDropController.Instance.IsDragging)
+            if (!DragCardManager.Instance.IsDragging)
             {
                 ToggleSlotPanel(false);
             }

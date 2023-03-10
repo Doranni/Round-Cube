@@ -30,9 +30,9 @@ public class FightingManager : Singleton<FightingManager>
 
     public IEnumerator StartFight()
     {
-        yield return new WaitForSeconds(0.3f);
-        FightingSceneUI.Instance.StartFight();
-        yield return new WaitForSeconds(2);
+        //yield return new WaitForSeconds(0.3f);
+        //FightingSceneUI.Instance.StartFight();
+        yield return new WaitForSeconds(0.5f);
         FightingSceneUI.Instance.SetPlayerScreenVisible(true);
         FightingSceneUI.Instance.SetEnemyScreenVisible(true);
         TimeLeft = maxTimerValue;
@@ -55,15 +55,15 @@ public class FightingManager : Singleton<FightingManager>
         FightingSceneUI.Instance.UpdateTimer();
         yield return new WaitForSeconds(0.5f);
         CurrentTurn = turn;
-        if (CurrentTurn == Turn.Player)
-        {
-            FightingSceneUI.Instance.StartPlayerTurn();
-        }
-        else
-        {
-            FightingSceneUI.Instance.StartEnemiesTurn();
-        }
-        yield return new WaitForSeconds(0.7f);
+        //if (CurrentTurn == Turn.Player)
+        //{
+        //    FightingSceneUI.Instance.StartPlayerTurn();
+        //}
+        //else
+        //{
+        //    FightingSceneUI.Instance.StartEnemiesTurn();
+        //}
+        //yield return new WaitForSeconds(0.7f);
         InvokeRepeating(nameof(DecreaseTimer), 1f, 1);
         if (CurrentTurn == Turn.Enemy)
         {
@@ -77,11 +77,11 @@ public class FightingManager : Singleton<FightingManager>
         Enemy.Stats.ExecuteEffects();
         if (CurrentTurn == Turn.Player)
         {
-            Player.Deck.UnselectCards();
+            Player.Equipment.UnselectCards();
         }
         else
         {
-            Enemy.Deck.UnselectCards();
+            Enemy.Equipment.UnselectCards();
         }
         CancelInvoke(nameof(DecreaseTimer));
         if (Player.Stats.ChHealth.IsDead)
@@ -120,37 +120,46 @@ public class FightingManager : Singleton<FightingManager>
     {
         yield return new WaitForSeconds(0.6f);
         (Card card, bool useOnYourself) = Enemy.ChooseCard();
-        Enemy.Deck.SelectBattleCard(card.InstanceId);
+        Enemy.Equipment.SelectCard(card);
         yield return new WaitForSeconds(0.6f);
         if (useOnYourself)
         {
-            ((IUsable)card).Use(Enemy);
+            Enemy.Stats.UseCard((ICardUsable)card);
         }
         else
         {
-            ((IUsable)card).Use(Player);
+            Player.Stats.UseCard((ICardUsable)card);
         }
         EndTurn();
     }
 
     public bool TrySetTarget(Character target)
     {
-        if (IsTarget(target))
+        if (IsTarget(target).isTarget)
         {
-            ((IUsable)Player.Deck.SelectedBattleCard).Use(Enemy);
+            target.Stats.UseCard((ICardUsable)Player.Equipment.SelectedCard);
             EndTurn();
             return true;
         }
         return false;
     }
 
-    public bool IsTarget(Character target)
+    public (bool isTarget, Card.CardEffectType effect) IsTarget(Character target)
     {
-        if (CurrentTurn == Turn.Player && Player.Deck.SelectedBattleCard != null)
+        (bool isTarget, Card.CardEffectType effect) res;
+        if (CurrentTurn == Turn.Player && Player.Equipment.SelectedCard != null)
         {
-            return true;
+            if ((Player.Equipment.SelectedCard.EffectType == Card.CardEffectType.Harm 
+                && target.gameObject == Enemy.gameObject)
+                || (Player.Equipment.SelectedCard.EffectType == Card.CardEffectType.Benefit
+                && target.gameObject == Player.gameObject))
+            {
+                res.isTarget = true;
+                res.effect = Player.Equipment.SelectedCard.EffectType;
+                return res;
+            }
         }
-        return false;
+        return (false, Card.CardEffectType.Harm);
     }
 
     private void DecreaseTimer()

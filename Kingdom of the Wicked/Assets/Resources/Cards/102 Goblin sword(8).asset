@@ -13,14 +13,14 @@ MonoBehaviour:
   m_Name: 102 Goblin sword(8)
   m_EditorClassIdentifier: 
   id: 102
-  cardName: Goblin\nsword
-  description: Deals 8\ndamage
-  duration: 0
+  cardName: Goblin Sword
+  description: 
+  effectType: 0
   image: {fileID: 0}
   effects:
   - effectType: 0
-    name: 
-    description: 
+    name: 8 damage
+    description: Deals 8 damage
     duration: 1
     valueType: 0
     value: 8

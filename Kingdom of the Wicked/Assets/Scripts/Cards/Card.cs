@@ -15,29 +15,52 @@ public abstract class Card
         Artifact = 32
     }
 
+    public enum CardEffectType
+    {
+        Harm,
+        Benefit
+    }
+
     public int NameId { get; protected set; }
     public int InstanceId { get; protected set; }
     public CardsType CardType { get; protected set; }
+    public CardEffectType EffectType { get; protected set; }
     public string CardName { get; protected set; }
     public string Description { get; protected set; }  
-    public int Duration { get; protected set; }
     public Texture Image { get; protected set; }
+    public Character Owner { get; protected set; }
+    public IStorage.StorageNames Storage { get; protected set; }
+
+    public Action<bool> WasSelected, WasHided;
+    public Action WasChanged;
 
     public Card(CardSO cardSO)
     {
-        NameId = cardSO.id;
-        CardName = cardSO.cardName;
-        Description = cardSO.description;
-        Duration = cardSO.duration;
-        Image = cardSO.image;
+        NameId = cardSO.Id;
+        CardName = cardSO.CardName;
+        Description = cardSO.Description;
+        EffectType = cardSO.EffectType;
+        Image = cardSO.Image;
     }
 
-    public void SetInstanceId()
+    public void SetCardOwner(Character character, IStorage.StorageNames storage)
     {
+        Owner = character;
+        Storage = storage;
         if (InstanceId == 0)
         {
             InstanceId = GameManager.Instance.GetID();
         }
+    }
+
+    public void SelectCard(bool value)
+    {
+        WasSelected?.Invoke(value);
+    }
+
+    public void HideCard(bool value)
+    {
+        WasHided?.Invoke(value);
     }
 
     public static bool ComperaCardTypesFlags(CardsType flags1, CardsType flags2)
@@ -58,24 +81,25 @@ public abstract class Card
     }
 }
 
-public interface IUsable
+public interface ICardUsable
 {
     public List<Effect> Effects { get; }
-    public void Use(Character target)
-    {
-        foreach(Effect effect in Effects)
-        {
-            target.Stats.AddEffect(effect);
-        }
-    }
+    public void WasUsed();
 }
 
-public interface IAddStatBonuses
+public interface ICardAddStatBonuses
 {
     public List<StatBonus> StatBonuses { get; }
 }
 
-public class WeaponCard : Card, IUsable, IAddStatBonuses
+public interface ICardBreakable
+{
+    public int ChargesMax { get; }
+    public int ChargesLeft { get; }
+    public void SetChargesLeft(int value);
+}
+
+public class WeaponCard : Card, ICardUsable, ICardAddStatBonuses
 {
     public List<Effect> Effects { get; private set; }
     public List<StatBonus> StatBonuses { get; private set; }
@@ -83,61 +107,126 @@ public class WeaponCard : Card, IUsable, IAddStatBonuses
     public WeaponCard(WeaponCardSO cardSO) : base(cardSO)
     {
         CardType = CardsType.Weapon;
-        Effects = cardSO.effects;
-        StatBonuses = cardSO.statBonuses;
+        Effects = cardSO.Effects;
+        StatBonuses = cardSO.StatBonuses;
     }
 
-    public void Use(Character target)
-    {
-        foreach (Effect effect in Effects)
-        {
-            target.Stats.AddEffect(effect);
-        }
-        Debug.Log($"Use {CardName} on {target.name}");
-    }
+    public void WasUsed() { }
 }
 
-public class ArmorCard : Card, IAddStatBonuses
+public class ArmorCard : Card, ICardAddStatBonuses
 {
+    public int Protection;
     public List<StatBonus> StatBonuses { get; private set; }
 
     public ArmorCard(ArmorCardSO cardSO) : base(cardSO)
     {
         CardType = CardsType.Armor;
-        StatBonuses = cardSO.statBonuses;
+        Protection = cardSO.Protection;
+        StatBonuses = cardSO.StatBonuses;
+    }
+
+    public void DecreaseProtection(int value)
+    {
+        Protection -= value;
+        WasChanged?.Invoke();
+    }
+
+    public void SetProtection(int value)
+    {
+        Protection = value;
+        WasChanged?.Invoke();
     }
 }
 
-public class ShieldCard : Card, IAddStatBonuses
+public class ShieldCard : Card, ICardAddStatBonuses
 {
+    public int BlockChargesMax { get; private set; }
+    public int BlockChargesLeft { get; private set; }
+    public float BlockChanse { get; private set; }
     public List<StatBonus> StatBonuses { get; private set; }
 
     public ShieldCard(ShieldCardSO cardSO) : base(cardSO)
     {
         CardType = CardsType.Shield;
-        StatBonuses = cardSO.statBonuses;
+        StatBonuses = cardSO.StatBonuses;
+        BlockChargesMax = cardSO.BlockCharges;
+        BlockChargesLeft = BlockChargesMax;
+        BlockChanse = cardSO.BlockChanse;
     }
-}
 
-public class PotionCard : Card, IUsable
-{
-    public List<Effect> Effects { get; protected set; }
-
-    public PotionCard(PotionCardSO cardSO) : base(cardSO)
+    public void DecreaseCharges()
     {
-        CardType = CardsType.Potion;
-        Effects = cardSO.effects;
+        --BlockChargesLeft;
+        WasChanged?.Invoke();
+    }
+
+    public void SetChargesLeft(int value)
+    {
+        BlockChargesLeft = Mathf.Clamp(value, 0, BlockChargesMax);
+        WasChanged?.Invoke();
     }
 }
 
-public class MagicCard : Card, IUsable
+public class MagicCard : Card, ICardUsable, ICardBreakable
 {
     public List<Effect> Effects { get; protected set; }
+    public int ChargesMax { get; protected set; }
+    public int ChargesLeft { get; protected set; }
 
     public MagicCard(MagicCardSO cardSO) : base(cardSO)
     {
         CardType = CardsType.Magic;
-        Effects = cardSO.effects;
+        Effects = cardSO.Effects;
+        ChargesMax = cardSO.Charges;
+        ChargesLeft = ChargesMax;
+    }
+
+    public void WasUsed()
+    {
+        ChargesLeft--;
+        if (ChargesLeft <= 0)
+        {
+            Owner.Equipment.RemoveCard(this, Storage);
+        }
+        WasChanged?.Invoke();
+    }
+
+    public void SetChargesLeft(int value)
+    {
+        ChargesLeft = Mathf.Clamp(value, 0, ChargesMax);
+        WasChanged?.Invoke();
+    }
+}
+
+public class PotionCard : Card, ICardUsable, ICardBreakable
+{
+    public List<Effect> Effects { get; protected set; }
+    public int ChargesMax { get; protected set; }
+    public int ChargesLeft { get; protected set; }
+
+    public PotionCard(PotionCardSO cardSO) : base(cardSO)
+    {
+        CardType = CardsType.Potion;
+        Effects = cardSO.Effects;
+        ChargesMax = cardSO.Charges;
+        ChargesLeft = ChargesMax;
+    }
+
+    public void WasUsed()
+    {
+        ChargesLeft--;
+        if (ChargesLeft <= 0)
+        {
+            Owner.Equipment.RemoveCard(this, Storage);
+        }
+        WasChanged?.Invoke();
+    }
+
+    public void SetChargesLeft(int value)
+    {
+        ChargesLeft = Mathf.Clamp(value, 0, ChargesMax);
+        WasChanged?.Invoke();
     }
 }
 

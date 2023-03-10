@@ -21,5 +21,9 @@ MonoBehaviour:
   cards:
   - cardId: 101
     storage: 0
+  - cardId: 401
+    storage: 3
+  - cardId: 501
+    storage: 4
   boardSprite: {fileID: 1848358945, guid: 16c6f66a70805224591bd63001257b39, type: 3}
   fightSprite: {fileID: 281882599, guid: 16c6f66a70805224591bd63001257b39, type: 3}

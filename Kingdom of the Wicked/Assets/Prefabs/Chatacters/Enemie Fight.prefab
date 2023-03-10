@@ -7,6 +7,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 284776054410493500, guid: b3a9e2c080f04ee49a564d56da15fd63,
+        type: 3}
+      propertyPath: m_LocalScale.x
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 284776054410493501, guid: b3a9e2c080f04ee49a564d56da15fd63,
         type: 3}
       propertyPath: m_Materials.Array.data[0]
@@ -95,6 +100,46 @@ PrefabInstance:
       objectReference: {fileID: 5156958603539049969}
     - target: {fileID: 8811553112081131016, guid: b3a9e2c080f04ee49a564d56da15fd63,
         type: 3}
+      propertyPath: outline_TargetHeal.a
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8811553112081131016, guid: b3a9e2c080f04ee49a564d56da15fd63,
+        type: 3}
+      propertyPath: outline_TargetHeal.b
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8811553112081131016, guid: b3a9e2c080f04ee49a564d56da15fd63,
+        type: 3}
+      propertyPath: outline_TargetHeal.g
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8811553112081131016, guid: b3a9e2c080f04ee49a564d56da15fd63,
+        type: 3}
+      propertyPath: outline_TargetHeal.r
+      value: 0.05724919
+      objectReference: {fileID: 0}
+    - target: {fileID: 8811553112081131016, guid: b3a9e2c080f04ee49a564d56da15fd63,
+        type: 3}
+      propertyPath: outline_targetAttack.a
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8811553112081131016, guid: b3a9e2c080f04ee49a564d56da15fd63,
+        type: 3}
+      propertyPath: outline_targetAttack.b
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8811553112081131016, guid: b3a9e2c080f04ee49a564d56da15fd63,
+        type: 3}
+      propertyPath: outline_targetAttack.g
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8811553112081131016, guid: b3a9e2c080f04ee49a564d56da15fd63,
+        type: 3}
+      propertyPath: outline_targetAttack.r
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8811553112081131016, guid: b3a9e2c080f04ee49a564d56da15fd63,
+        type: 3}
       propertyPath: outline_targetAvailable.a
       value: 1
       objectReference: {fileID: 0}
@@ -124,6 +169,18 @@ Animator:
     type: 3}
   m_PrefabInstance: {fileID: 8569080850460742800}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &4572341013648678646 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 5305040579987114598, guid: b3a9e2c080f04ee49a564d56da15fd63,
+    type: 3}
+  m_PrefabInstance: {fileID: 8569080850460742800}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5fea29bb7c508c244a1f805a5fd3fc4d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!212 &6595311326998770328 stripped
 SpriteRenderer:
   m_CorrespondingSourceObject: {fileID: 3273058188312684040, guid: b3a9e2c080f04ee49a564d56da15fd63,
@@ -152,3 +209,4 @@ MonoBehaviour:
   bodySpriteRenderer: {fileID: 6595311326998770328}
   modelForFight: 1
   animator: {fileID: 1016653762510325550}
+  outline: {fileID: 4572341013648678646}

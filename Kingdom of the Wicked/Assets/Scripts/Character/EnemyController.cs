@@ -6,7 +6,7 @@ public class EnemyController : Character
 {
     public (Card card, bool useOnYourself) ChooseCard()
     {
-        return (Deck.BattleCardsUsable[0], false);
+        return (Equipment.Storages[IStorage.StorageNames.WeaponSlot].Cards[0], false);
     }
 
     protected override void Death()

@@ -5,6 +5,10 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "Potion card ", menuName = "Cards/Potion Card")]
 public class PotionCardSO : CardSO
 {
-    public List<Effect> effects;
+    [SerializeField] private List<Effect> effects;
+    [SerializeField] private int charges;
+
+    public List<Effect> Effects => effects;
+    public int Charges => charges;
 }
 

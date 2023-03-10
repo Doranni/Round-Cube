@@ -24,13 +24,13 @@ public class Map : Singleton<Map>
             MapNodes[mapNodes[i].MapNodeId].Load();
         }
 
-        Index_start = map.startMapNodeId;
+        Index_start = map.StartMapNodeId;
 
-        for (int i = 0; i < map.mapNodes.Length; i++)
+        for (int i = 0; i < map.MapNodes.Length; i++)
         {
-            for (int j = 0; j < map.mapNodes[i].links.Length; j++)
+            for (int j = 0; j < map.MapNodes[i].Links.Length; j++)
             {
-                MapNodes[map.mapNodes[i].mapNodeId].AddLink(map.mapNodes[i].links[j]);
+                MapNodes[map.MapNodes[i].MapNodeId].AddLink(map.MapNodes[i].Links[j]);
             }
         }
     }

@@ -3,8 +3,10 @@ using UnityEngine;
 
 public class GameDatabase : Singleton<GameDatabase>
 {
-    [SerializeField] StatsDescriptionSO statsDescriptionData;
+    [SerializeField] private int playerHeroId;
+    [SerializeField] private StatsDescriptionSO statsDescriptionData;
 
+    public int PlayerHeroId => playerHeroId;
     public Dictionary<int, CardSO> Cards { get; private set; }
     public Dictionary<Stat.StatId, (string name, string description)> StatsDescription { get; private set; }
     public Dictionary<int, CharacterSO> Characters { get; private set; }
@@ -17,29 +19,25 @@ public class GameDatabase : Singleton<GameDatabase>
         Cards = new(cards.Length);
         for (int i = 0; i < cards.Length; i++)
         {
-            Cards.Add(cards[i].id, cards[i]);
+            Cards.Add(cards[i].Id, cards[i]);
         }
 
         StatsDescription = new();
-        StatsDescription.Add(Stat.StatId.health, (statsDescriptionData.healthStatName, 
-            statsDescriptionData.healthStatDescription));
-        StatsDescription.Add(Stat.StatId.armor, (statsDescriptionData.armorStatName,
-            statsDescriptionData.armorStatDescription));
-        StatsDescription.Add(Stat.StatId.damage, (statsDescriptionData.damageStatName,
-            statsDescriptionData.damageStatDescription));
+        StatsDescription.Add(Stat.StatId.health, (statsDescriptionData.HealthStatName, 
+            statsDescriptionData.HealthStatDescription));
 
         CharacterSO[] characters = Resources.LoadAll<CharacterSO>("Characters");
         Characters = new(characters.Length);
         for (int i = 0; i < characters.Length; i++)
         {
-            Characters.Add(characters[i].id, characters[i]);
+            Characters.Add(characters[i].Id, characters[i]);
         }
 
         ChestSO[] chests = Resources.LoadAll<ChestSO>("Chests");
         Chests = new(chests.Length);
         for (int i = 0; i < chests.Length; i++)
         {
-            Chests.Add(chests[i].id, chests[i]);
+            Chests.Add(chests[i].Id, chests[i]);
         }
     }
 

@@ -15,20 +15,21 @@ MonoBehaviour:
   id: 401
   cardName: Fireball
   description: 
-  duration: 0
+  effectType: 0
   image: {fileID: 0}
   effects:
   - effectType: 2
-    name: 
-    description: 
+    name: 26 f once
+    description: 26 fire damage once.
     duration: 1
     valueType: 0
     value: 26
     chance: 1
   - effectType: 2
-    name: 
-    description: 
+    name: 4 f - 3 t
+    description: 4 fire damage for 3 turns
     duration: 3
     valueType: 0
     value: 4
     chance: 1
+  charges: 1

@@ -81,6 +81,18 @@ PrefabInstance:
     - {fileID: 7159589125277109366, guid: 439046f5e1f5fcb448848a8896eb50ab, type: 3}
     - {fileID: 6182424735355895055, guid: 439046f5e1f5fcb448848a8896eb50ab, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 439046f5e1f5fcb448848a8896eb50ab, type: 3}
+--- !u!114 &1223452866751467713 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 4058051463325508845, guid: 439046f5e1f5fcb448848a8896eb50ab,
+    type: 3}
+  m_PrefabInstance: {fileID: 2930589537780560940}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5fea29bb7c508c244a1f805a5fd3fc4d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!95 &2419916510083615001 stripped
 Animator:
   m_CorrespondingSourceObject: {fileID: 666196942770011445, guid: 439046f5e1f5fcb448848a8896eb50ab,
@@ -109,6 +121,7 @@ MonoBehaviour:
   bodySpriteRenderer: {fileID: 8361465688296144047}
   modelForFight: 0
   animator: {fileID: 2419916510083615001}
+  outline: {fileID: 1223452866751467713}
 --- !u!212 &8361465688296144047 stripped
 SpriteRenderer:
   m_CorrespondingSourceObject: {fileID: 6675019739160430723, guid: 439046f5e1f5fcb448848a8896eb50ab,

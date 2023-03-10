@@ -7,37 +7,55 @@ using UnityEngine.UIElements;
 public class DebugUI : MonoBehaviour
 {
     [SerializeField] private Character player;
+    [SerializeField] private Character enemy;
 
-    private VisualElement debugScreen;
-    private Label plStatsLbl;
+    private Label plStatsLbl, enemyStatsLbl;
 
-    const string k_debugScreen = "Debug";
-    const string k_plStatsLbl = "lbl_stats";
+    const string k_plStatsLbl = "Lbl_PlStats";
+    const string k_enemyStatsLbl = "Lbl_EnemyStats";
 
-    const string str_stats = "Player Stats:";
-    const string str_effects = "Player Effects:";
+    const string str_player = "Player:";
+    const string str_enemy = "Enemy:";
+    const string str_stats = "Stats:";
+    const string str_effects = "Effects:";
 
     private void Awake()
     {
         VisualElement rootElement = GetComponent<UIDocument>().rootVisualElement;
 
-        debugScreen = rootElement.Q(k_debugScreen);
         plStatsLbl = rootElement.Q<Label>(k_plStatsLbl);
+        enemyStatsLbl = rootElement.Q<Label>(k_enemyStatsLbl);
     }
 
     void Update()
     {
-        var res = str_stats;
+        var plRes = str_player + "\n" + str_stats;
         foreach (KeyValuePair<Stat.StatId, Stat> stat in player.Stats.ChStats)
         {
-            res += "\n" + GameDatabase.Instance.StatsDescription[stat.Key].name + ": " 
+            plRes += "\n" + GameDatabase.Instance.StatsDescription[stat.Key].name + ": " 
                 + stat.Value.BaseValue + " => " + stat.Value.TotalValue;
         }
-        res += "\n" + str_effects;
+        plRes += "\n" + str_effects;
         foreach (Effect effect in player.Stats.Effects)
         {
-            res += "\n" + effect.EffectType + ": " + effect.Value + " for " + effect.Duration + " moves.";
+            plRes += "\n" + effect.EffectType + ": " + effect.Value + " for " + effect.Duration + " moves.";
         }
-        plStatsLbl.text = res;
+        plStatsLbl.text = plRes;
+
+        if (enemy != null)
+        {
+            var enemyRes = str_enemy + "\n" + str_stats;
+            foreach (KeyValuePair<Stat.StatId, Stat> stat in enemy.Stats.ChStats)
+            {
+                enemyRes += "\n" + GameDatabase.Instance.StatsDescription[stat.Key].name + ": "
+                    + stat.Value.BaseValue + " => " + stat.Value.TotalValue;
+            }
+            enemyRes += "\n" + str_effects;
+            foreach (Effect effect in enemy.Stats.Effects)
+            {
+                enemyRes += "\n" + effect.EffectType + ": " + effect.Value + " for " + effect.Duration + " moves.";
+            }
+            enemyStatsLbl.text = enemyRes;
+        }
     }
 }

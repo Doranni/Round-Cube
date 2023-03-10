@@ -8,15 +8,15 @@ public class CharacterStats
     public Health ChHealth { get; private set; }
     public Dictionary<Stat.StatId, Stat> ChStats { get; private set; }
     public List<Effect> Effects { get; private set; }
+    public ArmorCard armorCard;
+    public ShieldCard shieldCard;
 
     public CharacterStats(Character character, CharacterSO characterSO)
     {
         this.character = character;
         ChStats = new(GameDatabase.Instance.StatsDescription.Count)
         {
-            { Stat.StatId.health, new(characterSO.baseHealthValue) },
-            { Stat.StatId.armor, new(characterSO.armorValue) },
-            { Stat.StatId.damage, new(characterSO.damageValue) }
+            { Stat.StatId.health, new(characterSO.BaseHealthValue) },
         };
         ChHealth = new Health(character, ChStats[Stat.StatId.health].BaseValue);
         Effects = new();
@@ -25,53 +25,98 @@ public class CharacterStats
         ChStats[Stat.StatId.health].BonusRemoved += x => ChHealth.AddHealthBonus(-x);
     }
 
-    public void AddEffect(Effect effect)
+    public void UseCard(ICardUsable card)
     {
-        if (effect.Duration <= 0)
+        if (card is WeaponCard && shieldCard != null)
         {
-            return;
+            if (shieldCard.BlockChargesLeft > 0 && shieldCard.BlockChanse >= Random.value)
+            {
+                shieldCard.DecreaseCharges();
+                return;
+            }
         }
-        var targetEffect = effect.Clone();
-        targetEffect.SetId();
-        Effects.Add(targetEffect);
+        foreach (Effect effect in card.Effects)
+        {
+            if (effect.Duration < 0)
+            {
+                return;
+            }
+            if (effect.Duration == 0)
+            {
+                ExecuteEffect(effect);
+                return;
+            }
+            var targetEffect = effect.Clone();
+            targetEffect.SetId();
+            Effects.Add(targetEffect);
+        }
+        card.WasUsed();
+    }
+
+    public void SetArmor(ArmorCard card)
+    {
+        armorCard = card;
+    }
+
+    public void SetShield(ShieldCard card)
+    {
+        shieldCard = card;
     }
 
     public void ExecuteEffects()
     {
         for (int i = 0; i < Effects.Count; i++)
         {
-            var chance = Random.value;
-            if (chance <= Effects[i].Chance)
+            ExecuteEffect(Effects[i]);
+            Effects[i].DecreaseDuration();
+            if (Effects[i].Duration <= 0)
             {
-                float effectValue = 0;
-                if (Effects[i].ValueType == Effect.ValueTypes.percentage)
-                {
-                    effectValue = ChHealth.CurrentHealth * Effects[i].Value;
-                }
-                else
-                {
-                    effectValue = Effects[i].Value;
-                }
-                switch (Effects[i].EffectType)
-                {
-                    case Effect.EffectTypes.damage:
-                    case Effect.EffectTypes.fireDamage:
+                Effects.RemoveAt(i);
+                --i;
+            }
+        }
+    }
+
+    private void ExecuteEffect(Effect effect)
+    {
+        if (effect.Chance == 1 || effect.Chance >= Random.value)
+        {
+            float effectValue;
+            if (effect.ValueType == Effect.ValueTypes.percentage)
+            {
+                effectValue = ChHealth.MaxHealth * effect.Value;
+            }
+            else
+            {
+                effectValue = effect.Value;
+            }
+            switch (effect.EffectType)
+            {
+                case Effect.EffectTypes.Damage:
+                case Effect.EffectTypes.FireDamage:
+                    {
+                        if (armorCard != null && armorCard.Protection > 0)
                         {
-                            ChHealth.ChangeHealth(-effectValue);
-                            break;
+                            if (effectValue > armorCard.Protection)
+                            {
+                                effectValue -= armorCard.Protection;
+                                armorCard.DecreaseProtection(armorCard.Protection);
+                                ChHealth.ChangeHealth(-effectValue);
+                            }
+                            else
+                            {
+                                armorCard.DecreaseProtection((int)effectValue);
+                            }
+                            return;
                         }
-                    case Effect.EffectTypes.heal:
-                        {
-                            ChHealth.ChangeHealth(effectValue);
-                            break;
-                        }
-                }
-                Effects[i].DecreaseDuration();
-                if (Effects[i].Duration <= 0)
-                {
-                    Effects.RemoveAt(i);
-                    --i;
-                }
+                        ChHealth.ChangeHealth(-effectValue);
+                        break;
+                    }
+                case Effect.EffectTypes.Heal:
+                    {
+                        ChHealth.ChangeHealth(effectValue);
+                        break;
+                    }
             }
         }
     }

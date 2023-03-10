@@ -14,13 +14,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   id: 104
   cardName: Cutlass
-  description: Deals 15\ndamage
-  duration: 0
+  description: 
+  effectType: 0
   image: {fileID: 0}
   effects:
   - effectType: 0
-    name: 
-    description: 
+    name: 15 damage
+    description: Deals 15 damage
     duration: 1
     valueType: 0
     value: 15
